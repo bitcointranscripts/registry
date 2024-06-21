@@ -1,0 +1,27 @@
+{
+  "name": "registry",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "submodules:update": "git submodule update --init && git submodule update --remote",
+    "build": "npm run submodules:update && next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "contentlayer2": "^0.4.6",
+    "next": "14.2.4",
+    "next-contentlayer2": "^0.4.6",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
