@@ -1,28 +1,7 @@
-import * as fs from "fs";
 import Link from "next/link";
+import { getTranscriptList } from "@/utils";
 
 export default function Home() {
-  const path = `${process.cwd()}/public/bitcoin-transcript`;
-
-  const getTranscriptList = () => {
-    const listFilesFromPath = fs.readdirSync(path, "utf-8");
-    let list: Array<string> = [];
-
-    for (let i = 0; i < listFilesFromPath.length; i++) {
-      const folder = listFilesFromPath[i];
-      const transcriptPath = `${path}/${folder}`;
-
-      const stat = fs.statSync(transcriptPath);
-      const isFolder = !stat.isFile() && !folder.startsWith(".");
-
-      if (isFolder) {
-        list.push(folder);
-      }
-    }
-
-    return { list };
-  };
-
   const firstLetterRegex = /(^\w{1})|(\s+\w{1})/g;
   const { list } = getTranscriptList();
 

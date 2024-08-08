@@ -14,7 +14,6 @@ export const TranscriptFields: FieldDefs | undefined = {
   date: { type: "date" },
   transcript_by: { type: "string" },
   Transcript_by: { type: "string" },
-  "transcript by": { type: "string" },
   categories: { type: "list", of: { type: "string" } },
   tag: { type: "list", of: { type: "string" } },
   tags: { type: "list", of: { type: "string" } },
