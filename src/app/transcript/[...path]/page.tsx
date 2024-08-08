@@ -126,8 +126,8 @@ export default async function Page({ params }: { params: { path: string[] } }) {
         <div>
           <p className='py-6 pb-2 font-bold text-2xl capitalize text-black'>Folders</p>
           <div className='flex flex-col gap-5'>
-            {folders.map((sub) => (
-              <CustomLink href={`${path.join("")}/${sub}`} text={sub} key={sub!} />
+            {folders.map((sub, index) => (
+              <CustomLink href={`${path.join("")}/${sub}`} text={sub} key={index} />
             ))}
           </div>
         </div>
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: { path: string[] } }) {
   );
 }
 
-const CustomLink = ({ href, text, key }: { href: string; text: string | undefined; key: string }) => {
+const CustomLink = ({ href, text, key }: { href: string; text: string | undefined; key: string | number }) => {
   return (
     <Link href={href} key={key} className='border border-[#cecece] p-6 bg-[#fffcf9] text-[#4d4d4d] hover:bg-transparent max-w-[500px]'>
       {text}
