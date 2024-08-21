@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 
-export const manrope = Manrope({ subsets: ["latin"], display: "swap" });
+const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Bitcoin transcript registry",
