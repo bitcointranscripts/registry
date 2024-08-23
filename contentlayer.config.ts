@@ -4,6 +4,8 @@ import {
   makeSource,
 } from "contentlayer2/source-files";
 import path from "path";
+import { createSlug } from "./src/utils";
+import { writeFileSync } from "fs";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -52,7 +54,61 @@ export const Transcript = defineDocumentType(() => ({
   },
 }));
 
+/**
+ * Count the occurrences of all tags across transcripts and write to json file
+ * TODO: find a way to remove the any[] type
+ */
+function createTagCount(allTranscripts: any[]) {
+  const tagCount: Record<string, number> = {};
+  allTranscripts.forEach((file) => {
+    if (file.tags) {
+      file.tags.forEach((tag: string) => {
+        const formattedTag = createSlug(tag);
+        if (formattedTag in tagCount) {
+          tagCount[formattedTag] += 1;
+        } else {
+          tagCount[formattedTag] = 1;
+        }
+      });
+    }
+  });
+  writeFileSync("./public/tag-data.json", JSON.stringify(tagCount));
+}
+
+/**
+ * Count the occurrences of all speakers across transcripts and write to json file
+ * Also store the actual name of the speaker alongside the slugified version.
+ * TODO: find a way to remove the any[] type
+ */
+function createSpeakerCount(allTranscripts: any[]) {
+  const speakerCount: Record<string, { count: number, fullName: string }> = {};
+  
+  allTranscripts.forEach((file) => {
+    if (file.speakers) {
+      file.speakers.forEach((speaker: string) => {
+        const formattedSpeaker = createSlug(speaker);
+        
+        if (formattedSpeaker in speakerCount) {
+          speakerCount[formattedSpeaker].count += 1;
+        } else {
+          speakerCount[formattedSpeaker] = {
+            count: 1,
+            fullName: speaker // Store the actual name of the speaker
+          };
+        }
+      });
+    }
+  });
+
+  writeFileSync("./public/speaker-data.json", JSON.stringify(speakerCount));
+}
+
 export default makeSource({
   contentDirPath: path.join(process.cwd(), "public", "bitcoin-transcript"),
   documentTypes: [Transcript],
+  onSuccess: async (importData) => {
+    const { allDocuments } = await importData();
+    createTagCount(allDocuments);
+    createSpeakerCount(allDocuments);
+  },
 });

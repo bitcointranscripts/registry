@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "submodules:update": "git submodule update --init && git submodule update --remote",
-    "build": "npm run submodules:update && next build",
+    "fetch-categories": "node scripts/fetchCategories.js",
+    "contentlayer": "contentlayer2 build --clearCache",
+    "build": "npm run submodules:update && npm run fetch-categories && next build",
     "start": "next start",
     "lint": "next lint"
   },

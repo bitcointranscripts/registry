@@ -1,22 +1,22 @@
-import React from "react";
-import { allTranscripts } from "contentlayer/generated";
 import Link from "next/link";
 
-import { organizeContent } from "@/utils";
-
-export default function Home() {
-  const contentTree = organizeContent(allTranscripts);
-
+export default function HomePage() {
   return (
     <div>
       <h1>Bitcoin Transcripts</h1>
-      <ul>
-        {Object.keys(contentTree).map((key) => (
-          <li key={key}>
-            <Link href={`/${key}`}>{key}</Link>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/sources">Sources</Link>
           </li>
-        ))}
-      </ul>
+          <li>
+            <Link href="/tags">Tags</Link>
+          </li>
+          <li>
+            <Link href="/speakers">Speakers</Link>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }
