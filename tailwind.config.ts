@@ -19,6 +19,7 @@ const config: Config = {
           "custom-700": "#F0F0F0",
           "custom-800": "#808080",
           "custom-900": "#F7F7F7",
+          "custom-1000": "#656565",
         },
         blue: {
           "custom-100": "#2A58FE",
@@ -31,6 +32,7 @@ const config: Config = {
           "custom-500": "#FEF6EB",
           "custom-600": "#FADEB7",
           "custom-700": "#FFF0E0",
+          "custom-800": "#FFF7F0",
         },
         purple: {
           "custom-100": "#F2F0FF",
