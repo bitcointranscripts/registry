@@ -8,7 +8,7 @@ export default function Home() {
   const contentTree = organizeContent(allTranscripts);
 
   return (
-    <div>
+    <div className='bg-white'>
       <Header />
       <HeroSection />
       <FeaturedTranscripts />

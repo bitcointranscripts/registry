@@ -8,7 +8,7 @@ import bitcoinMap from "/public/images/bitcoin-map.png";
 
 const WhyTranscripts = () => {
   return (
-    <Wrapper className='py-[104px] text-black flex flex-col gap-[104px] max-md:py-16 max-md:gap-16'>
+    <Wrapper className='py-[104px] text-black flex flex-col gap-[104px] max-md:py-16 max-md:gap-12'>
       <div className='flex flex-col items-center justify-center gap-12 max-md:gap-4'>
         <p className='text-purple-custom-200 bg-purple-custom-100 py-2 px-6 rounded-full max-md:text-sm max-md:py-[2px] max-md:px-3.5'>
           WHY TRANSCRIPTS?
@@ -73,7 +73,8 @@ const WhyTranscripts = () => {
           </p>
           <div className='flex flex-col gap-4 items-center justify-center'>
             <Link
-              href='/transcripts'
+              href='https://review.btctranscripts.com/'
+              target='_blank'
               className='text-xl bg-orange-custom-100 text-white py-6 rounded-full flex items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8'
             >
               Review Transcripts, Earn Sats

@@ -16,16 +16,26 @@ const FooterTop = () => {
         </section>
         <section className='flex flex-col gap-12 text-black font-bold text-xl underline max-xl:text-base max-xl:gap-8 max-md:gap-4'>
           <Link href='/transcripts'>Transcripts</Link>
-          <Link href='/About'>About</Link>
+          <Link href='/About' className='hidden'>
+            About
+          </Link>
         </section>
       </section>
 
       <section className='flex flex-col gap-6 max-md:gap-4'>
         <h4 className='text-black text-xl max-md:text-base'>Explore all Products</h4>
         <section className='flex max-w-[400px] gap-12 flex-wrap max-xl:gap-6 max-md:max-w-full max-lg:gap-4'>
-          {menuApps.map(({ href, image, alt }) => (
+          {menuApps.slice(1).map(({ href, image, alt }) => (
             <Link href={href} target='_blank' rel='noopener noreferrer' key={alt}>
-              <Image className='rounded-xl w-[54px] h-[54px] lg:w-16 lg:h-16 border border-black' src={image} alt={alt} width={88} height={88} />
+              <Image
+                className={`rounded-xl w-[54px] h-[54px] lg:w-16 lg:h-16 border border-gray-custom-200 ${
+                  alt === "Bitcoin search" || alt === "Bitcoin TLDR" ? "border border-gray-custom-200" : ""
+                }`}
+                src={image}
+                alt={alt}
+                width={88}
+                height={88}
+              />
             </Link>
           ))}
         </section>
