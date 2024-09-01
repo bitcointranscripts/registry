@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { DiceIcon } from "bdp-ui/icons";
 import { Wrapper, TranscriptCard } from ".";
