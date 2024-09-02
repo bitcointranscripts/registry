@@ -1,12 +1,20 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Wrapper } from ".";
+import { SuggestModal, Wrapper } from ".";
 import userTranscribing from "/public/images/user-typing.webp";
 import wordList from "/public/images/word-list.png";
 import bitcoinMap from "/public/images/bitcoin-map.png";
 
 const WhyTranscripts = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", isOpen);
+  }, [isOpen]);
+
   return (
     <Wrapper className='py-[104px] text-black flex flex-col gap-[104px] max-md:py-16 max-md:gap-12'>
       <div className='flex flex-col items-center justify-center gap-12 max-md:gap-4'>
@@ -24,13 +32,13 @@ const WhyTranscripts = () => {
           <p className='pt-6 pb-8 text-xl max-lg:text-base max-md:pb-6'>
             Bryan Bishop{" "}
             <span>
-              <Link href={"/"} className='text-blue-custom-100 underline'>
+              <Link href='https://github.com/kanzure' target='_blank' className='text-blue-custom-100 underline'>
                 (@kanzure)
               </Link>
             </span>{" "}
             manually transcribed ~900 transcripts over the years, making them publicly available at{" "}
             <span>
-              <Link href={"/"} className='text-blue-custom-100 underline'>
+              <Link href='https://github.com/kanzure/diyhpluswiki' target='_blank' className='text-blue-custom-100 underline'>
                 diyhpluswiki
               </Link>
             </span>
@@ -38,7 +46,7 @@ const WhyTranscripts = () => {
           </p>
           <div className='flex items-center justify-center max-md:w-full'>
             <Link
-              href='/transcripts'
+              href='https://btctranscripts.com/'
               className='text-xl bg-orange-custom-100 text-white py-6 rounded-full flex items-center md:w-fit px-32 whitespace-nowrap justify-center h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8'
             >
               Explore Bitcoin Transcripts
@@ -46,13 +54,13 @@ const WhyTranscripts = () => {
           </div>
         </section>
         <section className='max-w-[50%] max-h-[587px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[261px]'>
-          <Image src={userTranscribing} alt='user transcribing' className='w-full h-full' />
+          <Image src={userTranscribing} loading='lazy' alt='user transcribing' className='w-full h-full' />
         </section>
       </div>
 
       <div className='flex justify-between items-center gap-[52px] max-md:flex-col-reverse max-md:items-start max-lg:gap-8 max-md:gap-6'>
         <section className='max-w-[50%] max-h-[587px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[277px]'>
-          <Image src={wordList} alt='user transcribing' className='w-full h-full' />
+          <Image src={wordList} loading='lazy' alt='words list' className='w-full h-full' />
         </section>
         <section className='max-w-[50%] flex flex-col max-md:max-w-full'>
           <h4 className='text-5xl font-medium max-lg:text-3xl max-md:text-2xl leading-[130%]'>Making Bitcoin Accessible</h4>
@@ -75,19 +83,23 @@ const WhyTranscripts = () => {
             <Link
               href='https://review.btctranscripts.com/'
               target='_blank'
-              className='text-xl bg-orange-custom-100 text-white py-6 rounded-full flex items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8'
+              className='text-xl bg-orange-custom-100 text-white py-6 rounded-full flex items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8 cursor-pointer'
             >
               Review Transcripts, Earn Sats
             </Link>
-            <button className='text-xl bg-orange-custom-200 border-gray-custom-300 text-orange-custom-400 py-6 rounded-full flex items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8'>
+            <button
+              className='text-xl bg-orange-custom-200 border-gray-custom-300 text-orange-custom-400 py-6 rounded-full flex items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8 cursor-pointer hidden'
+              onClick={() => setIsOpen(!isOpen)}
+            >
               Suggest Source for Transcription
             </button>
           </div>
         </section>
         <section className='max-w-[50%] max-h-[587px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[261px]'>
-          <Image src={bitcoinMap} alt='user transcribing' className='w-full h-full' />
+          <Image src={bitcoinMap} loading='lazy' alt='bitcoin map' className='w-full h-full' />
         </section>
       </div>
+      <SuggestModal handleClose={() => setIsOpen(!isOpen)} isOpen={isOpen} />
     </Wrapper>
   );
 };

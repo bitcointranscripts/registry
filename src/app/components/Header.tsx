@@ -3,12 +3,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "bdp-ui/icons";
 import { Wrapper, Logo } from ".";
 import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "./MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
+import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { allTranscripts } from "contentlayer/generated";
 
+allTranscripts;
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -65,11 +67,19 @@ export const LanguageSwitcher = () => {
 export const AppItem = ({ href, image, alt, title }: MenuApp) => (
   <Link
     href={href}
-    className='font-mona text-custom-primary-text py-2 md:py-3 px-5 md:px-8 gap-3 md:gap-6 flex items-center hover:bg-custom-hover-state dark:hover:bg-custom-stroke first-of-type:pt-4 first-of-type:md:pt-6 last-of-type:pb-4 last-of-type:md:pb-6'
+    className='py-2 md:py-3 px-5 md:px-8 gap-3 md:gap-6 flex items-center hover:bg-orange-custom-600 first-of-type:pt-4 first-of-type:md:pt-6 last-of-type:pb-4 last-of-type:md:pb-6'
     target='_blank'
     rel='noopener noreferrer'
   >
-    <Image className='rounded-xl w-11 h-11 lg:w-16 lg:h-16' src={image} alt={alt} width={88} height={88} />
+    <Image
+      className={`rounded-xl w-11 h-11 lg:w-16 lg:h-16 ${
+        alt === "Bitcoin search" || alt === "Bitcoin TLDR" ? "border-[1.5px] border-gray-custom-600" : ""
+      }`}
+      src={image}
+      alt={alt}
+      width={88}
+      height={88}
+    />
     <p className='text-xs md:text-sm xl:text-base 2xl:text-lg text-left '>{title}</p>
   </Link>
 );
@@ -91,7 +101,7 @@ export function AppMenu() {
 const MenuSwitcher = () => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [open, setIsOpen] = useState(true);
+  const [open, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -120,7 +130,7 @@ const MenuSwitcher = () => {
           </div>
         </div>
       </button>
-      <div className='relative'>
+      <div className='relative z-10'>
         <div data-is-open={open} ref={popoverRef} className='hidden data-[is-open=true]:block absolute top-0 right-0 mt-3 md:mt-4'>
           <div
             className={`bg-white rounded-2xl border border-gray-custom-600 w-[min(90vw,300px)] md:w-[402px] max-h-[calc(100vh-70px)] md:max-h-[calc(100vh-100px)] overflow-auto`}
@@ -133,6 +143,7 @@ const MenuSwitcher = () => {
           </div>
         </div>
       </div>
+      <div className={` max-h-screen fixed bg-[#0000007f] top-0 bottom-0 right-0 left-0 ${open ? "flex" : "hidden"}`}></div>
     </div>
   );
 };
@@ -155,7 +166,8 @@ export function ThemeSwitcher() {
 
 const SearchComponent = () => {
   return (
-    <div className='md:flex relative w-full max-w-[540px] max-md:hidden'>
+    <div className='hidden'>
+      {/* <div className='md:flex relative w-full max-w-[540px] max-md:hidden hidden'> */}
       <input
         placeholder='Search here'
         className='max-w-[540px] w-full h-[66px] max-xl:h-12 text-gray-custom-300 outline-none rounded-[14px] border border-gray-custom-400 bg-gray-custom-100 px-6'
@@ -179,9 +191,7 @@ const Header = () => {
       <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
         <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
         <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
-          <Link href='/transcripts' className=''>
-            Transcripts
-          </Link>
+          <Link href='https://btctranscripts.com/'>Transcripts</Link>
           <Link href='/transcripts' className='hidden'>
             About
           </Link>

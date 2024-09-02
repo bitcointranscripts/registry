@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { LanguageSwitcher, ThemeSwitcher } from "./Header";
 import { menuApps } from "@/utils/data";
-import { ArrowLinkUpRight } from "bdp-ui/icons";
+import { LanguageSwitcher, ThemeSwitcher } from "./Header";
+import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 
 const MobileMenu = () => {
   const links = ["categories", "topics", "speakers", "types", "sources"];

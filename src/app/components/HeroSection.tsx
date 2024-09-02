@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLinkUpRight } from "bdp-ui/icons";
 
 import { Wrapper } from ".";
 import HeroImageDestop from "/public/images/hero-desktop.webp";
 import HeroImageMobile from "/public/images/hero-mobile.webp";
+import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 
 const HeroSection = () => {
   return (
@@ -20,7 +20,7 @@ const HeroSection = () => {
           </p>
         </section>
         <Link
-          href='/transcripts'
+          href='https://btctranscripts.com/'
           className='flex justify-between items-center h-20 px-8 bg-orange-custom-100 rounded-full w-[90%] max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full'
         >
           <p className='text-xl text-white font-semibold text-nowrap max-lg:text-lg max-md:text-base'>Explore Transcripts</p>
@@ -33,14 +33,12 @@ const HeroSection = () => {
           src={HeroImageDestop}
           alt='transcript desktop card'
           className='w-full max-h-[437px] max-md:max-w-full max-md:h-[180px] max-sm:h-[460px] max-md:hidden'
-          priority
           placeholder='blur'
         />
         <Image
           src={HeroImageMobile}
           alt='transcript mobile card'
           className='w-full max-h-[460px] max-md:max-w-[433px] md:hidden'
-          priority
           placeholder='blur'
         />
       </section>

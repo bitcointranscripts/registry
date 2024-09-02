@@ -1,6 +1,6 @@
 import React from "react";
 import { Ubuntu } from "next/font/google";
-import { BitcoinIcon } from "bdp-ui/icons";
+import { BitcoinIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 
 export const ubuntu = Ubuntu({ subsets: ["latin"], display: "swap", weight: ["700"], style: ["italic"] });
 
