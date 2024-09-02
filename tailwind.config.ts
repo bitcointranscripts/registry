@@ -20,6 +20,7 @@ const config: Config = {
           "custom-800": "#808080",
           "custom-900": "#F7F7F7",
           "custom-1000": "#656565",
+          "custom-1100":"#525252",
         },
         blue: {
           "custom-100": "#2A58FE",
