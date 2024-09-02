@@ -15,6 +15,9 @@
 
 # production
 /build
+/public/categories.json
+/public/types-data.json
+/public/tag-data.json
 
 # misc
 .DS_Store
