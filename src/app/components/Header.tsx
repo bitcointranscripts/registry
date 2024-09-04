@@ -213,7 +213,7 @@ const Header = () => {
       </section>
 
       <div className='max-md:gap-4 items-center md:hidden max-md:flex'>
-        <button className='md:hidden max-md:flex'>
+        <button className='md:hidden max-md:flex hidden'>
           <SearchIcon className='text-black w-6' />
         </button>
         <button className='md:hidden max-md:flex h-8 w-8 items-center justify-center' onClick={() => setOpen(!open)}>

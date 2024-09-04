@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Wrapper } from ".";
-import HeroImageDestop from "/public/images/hero-desktop.webp";
-import HeroImageMobile from "/public/images/hero-mobile.webp";
+import HeroImageDestop from "/public/images/hero-desktop-image.webp";
+import HeroImageMobile from "/public/images/hero-mobile-image.webp";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 
 const HeroSection = () => {
@@ -34,12 +34,14 @@ const HeroSection = () => {
           alt='transcript desktop card'
           className='w-full max-h-[437px] max-md:max-w-full max-md:h-[180px] max-sm:h-[460px] max-md:hidden'
           placeholder='blur'
+          priority
         />
         <Image
           src={HeroImageMobile}
           alt='transcript mobile card'
           className='w-full max-h-[460px] max-md:max-w-[433px] md:hidden'
           placeholder='blur'
+          priority
         />
       </section>
     </Wrapper>
