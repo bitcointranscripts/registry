@@ -26,7 +26,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
         <section className='flex items-center gap-4 w-full'>
           <h3 className='text-2xl font-semibold max-md:text-xl'>Categories</h3>
           <Link
-            href='https://btctranscripts.com/tags/'
+            href='/tags'
             className='w-fit px-5 py-[6px] rounded-full border border-black flex gap-1 items-center max-md:py-1 max-md:px-3'
           >
             <p className='leading-[19.2px] text-sm font-medium'>View All</p>
@@ -52,7 +52,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
         <section className='flex items-center gap-4 w-full'>
           <h3 className='text-2xl font-semibold max-md:text-xl'>Types</h3>
           <Link
-            href='https://btctranscripts.com/categories/'
+            href='/categories'
             className='w-fit px-5 py-[6px] rounded-full border border-black flex gap-1 items-center max-md:py-1 max-md:px-3'
           >
             <p className='leading-[19.2px] text-sm font-medium'>View All</p>

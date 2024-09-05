@@ -20,7 +20,7 @@ const HeroSection = () => {
           </p>
         </section>
         <Link
-          href='https://btctranscripts.com/'
+          href='/transcripts'
           className='flex justify-between items-center h-20 px-8 bg-orange-custom-100 rounded-full w-[90%] max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full'
         >
           <p className='text-xl text-white font-semibold text-nowrap max-lg:text-lg max-md:text-base'>Explore Transcripts</p>
