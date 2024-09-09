@@ -8,9 +8,7 @@ import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "./MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
 import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "@bitcoin-dev-project/bdp-ui/icons";
-import { allTranscripts } from "contentlayer/generated";
 
-allTranscripts;
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -187,7 +185,7 @@ const Header = () => {
   }, [open]);
 
   return (
-    <Wrapper className='h-[140px] flex items-center w-full justify-between bg-white sticky top-0 border-b-[0.5px] border-b-gray-custom-200 z-10 gap-6 max-lg:gap-4 max-md:h-[86px] max-md:border-b-0'>
+    <Wrapper className='h-[140px] flex items-center w-full justify-between bg-white sticky top-0 border-b-[0.5px] border-b-gray-custom-200 z-20 gap-6 max-lg:gap-4 max-md:h-[86px] max-md:border-b-0'>
       <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
         <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
         <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>

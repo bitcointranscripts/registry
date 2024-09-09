@@ -9,7 +9,7 @@ const FooterTop = () => {
     <Wrapper className='pt-16 pb-20 flex justify-between max-md:flex-col max-md:px-6 max-md:gap-8 max-md:pt-6 max-md:pb-8'>
       <section className='flex justify-between w-[50%] gap-8 max-md:flex-col max-md:w-full'>
         <section className='flex flex-col gap-6 max-w-[400px] max-md:gap-4 max-md:max-w-full max-md:w-full'>
-          <Logo iconStyles='w-14 max-xl:w-10' textStyles='text-5xl text-black max-xl:text-3xl' />
+          <Logo iconStyles='w-14 max-xl:w-[45px]' textStyles='text-5xl text-black max-xl:text-[32px]' />
           <p className='font-medium sm:text-sm md:text-base xl:text-lg text-gray-custom-800 max-xl:text-base max-md:text-sm'>
             Community-maintained archive to unlocking knowledge from technical bitcoin transcripts
           </p>
