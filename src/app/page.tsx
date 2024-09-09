@@ -10,7 +10,6 @@ export default function Home() {
   return (
     <div className='bg-white flex flex-col items-center justify-center'>
       <div className='w-full max-w-[1920px]'>
-        <Header />
         <HeroSection />
         <FeaturedTranscripts />
         <WhyTranscripts />

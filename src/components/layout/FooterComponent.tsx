@@ -23,7 +23,7 @@ const FooterComponent = () => {
             <Link href='/transcripts'>
               Transcripts
             </Link>
-            <Link href='/About' className='hidden'>
+            <Link href='/about' className='hidden'>
               About
             </Link>
           </section>

@@ -18,13 +18,15 @@ export const menuApps = [
     href: "https://bitcoindevs.xyz/",
     image: bitcoindevs,
     alt: "Bitcoin Devs",
-    title: "Build the future of money - Study & contribute to bitcoin and lightning open source",
+    title:
+      "Build the future of money - Study & contribute to bitcoin and lightning open source",
   },
   {
     href: "https://chat.bitcoinsearch.xyz",
     image: chatbtc,
     alt: "ChatBTC image",
-    title: "Interactive AI chat to learn about bitcoin technology and its history",
+    title:
+      "Interactive AI chat to learn about bitcoin technology and its history",
   },
   {
     href: "https://bitcoinsearch.xyz/",
@@ -36,13 +38,15 @@ export const menuApps = [
     href: "https://tldr.bitcoinsearch.xyz/",
     image: bitcointldr,
     alt: "Bitcoin TLDR",
-    title: "Daily summary of key bitcoin tech development discussions and updates",
+    title:
+      "Daily summary of key bitcoin tech development discussions and updates",
   },
   {
     href: "https://savingsatoshi.com",
     image: savingSatoshi,
     alt: "Saving Satoshi",
-    title: "Engaging bitcoin dev intro for coders using technical texts and code challenges",
+    title:
+      "Engaging bitcoin dev intro for coders using technical texts and code challenges",
   },
   {
     href: "https://review.btctranscripts.com/",
@@ -51,3 +55,26 @@ export const menuApps = [
     title: "Review technical bitcoin transcripts and earn sats",
   },
 ] satisfies Array<MenuApp>;
+
+export const ExploreNavigationItems = [
+  {
+    href: "/categories",
+    title: "Categories",
+  },
+  {
+    href: "/topics",
+    title: "Topics",
+  },
+  {
+    href: "/speakers",
+    title: "Speakers",
+  },
+  {
+    href: "/types",
+    title: "Types",
+  },
+  {
+    href: "/sources",
+    title: "Sources",
+  },
+];

@@ -10,7 +10,7 @@ const nextConfig = {
         },
         {
           source: "/transcripts",
-          destination: "/gh-pages/index.html",
+          destination: "/categories",
         },
         {
           source: "/:path*",
