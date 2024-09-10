@@ -46,7 +46,6 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
 
   const languageCodes = ["zh", "es", "pt"];
   const languageRegex = new RegExp(`\\.(${languageCodes.join("|")})(\\.md)?$`);
-  console.log({ languageRegex });
 
   const transcripts = shuffle(allTranscripts).filter((transcript) => {
     return transcript.date && !languageRegex.test(transcript.url);
