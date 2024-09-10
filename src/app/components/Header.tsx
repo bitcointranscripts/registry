@@ -141,7 +141,7 @@ const MenuSwitcher = () => {
           </div>
         </div>
       </div>
-      <div className={` max-h-screen fixed bg-[#0000007f] top-0 bottom-0 right-0 left-0 ${open ? "flex" : "hidden"}`}></div>
+      <div className={`max-h-screen fixed bg-[#0000007f] top-0 bottom-0 right-0 left-0 ${open ? "flex" : "hidden"}`}></div>
     </div>
   );
 };
@@ -188,9 +188,9 @@ const Header = () => {
     <Wrapper className='h-[140px] flex items-center w-full justify-between bg-white sticky top-0 border-b-[0.5px] border-b-gray-custom-200 z-20 gap-6 max-lg:gap-4 max-md:h-[86px] max-md:border-b-0'>
       <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
         <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
-        <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
-          <Link href='/transcripts'>Transcripts</Link>
-          <Link href='/about' className='hidden'>
+        <nav className='md:hidden items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
+          <Link href='https://btctranscripts.com/'>Transcripts</Link>
+          <Link href='/transcripts' className='hidden'>
             About
           </Link>
         </nav>
@@ -198,13 +198,19 @@ const Header = () => {
 
       <SearchComponent />
 
-      <section className='flex gap-4 max-lg:gap-2 items-center max-md:hidden'>
+      <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden'>
         <div className='max-md:hidden hidden'>
           <LanguageSwitcher />
         </div>
         <div className='max-md:hidden hidden'>
           <ThemeSwitcher />
         </div>
+        <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
+          <Link href='https://btctranscripts.com/'>Transcripts</Link>
+          <Link href='/transcripts' className='hidden'>
+            About
+          </Link>
+        </nav>
         <div className='md:flex max-md:hidden'>
           <MenuSwitcher />
         </div>

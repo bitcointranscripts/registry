@@ -10,7 +10,7 @@ const MobileMenu = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-white min-h-full overflow-y-scroll'>
-      <section className='flex flex-col gap-2'>
+      <section className='flex-col gap-2 hidden'>
         <p className='text-lg font-medium text-black'>Transcripts</p>
         <div className='w-full flex flex-col'>
           {links.map((link) => (
@@ -24,7 +24,7 @@ const MobileMenu = () => {
         </div>
       </section>
       <section className='flex flex-col gap-6'>
-        <p className='text-lg font-medium text-black'>About</p>
+        <p className='text-lg font-medium text-black hidden'>About</p>
         <div className='w-fit hidden'>
           <LanguageSwitcher />
         </div>

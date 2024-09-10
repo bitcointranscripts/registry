@@ -44,10 +44,12 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
-  const languageCodes = ["zh.md", "es.md"];
-  const transcripts = allTranscripts.filter((transcript) => {
-    const fileName = transcript._raw.sourceFileName;
-    return transcript.date && languageCodes.some((code) => fileName.endsWith(code));
+  const languageCodes = ["zh", "es", "pt"];
+  const languageRegex = new RegExp(`\\.(${languageCodes.join("|")})(\\.md)?$`);
+  console.log({ languageRegex });
+
+  const transcripts = shuffle(allTranscripts).filter((transcript) => {
+    return transcript.date && !languageRegex.test(transcript.url);
   });
 
   // Sort and slice in one pass
@@ -62,7 +64,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
     return acc;
   }, [] as (Transcript & { days_opened: number })[]);
 
-  const featuredTranscripts = getFeaturedTranscripts(allTranscripts);
+  const featuredTranscripts = getFeaturedTranscripts(transcripts);
 
   return { latestTranscripts, featuredTranscripts };
 };
