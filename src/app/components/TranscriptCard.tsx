@@ -91,7 +91,7 @@ export const ExploreTranscriptCard = ({
       className={`flex flex-col min-w-[400px] max-md:min-w-[292px] p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex justify-between items-center gap-4'>
-        <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{title}</p>
+        <p className='text-xl font-medium max-xl:text-lg max-md:text-base capitalize'>{title}</p>
       </section>
 
       <p>{transcripts} Transcripts</p>

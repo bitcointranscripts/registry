@@ -20,6 +20,14 @@ interface ExploreTranscriptClientProps {
 }
 
 const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientProps) => {
+  const sortedCategories = Object.fromEntries(
+    Object.entries(categories)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, value]) => [key, value.sort((a, b) => a.title.localeCompare(b.title))])
+  );
+
+  const sortedTypes = Object.fromEntries(Object.entries(types).sort(([a], [b]) => a.localeCompare(b)));
+
   return (
     <div className='flex items-start flex-col gap-14 w-full max-md:gap-10'>
       <section className='flex flex-col gap-6 w-full'>
@@ -35,7 +43,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
         </section>
         <Carousel config={{ stepWidthInPercent: 40 }}>
           <Carousel.Container>
-            {Object.entries(categories).map(([key, value]) => (
+            {Object.entries(sortedCategories).map(([key, value]) => (
               <Carousel.Item key={key}>
                 <ExploreTranscriptCard title={key} transcripts={value.length} url={key} key={key} type='CATEGORY' />
               </Carousel.Item>
@@ -63,7 +71,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
         </section>
         <Carousel config={{ stepWidthInPercent: 40 }}>
           <Carousel.Container>
-            {Object.entries(types).map(([key, value]) => (
+            {Object.entries(sortedTypes).map(([key, value]) => (
               <Carousel.Item key={key}>
                 <ExploreTranscriptCard title={key} url={key} transcripts={value} key={key} type='TYPE' />
               </Carousel.Item>

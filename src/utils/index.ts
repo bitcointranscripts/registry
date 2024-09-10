@@ -72,7 +72,7 @@ export const getFeaturedTranscripts = (allTranscripts: Transcript[]) => {
   const featuredTranscripts = allTranscripts
     .filter((transcript) => transcript.speakers)
     .sort(() => Math.random() - 0.5)
-    .slice(0, 30);
+    .slice(0, 60);
 
   return featuredTranscripts;
 };
