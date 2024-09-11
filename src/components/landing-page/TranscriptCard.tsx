@@ -18,11 +18,11 @@ const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) 
       href={`${data.url}`}
       className={`flex flex-col justify-between ${
         transcripts ? "min-w-[400px] max-md:min-w-[292px]" : "max-w-[580px] w-full"
-      } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
+      } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex justify-between items-center gap-4'>
         <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{data?.title}</p>
-        {daysOpened ? <p className='text-sm text-nowrap whitespace-normal'>{daysOpened} days ago</p> : null}
+        {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800'>{daysOpened} days ago</p> : null}
       </section>
 
       {transcripts ? (
@@ -91,7 +91,7 @@ export const ExploreTranscriptCard = ({
       className={`flex flex-col min-w-[400px] max-md:min-w-[292px] p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex justify-between items-center gap-4'>
-        <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{title}</p>
+        <p className='text-xl font-medium max-xl:text-lg max-md:text-base capitalize'>{title}</p>
       </section>
 
       <p>{transcripts} Transcripts</p>

@@ -41,32 +41,40 @@ export function shuffle(data: Transcript[]) {
 }
 
 export const extractTranscripts = (allTranscripts: Transcript[]) => {
-  const transcripts = allTranscripts.filter((transcript) => !!transcript.date);
-  const date = new Date();
+  const CURRENT_DAY = Date.now();
+  const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
-  const CURRENT_DAY = date.getTime();
-  const ONE_DAY = 1000 * 3600 * 24;
+  const languageCodes = ["zh", "es", "pt"];
+  const languageRegex = new RegExp(`\\.(${languageCodes.join("|")})(\\.md)?$`);
 
-  const latestTranscripts = transcripts
-    .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime())
-    .slice(0, 3)
-    .map((transcript) => {
-      return {
-        ...transcript,
-        days_opened: Math.floor((CURRENT_DAY - new Date(transcript.date as string).getTime()) / ONE_DAY),
-      };
-    });
+  const transcripts = shuffle(allTranscripts).filter((transcript) => {
+    return transcript.date && !languageRegex.test(transcript.url);
+  });
+
+  // Sort and slice in one pass
+  const latestTranscripts = transcripts.reduce((acc, transcript) => {
+    const transcriptDate = new Date(transcript.date as string).getTime();
+    const days_opened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
+
+    acc.push({ ...transcript, days_opened });
+    acc.sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
+
+    if (acc.length > 3) acc.pop();
+    return acc;
+  }, [] as (Transcript & { days_opened: number })[]);
 
   const featuredTranscripts = getFeaturedTranscripts(transcripts);
 
   return { latestTranscripts, featuredTranscripts };
 };
 
-export const getFeaturedTranscripts = (allTranscripts: Transcript[], callbackFn?: React.Dispatch<React.SetStateAction<Transcript[]>>) => {
-  const featuredTranscripts = shuffle(allTranscripts).filter((transcript) => !!transcript.speakers);
-  callbackFn && callbackFn(featuredTranscripts.slice(0, 3));
+export const getFeaturedTranscripts = (allTranscripts: Transcript[]) => {
+  const featuredTranscripts = allTranscripts
+    .filter((transcript) => transcript.speakers)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 60);
 
-  return featuredTranscripts.slice(0, 3);
+  return featuredTranscripts;
 };
 
 export function createSlug(name: string): string {

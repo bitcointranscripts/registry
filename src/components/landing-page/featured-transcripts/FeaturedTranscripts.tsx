@@ -1,7 +1,8 @@
 import React from "react";
 import { extractTranscripts } from "@/utils";
-import { Wrapper, FeaturedTranscriptClient } from ".";
 import { allTranscripts } from "contentlayer/generated";
+import Wrapper from "@/components/layout/Wrapper";
+import FeaturedTranscriptClient from "./FeaturedTranscriptClient";
 
 const FeaturedTranscripts = () => {
   const { latestTranscripts, featuredTranscripts } = extractTranscripts(allTranscripts);

@@ -2,6 +2,7 @@ import { createSlug } from "./src/utils";
 import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
 import { writeFileSync } from "fs";
 import path from "path";
+import * as fs from "fs";
 import { Transcript as ContentTranscriptType } from "./.contentlayer/generated/types";
 
 const Resources = defineNestedType(() => ({
@@ -12,24 +13,103 @@ const Resources = defineNestedType(() => ({
   },
 }));
 
+export interface CategoryInfo {
+  title: string;
+  slug: string;
+  optech_url: string;
+  categories: string[];
+  aliases?: string[];
+  excerpt: string;
+}
+
+interface TagInfo {
+  title: string;
+  slug: string;
+  count: number;
+}
+
 /**
  * Count the occurrences of all tags across transcripts and write to json file
  */
-function createTagCount(allTranscripts: ContentTranscriptType[]) {
-  const tagCount: Record<string, number> = {};
-  allTranscripts.forEach((file) => {
-    if (file.tags) {
-      file.tags.forEach((tag: string) => {
-        const formattedTag = createSlug(tag);
-        if (formattedTag in tagCount) {
-          tagCount[formattedTag] += 1;
-        } else {
-          tagCount[formattedTag] = 1;
+function createTagCount(allTranscripts: ContentTranscriptType[]): { tagCounts: Record<string, number> } {
+  const tagCounts: Record<string, number> = {};
+
+  for (const file of allTranscripts) {
+    if (!file.tags) continue;
+
+    for (const tag of file.tags) {
+      const formattedTag = createSlug(tag);
+      tagCounts[formattedTag] = (tagCounts[formattedTag] || 0) + 1;
+    }
+  }
+
+  return { tagCounts };
+}
+
+const getCategories = () => {
+  const filePath = path.join(process.cwd(), "public", "categories.json");
+  const fileContents = fs.readFileSync(filePath, "utf8");
+  return JSON.parse(fileContents);
+};
+
+function organizeTags(transcripts: ContentTranscriptType[]) {
+  const categories: CategoryInfo[] = getCategories();
+  const { tagCounts } = createTagCount(transcripts);
+
+  const tagsByCategory: { [category: string]: TagInfo[] } = {};
+  const tagsWithoutCategory = new Set<string>();
+  const categorizedTags = new Set<string>();
+
+  // Create a map for faster category lookup
+  const categoryMap = new Map<string, CategoryInfo>();
+
+  categories.forEach((cat) => {
+    cat.categories.forEach((category) => {
+      if (!tagsByCategory[category]) {
+        tagsByCategory[category] = [];
+      }
+    });
+    categoryMap.set(cat.slug, cat);
+    cat.aliases?.forEach((alias) => categoryMap.set(alias, cat));
+  });
+
+  // Process all tags at once
+  const allTags = new Set(transcripts.flatMap((transcript) => transcript.tags || []));
+
+  allTags.forEach((tag) => {
+    const catInfo = categoryMap.get(tag);
+    if (catInfo) {
+      catInfo.categories.forEach((category) => {
+        if (!tagsByCategory[category].some((t) => t.slug === tag)) {
+          tagsByCategory[category].push({
+            title: catInfo.title,
+            slug: tag,
+            count: tagCounts[tag] || 0,
+          });
         }
       });
+      categorizedTags.add(tag);
+    } else {
+      tagsWithoutCategory.add(tag);
     }
   });
-  writeFileSync("./public/tag-data.json", JSON.stringify(tagCount));
+
+  // Add "Miscellaneous" category with remaining uncategorized tags
+  if (tagsWithoutCategory.size > 0) {
+    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map((tag) => ({
+      title: tag,
+      slug: tag,
+      count: tagCounts[tag] || 0,
+    }));
+  }
+
+  // Sort tags alphabetically within each category
+  Object.keys(tagsByCategory).forEach((category) => {
+    tagsByCategory[category].sort((a, b) => a.title.localeCompare(b.title));
+  });
+
+  writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
+  return { tagsByCategory, tagsWithoutCategory };
 }
 
 /**
@@ -123,7 +203,7 @@ export default makeSource({
   ],
   onSuccess: async (importData) => {
     const { allDocuments } = await importData();
-    createTagCount(allDocuments);
+    organizeTags(allDocuments);
     createTypesCount(allDocuments);
   },
 });

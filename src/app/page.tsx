@@ -1,12 +1,12 @@
 import React from "react";
-import { allTranscripts } from "contentlayer/generated";
-
-import { organizeContent } from "@/utils";
-import { HeroSection, Header, FeaturedTranscripts, ExploreTranscripts, FooterTop, WhyTranscripts, FooterComponent } from "./components/index";
+import Header from "@/components/layout/Header";
+import HeroSection from "@/components/landing-page/HeroSection";
+import FeaturedTranscripts from "@/components/landing-page/featured-transcripts/FeaturedTranscripts";
+import WhyTranscripts from "@/components/landing-page/WhyTranscripts";
+import ExploreTranscripts from "@/components/landing-page/explore-transcripts/ExploreTranscripts";
+import FooterComponent from "@/components/layout/FooterComponent";
 
 export default function Home() {
-  const contentTree = organizeContent(allTranscripts);
-
   return (
     <div className='bg-white flex flex-col items-center justify-center'>
       <div className='w-full max-w-[1920px]'>
@@ -15,7 +15,6 @@ export default function Home() {
         <FeaturedTranscripts />
         <WhyTranscripts />
         <ExploreTranscripts />
-        <FooterTop />
         <FooterComponent />
       </div>
     </div>
