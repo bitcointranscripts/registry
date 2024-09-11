@@ -3,11 +3,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Wrapper, Logo } from ".";
+// import { Wrapper, Logo } from "../landing-page";
 import MenuIcon from "/public/svgs/menu.svg";
-import MobileMenu from "./MobileMenu";
+import MobileMenu from "../landing-page/MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
 import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import Wrapper from "./Wrapper";
+import Logo from "./Logo";
 
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
@@ -189,8 +191,8 @@ const Header = () => {
       <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
         <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
         <nav className='md:hidden items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
-          <Link href='https://btctranscripts.com/'>Transcripts</Link>
-          <Link href='/transcripts' className='hidden'>
+          <Link href='/transcripts'>Transcripts</Link>
+          <Link href='/about' className='hidden'>
             About
           </Link>
         </nav>

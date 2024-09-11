@@ -2,12 +2,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { Wrapper } from ".";
 import HeroImageDestop from "/public/images/hero-desktop-image.webp";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import circleBackground from "/public/svgs/circle-background.svg";
 import circleBackgroundMobile from "/public/svgs/circle-background-mobile.svg";
 import mobileDesktopImage from "/public/svgs/mobile-desktop-image.svg";
+import Wrapper from "../layout/Wrapper";
 
 const HeroSection = () => {
   return (

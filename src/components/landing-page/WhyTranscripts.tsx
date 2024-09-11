@@ -3,10 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { SuggestModal, Wrapper } from ".";
 import userTranscribing from "/public/images/user-typing.webp";
 import wordList from "/public/images/word-list.webp";
 import bitcoinMap from "/public/images/bitcoin-map.png";
+import Wrapper from "../layout/Wrapper";
+import SuggestModal from "./SuggestionModal";
 
 const WhyTranscripts = () => {
   const [isOpen, setIsOpen] = React.useState(false);

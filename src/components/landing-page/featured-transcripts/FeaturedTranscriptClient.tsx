@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Transcript } from "contentlayer/generated";
 import { DiceIcon } from "@bitcoin-dev-project/bdp-ui/icons";
-import { TranscriptCard } from ".";
+import TranscriptCard from "../TranscriptCard";
 
 const FeaturedTranscriptClient = ({
   featuredTranscripts,

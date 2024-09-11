@@ -1,9 +1,8 @@
-"use server";
-
 import React from "react";
 import path from "path";
 import * as fs from "fs";
-import { Wrapper, ExploreTranscriptClient } from ".";
+import Wrapper from "@/components/layout/Wrapper";
+import ExploreTranscriptClient from "./ExploreTranscriptClient";
 
 function getTags() {
   const filePath = path.join(process.cwd(), "public", "tag-data.json");

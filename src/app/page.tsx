@@ -1,5 +1,10 @@
 import React from "react";
-import { HeroSection, Header, FeaturedTranscripts, ExploreTranscripts, FooterTop, WhyTranscripts, FooterComponent } from "./components";
+import Header from "@/components/layout/Header";
+import HeroSection from "@/components/landing-page/HeroSection";
+import FeaturedTranscripts from "@/components/landing-page/featured-transcripts/FeaturedTranscripts";
+import WhyTranscripts from "@/components/landing-page/WhyTranscripts";
+import ExploreTranscripts from "@/components/landing-page/explore-transcripts/ExploreTranscripts";
+import FooterComponent from "@/components/layout/FooterComponent";
 
 export default function Home() {
   return (
@@ -10,7 +15,6 @@ export default function Home() {
         <FeaturedTranscripts />
         <WhyTranscripts />
         <ExploreTranscripts />
-        <FooterTop />
         <FooterComponent />
       </div>
     </div>

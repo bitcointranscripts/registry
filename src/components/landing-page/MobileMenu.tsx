@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { menuApps } from "@/utils/data";
-import { LanguageSwitcher, ThemeSwitcher } from "./Header";
+import { LanguageSwitcher, ThemeSwitcher } from "../layout/Header";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 
 const MobileMenu = () => {
