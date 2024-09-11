@@ -15,7 +15,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) 
 
   return (
     <Link
-      href={`https://btctranscripts.com${data.url}`}
+      href={`${data.url}`}
       className={`flex flex-col justify-between ${
         transcripts ? "min-w-[400px] max-md:min-w-[292px]" : "max-w-[580px] w-full"
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
@@ -72,15 +72,14 @@ export const ExploreTranscriptCard = ({
   type: "CATEGORY" | "TYPE";
 }) => {
   const parseUrl = createSlug(url);
-  const homeUrl = "https://btctranscripts.com";
 
   let linkUrl = "";
   switch (type) {
     case "CATEGORY":
-      linkUrl = `${homeUrl}/tags/#${parseUrl}`;
+      linkUrl = `/tags/#${parseUrl}`;
       break;
     case "TYPE":
-      linkUrl = `${homeUrl}/categories/${parseUrl}`;
+      linkUrl = `/categories/${parseUrl}`;
       break;
     default:
       break;

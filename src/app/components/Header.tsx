@@ -191,8 +191,8 @@ const Header = () => {
       <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
         <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
         <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
-          <Link href='https://btctranscripts.com/'>Transcripts</Link>
-          <Link href='/transcripts' className='hidden'>
+          <Link href='/transcripts'>Transcripts</Link>
+          <Link href='/about' className='hidden'>
             About
           </Link>
         </nav>
