@@ -8,6 +8,9 @@ const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   title: "Bitcoin transcript registry",
   description: "A collection of technical bitcoin and lightning transcripts",
+  icons: {
+    icon: "/btctranscripts.png",
+  },
 };
 
 export default function RootLayout({
