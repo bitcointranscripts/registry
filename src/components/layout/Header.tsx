@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import { Wrapper, Logo } from "../landing-page";
 import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "../landing-page/MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
