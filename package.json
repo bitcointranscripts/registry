@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "fetch-categories": "node scripts/fetchCategories.js",
     "submodules:update": "git submodule update --init && git submodule update --remote",
-    "build": "npm run submodules:update && next build",
+    "build": "npm run submodules:update && npm run fetch-categories && next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@bitcoin-dev-project/bdp-ui": "^1.2.2",
     "contentlayer2": "^0.4.6",
     "next": "14.2.4",
     "next-contentlayer2": "^0.4.6",
