@@ -86,7 +86,7 @@ export const ExploreTranscriptCard = ({
   }
 
   return (
-    <Link
+    <a
       href={linkUrl}
       className={`flex flex-col min-w-[400px] max-md:min-w-[292px] p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
@@ -95,7 +95,7 @@ export const ExploreTranscriptCard = ({
       </section>
 
       <p>{transcripts} Transcripts</p>
-    </Link>
+    </a>
   );
 };
 
