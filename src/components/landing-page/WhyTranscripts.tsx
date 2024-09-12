@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import userTranscribing from "/public/images/user-typing.webp";
+import btcPrague from "/public/images/btc-prague.webp";
 import wordList from "/public/images/word-list.webp";
 import bitcoinMap from "/public/images/bitcoin-map.png";
 import Wrapper from "../layout/Wrapper";
@@ -54,8 +54,8 @@ const WhyTranscripts = () => {
             </Link>
           </div>
         </section>
-        <section className='max-w-[50%] max-h-[587px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[261px]'>
-          <Image src={userTranscribing} loading='lazy' alt='user transcribing' className='w-full h-full' />
+        <section className='w-full rounded-[20px] max-md:rounded-[10px] overflow-hidden grow max-w-[50%] max-h-[587px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[261px]'>
+          <Image src={btcPrague} loading='lazy' alt='btc prague conference' className='w-full h-full' />
         </section>
       </div>
 
