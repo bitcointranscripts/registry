@@ -86,3 +86,5 @@ export function createSlug(name: string): string {
     .replace(/^-+/, "") // Trim - from start of text
     .replace(/-+$/, ""); // Trim - from end of text
 }
+
+export const organizeTranscriptTopic = ()=> null

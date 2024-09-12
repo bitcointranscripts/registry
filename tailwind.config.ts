@@ -20,6 +20,8 @@ const config: Config = {
           "custom-800": "#808080",
           "custom-900": "#F7F7F7",
           "custom-1000": "#656565",
+          "custom-1100": "#4D4D4D",
+          "custom-1200": "#CCCCCC"
         },
         blue: {
           "custom-100": "#2A58FE",
@@ -40,6 +42,8 @@ const config: Config = {
         },
         "custom-black": {
           "custom-100": "#292929",
+          "custom-200": "#202020",
+          "custom-300": "#464646"
         },
       },
       fontFamily: {
