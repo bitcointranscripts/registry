@@ -1,0 +1,29 @@
+name: Update Submodules
+
+on:
+  repository_dispatch:
+    types: [update_submodules]
+
+jobs:
+  update:
+    permissions:
+      contents: write
+      actions: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Update submodules
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git submodule update --init && git submodule update --remote
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Update submodules" || echo "No changes to commit"
+          git push
