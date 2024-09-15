@@ -87,4 +87,59 @@ export function createSlug(name: string): string {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-export const organizeTranscriptTopic = ()=> null
+export function groupTopicsByAlphabet(
+  data: Record<string, TopicsData[]>
+): GroupedTopics[] {
+  const grouped: { [key: string]: TopicsData[] } = {};
+  //  This loops over all tags-data and gets the first letter
+  Object.values(data).forEach((titles) => {
+    titles.forEach((item) => {
+      const firstLetter = item.title.charAt(0).toUpperCase();
+
+      if (!grouped[firstLetter]) {
+        grouped[firstLetter] = [];
+      }
+
+      grouped[firstLetter].push(item);
+    });
+  });
+
+  // This turns the object  into an array of GroupedTitles
+  const result: GroupedTopics[] = Object.keys(grouped)
+    .sort()
+    .map((letter) => ({
+      letter,
+      titles: grouped[letter],
+    }));
+
+  return result;
+}
+
+export function getDoubleDigits(count: number) {
+  if (count >= 0 && count <= 9) {
+    return `0${count}`;
+  }
+
+  return `${count}`;
+}
+
+export const getAllCharactersProperty = (
+  arrayOfAlphabets: string[],
+  groupedTopics: GroupedTopics[]
+) => {
+  const newData = arrayOfAlphabets.map((alp) => {
+    const ifFound = groupedTopics.find((topic) => topic.letter == alp);
+    if (ifFound) {
+      return {
+        alp,
+        isDisabled: false,
+      };
+    }
+    return {
+      alp,
+      isDisabled: true,
+    };
+  });
+
+  return newData;
+};
