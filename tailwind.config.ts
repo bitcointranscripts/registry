@@ -52,6 +52,7 @@ const config: Config = {
       fontFamily: {
         brawler: ["var(--brawler-font)"],
         inter: ["var(--inter-font)"],
+        "basis-mono": ["Basis Grotesque Mono Pro"]
       },
     },
   },

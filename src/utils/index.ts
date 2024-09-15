@@ -3,6 +3,16 @@ import { type Transcript } from "contentlayer/generated";
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
 }
+export type TopicsData = {
+  title: string;
+  slug: string;
+  count: number;
+};
+
+export type GroupedTopics = {
+  letter: string;
+  titles: TopicsData[];
+};
 
 export function organizeContent(transcripts: Transcript[]): ContentTree {
   const tree: ContentTree = {};
@@ -57,7 +67,11 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
     const days_opened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
 
     acc.push({ ...transcript, days_opened });
-    acc.sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
+    acc.sort(
+      (a, b) =>
+        new Date(b.date as string).getTime() -
+        new Date(a.date as string).getTime()
+    );
 
     if (acc.length > 3) acc.pop();
     return acc;
@@ -122,24 +136,3 @@ export function getDoubleDigits(count: number) {
 
   return `${count}`;
 }
-
-export const getAllCharactersProperty = (
-  arrayOfAlphabets: string[],
-  groupedTopics: GroupedTopics[]
-) => {
-  const newData = arrayOfAlphabets.map((alp) => {
-    const ifFound = groupedTopics.find((topic) => topic.letter == alp);
-    if (ifFound) {
-      return {
-        alp,
-        isDisabled: false,
-      };
-    }
-    return {
-      alp,
-      isDisabled: true,
-    };
-  });
-
-  return newData;
-};
