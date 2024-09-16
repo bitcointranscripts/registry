@@ -207,8 +207,8 @@ const Header = () => {
           <ThemeSwitcher />
         </div>
         <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
-          <Link href='https://btctranscripts.com/'>Transcripts</Link>
-          <Link href='/transcripts' className='hidden'>
+          <Link href='/transcripts'>Transcripts</Link>
+          <Link href='/about' className='hidden'>
             About
           </Link>
         </nav>
