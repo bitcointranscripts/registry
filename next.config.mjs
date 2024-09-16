@@ -9,6 +9,10 @@ const nextConfig = {
           destination: '/gh-pages/:path*.:ext', // rewrite to gh-pages/[path_here].ext
         },
         {
+          source: "/transcripts",
+          destination: "/gh-pages/index.html",
+        },
+        {
           source: "/:path*",
           destination: "/gh-pages/:path*/index.html",
         },
