@@ -5,8 +5,12 @@ const nextConfig = {
     return {
       fallback: [
         {
-          source: "/plugins/:path*",
-          destination: "/gh-pages/plugins/:path*",
+          source: '/:path*.:ext([^/]+)', // intercept all paths ending with a file extension
+          destination: '/gh-pages/:path*.:ext', // rewrite to gh-pages/[path_here].ext
+        },
+        {
+          source: "/transcripts",
+          destination: "/gh-pages/index.html",
         },
         {
           source: "/:path*",

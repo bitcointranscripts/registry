@@ -20,7 +20,7 @@ const FooterComponent = () => {
             </p>
           </section>
           <section className='flex flex-col gap-12 text-black font-bold text-xl underline max-xl:text-base max-xl:gap-8 max-md:gap-4'>
-            <Link href='https://btctranscripts.com/' target='_blank'>
+            <Link href='/transcripts'>
               Transcripts
             </Link>
             <Link href='/About' className='hidden'>
