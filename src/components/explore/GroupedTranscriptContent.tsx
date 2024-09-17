@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from "react";
 import SingleTranscriptContent from "./SingleTranscriptContent";
 import { GroupedTopics } from "@/utils";
@@ -13,7 +14,6 @@ const GroupedTranscriptContent = ({
   setCurrentGroup,
 }: IGroupedTranscriptContent) => {
   const { ref, inView, entry } = useInView();
-
 
   useEffect(() => {
     if (inView) {

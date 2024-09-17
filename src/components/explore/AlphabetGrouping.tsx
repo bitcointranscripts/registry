@@ -1,17 +1,18 @@
-import {
-  getAllCharactersProperty,
-  GroupedTopics,
-} from "@/utils";
+import { getAllCharactersProperty, GroupedTopics } from "@/utils";
 import { alphabeticalArrangement } from "@/utils/data";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 export interface IAlphabetGrouping {
   currentGroup: string;
   groupedTopics: GroupedTopics[];
+  scrolled: boolean;
+  setScrolled: Dispatch<SetStateAction<boolean>>;
 }
 const AlphabetGrouping = ({
   currentGroup,
   groupedTopics,
+  scrolled,
+  setScrolled,
 }: IAlphabetGrouping) => {
   const allCharacters = getAllCharactersProperty(
     alphabeticalArrangement,
@@ -26,7 +27,10 @@ const AlphabetGrouping = ({
       {allCharacters.map((char) => (
         <Link
           key={char.alp}
-          href={`#${!char.isDisabled ?char.alp.toLowerCase():""}`}
+          onClick={() => {
+            setScrolled(false);
+          }}
+          href={`#${!char.isDisabled ? char.alp.toLowerCase() : ""}`}
           className={` flex justify-center items-center w-8 h-8 text-base xl:h-10 xl:w-10 xl:text-lg
             ${char.isDisabled && "text-gray-custom-1300 cursor-not-allowed"} ${
             currentGroup == char.alp

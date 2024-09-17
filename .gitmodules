@@ -1,7 +1,3 @@
 [submodule "public/bitcoin-transcript"]
 	path = public/bitcoin-transcript
 	url = https://github.com/bitcointranscripts/bitcointranscripts.git
-[submodule "public/gh-pages"]
-	path = public/gh-pages
-	url = https://github.com/bitcointranscripts/bitcointranscripts.github.io.git
-	branch = gh-pages

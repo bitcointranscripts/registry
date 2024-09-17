@@ -1,5 +1,9 @@
 import { createSlug } from "./src/utils";
-import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
+import {
+  defineDocumentType,
+  defineNestedType,
+  makeSource,
+} from "contentlayer2/source-files";
 import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
@@ -31,7 +35,9 @@ interface TagInfo {
 /**
  * Count the occurrences of all tags across transcripts and write to json file
  */
-function createTagCount(allTranscripts: ContentTranscriptType[]): { tagCounts: Record<string, number> } {
+function createTagCount(allTranscripts: ContentTranscriptType[]): {
+  tagCounts: Record<string, number>;
+} {
   const tagCounts: Record<string, number> = {};
 
   for (const file of allTranscripts) {
@@ -68,7 +74,8 @@ const getCategories = () => {
   return JSON.parse(fileContents);
 };
 
-function organizeTags(transcripts: ContentTranscriptType[]) {
+// export function organizeTags(transcripts: ContentTranscriptType[]) {
+export function organizeTags(transcripts: ContentTranscriptType[]) {
   const categories: CategoryInfo[] = getCategories();
   const { tagCounts } = createTagCount(transcripts);
 
@@ -81,19 +88,24 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 
   categories.forEach((cat) => {
     cat.categories.forEach((category) => {
-      if (!tagsByCategory[category]) {
-        tagsByCategory[category] = [];
+      if (!tagsByCategory[createSlug(category)]) {
+        tagsByCategory[createSlug(category)] = [];
       }
     });
-    categoryMap.set(cat.slug, cat);
-    cat.aliases?.forEach((alias) => categoryMap.set(alias, cat));
+    categoryMap.set(createSlug(cat.slug), cat);
+    cat.aliases?.forEach((alias) => categoryMap.set(createSlug(alias), cat));
   });
 
+  console.log(tagsByCategory, "tags")
   // Process all tags at once
-  const allTags = new Set(transcripts.flatMap((transcript) => transcript.tags || []));
+  const allTags = new Set(
+    transcripts.flatMap(
+      (transcript) => transcript.tags?.map((tag) => createSlug(tag.toLowerCase())) || []
+    )
+  );
 
   allTags.forEach((tag) => {
-    const catInfo = categoryMap.get(tag);
+    const catInfo =  categoryMap.get(tag);
     if (catInfo) {
       catInfo.categories.forEach((category) => {
         if (!tagsByCategory[category].some((t) => t.slug === tag)) {
@@ -112,19 +124,22 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 
   // Add "Miscellaneous" category with remaining uncategorized tags
   if (tagsWithoutCategory.size > 0) {
-    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map((tag) => ({
-      title: tag,
-      slug: tag,
-      count: tagCounts[tag] || 0,
-    }));
+    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map(
+      (tag) => ({
+        title: tag,
+        slug: tag,
+        count: tagCounts[tag] || 0,
+      })
+    );
   }
 
   // Sort tags alphabetically within each category
   Object.keys(tagsByCategory).forEach((category) => {
     tagsByCategory[category].sort((a, b) => a.title.localeCompare(b.title));
   });
-
+const abokiTags = Array.from(allTags)
   writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
+  writeFileSync("./public/all-tags.json", JSON.stringify(abokiTags));
   return { tagsByCategory, tagsWithoutCategory };
 }
 
