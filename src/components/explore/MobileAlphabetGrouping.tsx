@@ -38,11 +38,11 @@ const MobileAlphabetGrouping = ({
       <select
         onChange={onOptionsChange}
         ref={selectRef}
-        className="bg-orange-custom-800 max-w-[calc(100vw-32px)] fixed top-10 w-full py-2.5 px-4 outline-none"
+        className="bg-orange-custom-800 max-w-[calc(100vw-32px)]  top-10 w-full py-2.5 px-4 outline-none"
       >
-        {allCharacters.map((char) => (
-          <option key={char.alp} value={char.alp} disabled={char.isDisabled}>
-            {char.alp}{" "}
+        {Object.entries(allCharacters).map((char) => (
+          <option key={char[1].alp} value={char[1].alp} disabled={char[1].isDisabled}>
+            {char[1].alp}{" "}
           </option>
         ))}
       </select>

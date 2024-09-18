@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @layer utilities {
+  .header-height{
+    height:calc() var(--header-height);
+  }
+} */
 /*  fonts declaration */
 @font-face {
   font-family: 'Basis Grotesque Mono Pro';
@@ -13,7 +18,8 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --basic-mono-font: basic-mono
+  --basic-mono-font: basic-mono;
+  --header-height: 100px;
 }
 
 /* @media (prefers-color-scheme: dark) {

@@ -17,7 +17,7 @@ const BreadCrumbs = ({ links }: IBreadCrumbs) => {
           <div key={link.name} className="flex gap-1 items-center">
             <Link
               className={
-                `${i !== links.length-1 ? "text-black" :"text-gray-custom-800"} capitalize hover:underline font-medium text-sm   xl:text-base`
+                ` text-gray-custom-800 capitalize hover:underline font-medium text-sm    2xl:text-base`
               }
               href={link.link}
             >

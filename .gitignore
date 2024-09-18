@@ -19,6 +19,7 @@
 /public/types-data.json
 /public/tag-data.json
 /public/aliases.json
+/public/topics-data.json
 
 # misc
 .DS_Store

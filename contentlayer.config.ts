@@ -74,8 +74,7 @@ const getCategories = () => {
   return JSON.parse(fileContents);
 };
 
-// export function organizeTags(transcripts: ContentTranscriptType[]) {
-export function organizeTags(transcripts: ContentTranscriptType[]) {
+function organizeTags(transcripts: ContentTranscriptType[]) {
   const categories: CategoryInfo[] = getCategories();
   const { tagCounts } = createTagCount(transcripts);
 
@@ -88,24 +87,23 @@ export function organizeTags(transcripts: ContentTranscriptType[]) {
 
   categories.forEach((cat) => {
     cat.categories.forEach((category) => {
-      if (!tagsByCategory[createSlug(category)]) {
-        tagsByCategory[createSlug(category)] = [];
+      if (!tagsByCategory[category]) {
+        tagsByCategory[category] = [];
       }
     });
     categoryMap.set(createSlug(cat.slug), cat);
-    cat.aliases?.forEach((alias) => categoryMap.set(createSlug(alias), cat));
+    cat.aliases?.forEach((alias) => categoryMap.set(alias, cat));
   });
 
-  console.log(tagsByCategory, "tags")
   // Process all tags at once
   const allTags = new Set(
     transcripts.flatMap(
-      (transcript) => transcript.tags?.map((tag) => createSlug(tag.toLowerCase())) || []
+      (transcript) => transcript.tags?.map((tag) => tag) || []
     )
   );
 
   allTags.forEach((tag) => {
-    const catInfo =  categoryMap.get(tag);
+    const catInfo = categoryMap.get(tag);
     if (catInfo) {
       catInfo.categories.forEach((category) => {
         if (!tagsByCategory[category].some((t) => t.slug === tag)) {
@@ -137,12 +135,34 @@ export function organizeTags(transcripts: ContentTranscriptType[]) {
   Object.keys(tagsByCategory).forEach((category) => {
     tagsByCategory[category].sort((a, b) => a.title.localeCompare(b.title));
   });
-const abokiTags = Array.from(allTags)
+
   writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
-  writeFileSync("./public/all-tags.json", JSON.stringify(abokiTags));
   return { tagsByCategory, tagsWithoutCategory };
 }
 
+function organizeTopics(transcripts: ContentTranscriptType[]) {
+  const { tagCounts } = createTagCount(transcripts);
+
+  const allTopics = new Set(
+    transcripts.flatMap(
+      (transcript) => transcript.tags?.map((topic) => topic) || []
+    )
+  );
+  let topicsData: TagInfo[] = [];
+  allTopics.forEach((topic) => {
+    topicsData.push({
+      title: topic,
+      slug: topic,
+      count: tagCounts[topic] || 0,
+    });
+  });
+
+  // Sort tags alphabetically within each category
+
+  writeFileSync("./public/topics-data.json", JSON.stringify(topicsData));
+
+  return tagCounts;
+}
 /**
  * Count the occurrences of all types across transcripts and write to json file
  */
@@ -236,6 +256,7 @@ export default makeSource({
     const { allDocuments } = await importData();
     organizeTags(allDocuments);
     createTypesCount(allDocuments);
+    organizeTopics(allDocuments);
     getTranscriptAliases(allDocuments);
   },
 });

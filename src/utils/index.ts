@@ -9,10 +9,7 @@ export type TopicsData = {
   count: number;
 };
 
-export type GroupedTopics = {
-  letter: string;
-  titles: TopicsData[];
-};
+export type GroupedTopics = Record<string, TopicsData[]>;
 
 export function organizeContent(transcripts: Transcript[]): ContentTree {
   const tree: ContentTree = {};
@@ -102,31 +99,21 @@ export function createSlug(name: string): string {
 }
 
 export function groupTopicsByAlphabet(
-  data: Record<string, TopicsData[]>
-): GroupedTopics[] {
-  const grouped: { [key: string]: TopicsData[] } = {};
-  //  This loops over all tags-data and gets the first letter
-  Object.values(data).forEach((titles) => {
-    titles.forEach((item) => {
+  items: TopicsData[]
+): Record<string, TopicsData[]> {
+  return items
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .reduce((acc, item) => {
       const firstLetter = item.title.charAt(0).toUpperCase();
 
-      if (!grouped[firstLetter]) {
-        grouped[firstLetter] = [];
+      if (!acc[firstLetter]) {
+        acc[firstLetter] = [];
       }
+      // Add the current item to the correct group
+      acc[firstLetter].push(item);
 
-      grouped[firstLetter].push(item);
-    });
-  });
-
-  // This turns the object  into an array of GroupedTitles
-  const result: GroupedTopics[] = Object.keys(grouped)
-    .sort()
-    .map((letter) => ({
-      letter,
-      titles: grouped[letter],
-    }));
-
-  return result;
+      return acc;
+    }, {} as GroupedTopics);
 }
 
 export function getDoubleDigits(count: number) {
@@ -136,3 +123,26 @@ export function getDoubleDigits(count: number) {
 
   return `${count}`;
 }
+
+export const getAllCharactersProperty = (
+  arrayOfAlphabets: string[],
+  groupedTopics: GroupedTopics
+) => {
+  const newData = arrayOfAlphabets.map((alp) => {
+    const ifFound = Object.entries(groupedTopics).find(
+      (topic) => topic[0] === alp
+    );
+    if (ifFound) {
+      return {
+        alp,
+        isDisabled: false,
+      };
+    }
+    return {
+      alp,
+      isDisabled: true,
+    };
+  });
+
+  return newData;
+};
