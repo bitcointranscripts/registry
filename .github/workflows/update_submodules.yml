@@ -20,11 +20,11 @@ jobs:
 
       - name: Update submodules
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
         run: |
           git submodule update --init && git submodule update --remote
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config --global user.name "${{ secrets.NAME }}"
+          git config --global user.email "${{ secrets.EMAIL }}"
           git add .
           git commit -m "Update submodules" || echo "No changes to commit"
           git push
