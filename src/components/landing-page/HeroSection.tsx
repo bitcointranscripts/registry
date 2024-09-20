@@ -18,8 +18,9 @@ const HeroSection = () => {
             <h1 className='2xl:text-[72px] text-[64px] leading-[130%] max-xl:text-5xl max-xl:leading-[130%] max-[953px]:text-[38px] max-[953px]:leading-[130%] max-md:text-[42px]'>
               Unlock the treasure trove of technical bitcoin transcripts
             </h1>
-            <p className='text-xl max-lg:text-lg max-md:text-base'>
-              <span className='font-bold'>1042+ transcripts</span> growing every day. Thanks to people like you.
+            <p className='text-xl max-lg:text-lg max-md:text-base text-wrap'>
+              <span className='font-bold'>1042+ transcripts</span> growing every day.{" "}
+              <span className='whitespace-nowrap'>Thanks to people like you.</span>
             </p>
           </section>
           <Link
