@@ -18,6 +18,7 @@
 /public/categories.json
 /public/types-data.json
 /public/tag-data.json
+/public/aliases.json
 
 # misc
 .DS_Store

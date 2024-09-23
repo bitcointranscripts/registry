@@ -46,6 +46,22 @@ function createTagCount(allTranscripts: ContentTranscriptType[]): { tagCounts: R
   return { tagCounts };
 }
 
+const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
+  const aliases: Record<string, string> = {};
+
+  for (const transcript of allTranscripts) {
+    if (!transcript.aliases) continue;
+
+    if (transcript.aliases) {
+      transcript.aliases.forEach((alias) => {
+        aliases[alias] = transcript.url;
+      });
+    }
+  }
+
+  writeFileSync("./public/aliases.json", JSON.stringify(aliases));
+};
+
 const getCategories = () => {
   const filePath = path.join(process.cwd(), "public", "categories.json");
   const fileContents = fs.readFileSync(filePath, "utf8");
@@ -205,5 +221,6 @@ export default makeSource({
     const { allDocuments } = await importData();
     organizeTags(allDocuments);
     createTypesCount(allDocuments);
+    getTranscriptAliases(allDocuments);
   },
 });
