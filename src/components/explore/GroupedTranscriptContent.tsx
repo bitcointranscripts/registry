@@ -22,7 +22,7 @@ const GroupedTranscriptContent = ({
     inView: boolean,
     entry: IntersectionObserverEntry
   ) => {
-    
+  
     if (inView) {
       setCurrentGroup(topicsByAlphabet[0]);
     }

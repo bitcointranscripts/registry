@@ -7,7 +7,7 @@ import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { ExploreTranscriptCard } from "../TranscriptCard";
 
 interface TagInfo {
-  title: string;
+  name: string;
   slug: string;
   count: number;
 }
@@ -23,7 +23,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
   const sortedCategories = Object.fromEntries(
     Object.entries(categories)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([key, value]) => [key, value.sort((a, b) => a.title.localeCompare(b.title))])
+      .map(([key, value]) => [key, value.sort((a, b) => a.name.localeCompare(b.name))])
   );
 
   const sortedTypes = Object.fromEntries(Object.entries(types).sort(([a], [b]) => a.localeCompare(b)));
