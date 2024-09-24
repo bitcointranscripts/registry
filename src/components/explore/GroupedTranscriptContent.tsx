@@ -1,18 +1,20 @@
 "use client";
 import React, { useEffect } from "react";
 import SingleTranscriptContent from "./SingleTranscriptContent";
-import { GroupedTopics, TopicsData } from "@/utils";
+import { DepreciatedCategories, GroupedTopics, TopicsData } from "@/utils";
 import { useInView } from "react-intersection-observer";
 import { root } from "postcss";
 
 interface IGroupedTranscriptContent {
   topicsByAlphabet: [string, TopicsData[]];
   setCurrentGroup: React.Dispatch<React.SetStateAction<string>>;
+  linkName: DepreciatedCategories
 }
 
 const GroupedTranscriptContent = ({
   topicsByAlphabet,
   setCurrentGroup,
+  linkName
 }: IGroupedTranscriptContent) => {
   const handleAxisChange = (
     inView: boolean,
@@ -37,7 +39,7 @@ const GroupedTranscriptContent = ({
       <h4 className="font-bold text-2xl">{topicsByAlphabet[0]}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {topicsByAlphabet[1].map((topics, i) => (
-          <SingleTranscriptContent key={`${topics.slug}${i}`} {...topics} />
+          <SingleTranscriptContent key={`${topics.slug}${i}`} {...topics} linkName={linkName} />
         ))}
       </div>
     </div>

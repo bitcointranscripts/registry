@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+
 import "./globals.css";
+
+
 import Script from "next/script";
 import Header from "@/components/layout/Header";
 

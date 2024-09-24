@@ -4,10 +4,18 @@ export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
 }
 export type TopicsData = {
-  title: string;
+  name: string;
   slug: string;
   count: number;
 };
+
+export type SpeakerData = {
+  name: string;
+  slug: string;
+  count: number;
+};
+
+export type DepreciatedCategories = "tags" | "speakers" | "categories"
 
 export type GroupedTopics = Record<string, TopicsData[]>;
 
@@ -99,21 +107,30 @@ export function createSlug(name: string): string {
 }
 
 export function groupTopicsByAlphabet(
-  items: TopicsData[]
+  items: TopicsData[] | SpeakerData[]
 ): Record<string, TopicsData[]> {
   return items
-    .sort((a, b) => a.title.localeCompare(b.title))
+    .sort((a, b) => a.slug.localeCompare(b.slug))
     .reduce((acc, item) => {
-      const firstLetter = item.title.charAt(0).toUpperCase();
+      const firstLetter = item.slug.charAt(0).toUpperCase();
 
-      if (!acc[firstLetter]) {
-        acc[firstLetter] = [];
+      // Check if the first character is a digit
+      if (!isNaN(Number(firstLetter))) {
+        if (!acc['#']) {
+          acc['#'] = [];
+        }
+        // Add the current item to the '#' group
+        acc['#'].push(item);
+      } else {
+        if (!acc[firstLetter]) {
+          acc[firstLetter] = [];
+        }
+        // Add the current item to the correct group
+        acc[firstLetter].push(item);
       }
-      // Add the current item to the correct group
-      acc[firstLetter].push(item);
 
       return acc;
-    }, {} as GroupedTopics);
+    }, {} as Record<string, TopicsData[]>);
 }
 
 export function getDoubleDigits(count: number) {

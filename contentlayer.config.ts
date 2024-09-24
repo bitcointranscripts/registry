@@ -1,4 +1,4 @@
-import { createSlug } from "./src/utils";
+import { createSlug, SpeakerData, TopicsData } from "./src/utils";
 import {
   defineDocumentType,
   defineNestedType,
@@ -8,6 +8,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
 import { Transcript as ContentTranscriptType } from "./.contentlayer/generated/types";
+import { title } from "process";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -141,27 +142,32 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 }
 
 function organizeTopics(transcripts: ContentTranscriptType[]) {
-  const { tagCounts } = createTagCount(transcripts);
+  const slugTopics: any = {};
+  const topicsArray: TopicsData[] = [];
 
-  const allTopics = new Set(
-    transcripts.flatMap(
-      (transcript) => transcript.tags?.map((topic) => topic) || []
-    )
-  );
-  let topicsData: TagInfo[] = [];
-  allTopics.forEach((topic) => {
-    topicsData.push({
-      title: topic,
-      slug: topic,
-      count: tagCounts[topic] || 0,
+  transcripts.forEach((transcript) => {
+    const slugTags = transcript.tags?.map((tag) => ({
+      slug:createSlug(tag),
+      name:tag
+    }));
+
+    slugTags?.forEach(({slug, name}) => {
+      if (slugTopics[slug] !== undefined) {
+        const index = slugTopics[slug];
+        topicsArray[index].count += 1;
+      } else {
+        const topicsLength = topicsArray.length;
+        slugTopics[slug] = topicsLength;
+        topicsArray[topicsLength] = {
+          slug,
+          name,
+          count: 1,
+        };
+      }
     });
   });
 
-  // Sort tags alphabetically within each category
-
-  writeFileSync("./public/topics-data.json", JSON.stringify(topicsData));
-
-  return tagCounts;
+  writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
 }
 /**
  * Count the occurrences of all types across transcripts and write to json file
@@ -201,27 +207,33 @@ const createTypesCount = (allTranscripts: ContentTranscriptType[]) => {
 };
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
-  const speakerCount: Record<string, { count: number, fullName: string, slug: string }> = {};
+  const slugSpeakers: any = {};
+  const speakerArray: SpeakerData[] = [];
 
-  transcripts.forEach((file) => {
-    if (file.speakers) {
-      file.speakers.forEach((speaker: string) => {
-        const formattedSpeaker = createSlug(speaker);
+  transcripts.forEach((transcript) => {
+    const slugSpeakersArray = transcript.speakers?.map((speaker) => ({
+      slug:createSlug(speaker),
+      name: speaker,
+    }));
 
-        if (formattedSpeaker in speakerCount) {
-          speakerCount[formattedSpeaker].count += 1;
-        } else {
-          speakerCount[formattedSpeaker] = {
-            count: 1,
-            fullName: speaker, // Store the actual name of the speaker
-            slug: formattedSpeaker
-          };
-        }
-      });
-    }
+    slugSpeakersArray?.forEach(({slug, name}) => {
+      if (slugSpeakers[slug] !== undefined) {
+        const index = slugSpeakers[slug];
+        speakerArray[index].count += 1;
+      } else {
+        const speakersLength = speakerArray.length;
+        slugSpeakers[slug] = speakersLength;
+        speakerArray[speakersLength] = {
+          slug,
+          name,
+          count: 1,
+        };
+      }
+    });
   });
 
-  writeFileSync("./public/speaker-data.json", JSON.stringify(speakerCount));
+
+  writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
 }
 
 export const Transcript = defineDocumentType(() => ({
@@ -282,6 +294,6 @@ export default makeSource({
     createTypesCount(allDocuments);
     organizeTopics(allDocuments);
     getTranscriptAliases(allDocuments);
-    createSpeakers(allDocuments)
+    createSpeakers(allDocuments);
   },
 });
