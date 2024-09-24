@@ -17,6 +17,8 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Update submodules
         env:
