@@ -1,22 +1,18 @@
-import { getAllCharactersProperty, GroupedTopics } from "@/utils";
+import { getAllCharactersProperty, GroupedData } from "@/utils";
 import { alphabeticalArrangement } from "@/utils/data";
 import Link from "next/link";
 import React, { Dispatch, SetStateAction, useState } from "react";
 export interface IAlphabetGrouping {
   currentGroup: string;
-  groupedTopics: GroupedTopics;
-  scrolled: boolean;
-  setScrolled: Dispatch<SetStateAction<boolean>>;
+  groupedData: GroupedData | never[];
 }
 const AlphabetGrouping = ({
   currentGroup,
-  groupedTopics,
-  scrolled,
-  setScrolled,
+  groupedData,
 }: IAlphabetGrouping) => {
   const allCharacters = getAllCharactersProperty(
     alphabeticalArrangement,
-    groupedTopics
+    groupedData
   );
   return (
     <div

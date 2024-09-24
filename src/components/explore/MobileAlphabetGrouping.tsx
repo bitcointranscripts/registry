@@ -6,11 +6,11 @@ import { getAllCharactersProperty } from "@/utils";
 
 const MobileAlphabetGrouping = ({
   currentGroup,
-  groupedTopics,
+  groupedData,
 }: IAlphabetGrouping) => {
   const allCharacters = getAllCharactersProperty(
     alphabeticalArrangement,
-    groupedTopics
+    groupedData
   );
   const selectRef = useRef<HTMLSelectElement>(null);
   const linkRef = useRef<HTMLAnchorElement>(null);

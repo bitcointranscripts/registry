@@ -8,7 +8,6 @@ import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
 import { Transcript as ContentTranscriptType } from "./.contentlayer/generated/types";
-import { title } from "process";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -28,7 +27,7 @@ export interface CategoryInfo {
 }
 
 interface TagInfo {
-  title: string;
+  name: string;
   slug: string;
   count: number;
 }
@@ -109,7 +108,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
       catInfo.categories.forEach((category) => {
         if (!tagsByCategory[category].some((t) => t.slug === tag)) {
           tagsByCategory[category].push({
-            title: catInfo.title,
+            name: catInfo.title,
             slug: tag,
             count: tagCounts[tag] || 0,
           });
@@ -125,7 +124,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
   if (tagsWithoutCategory.size > 0) {
     tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map(
       (tag) => ({
-        title: tag,
+        name: tag,
         slug: tag,
         count: tagCounts[tag] || 0,
       })
@@ -134,7 +133,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 
   // Sort tags alphabetically within each category
   Object.keys(tagsByCategory).forEach((category) => {
-    tagsByCategory[category].sort((a, b) => a.title.localeCompare(b.title));
+    tagsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
   });
 
   writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));

@@ -15,9 +15,19 @@ export type SpeakerData = {
   count: number;
 };
 
+export type ContentData = {
+  name: string;
+  slug: string;
+  count: number;
+}
+
+type  ContentKeys = {
+  [key: string]: ContentData[];
+};
+
 export type DepreciatedCategories = "tags" | "speakers" | "categories"
 
-export type GroupedTopics = Record<string, TopicsData[]>;
+export type GroupedData = Record<string, TopicsData[] | SpeakerData[]>;
 
 export function organizeContent(transcripts: Transcript[]): ContentTree {
   const tree: ContentTree = {};
@@ -106,7 +116,7 @@ export function createSlug(name: string): string {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-export function groupTopicsByAlphabet(
+export function groupDataByAlphabet(
   items: TopicsData[] | SpeakerData[]
 ): Record<string, TopicsData[]> {
   return items
@@ -143,7 +153,7 @@ export function getDoubleDigits(count: number) {
 
 export const getAllCharactersProperty = (
   arrayOfAlphabets: string[],
-  groupedTopics: GroupedTopics
+  groupedTopics: GroupedData |  never[]
 ) => {
   const newData = arrayOfAlphabets.map((alp) => {
     const ifFound = Object.entries(groupedTopics).find(
@@ -162,4 +172,16 @@ export const getAllCharactersProperty = (
   });
 
   return newData;
+};
+
+
+export const sortKeysAlphabetically = (data:ContentKeys  ): ContentKeys => {
+  const sortedKeys = Object.keys(data).sort((a, b) => a.localeCompare(b));
+
+  const sortedData: ContentKeys = {};
+  sortedKeys.forEach((key) => {
+      sortedData[key] = data[key];
+  });
+
+  return sortedData;
 };
