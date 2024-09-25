@@ -42,8 +42,8 @@ const ContentGrouping = ({
             <Link
               key={char}
               href={`#${createSlug(char)}`}
-              className={` flex    text-sm  2xl:text-lg   ${
-                currentGroup == char
+              className={` flex    text-base  2xl:text-lg   ${
+                createSlug(currentGroup) == createSlug(char)
                   ? "text-orange-custom-100 rounded-[4px]"
                   : ""
               } `}

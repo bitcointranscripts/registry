@@ -7,9 +7,9 @@ export default function ExploreLayout({
 }) {
   return (
     <div className="w-full max-w-[1920px] mx-auto px-4 lg:px-[60px]">
-      <section className="flex gap-[50px] h-[calc(100vh-var(--header-height))]  pt-6 overflow-y-auto ">
+      <section className="flex  gap-[50px] h-[calc(100vh-var(--header-height))]  pt-6 overflow-y-auto ">
         <ExploreNavigation />
-        <div className="max-h-full h-full scroll-smooth overflow-scroll ">{children}</div>
+        <div className="max-h-full h-full w-full scroll-smooth overflow-scroll ">{children}</div>
 
         {/* Include shared UI here e.g. a header or sidebar */}
       </section>

@@ -6,10 +6,7 @@ export interface IAlphabetGrouping {
   currentGroup: string;
   groupedData: GroupedData | never[];
 }
-const AlphabetGrouping = ({
-  currentGroup,
-  groupedData,
-}: IAlphabetGrouping) => {
+const AlphabetGrouping = ({ currentGroup, groupedData }: IAlphabetGrouping) => {
   const allCharacters = getAllCharactersProperty(
     alphabeticalArrangement,
     groupedData
@@ -35,7 +32,7 @@ const AlphabetGrouping = ({
             {char.alp}
           </Link>
         ) : (
-          <button className="text-gray-custom-1400 cursor-not-allowed">
+          <button  key={char.alp} className="text-gray-custom-1400 cursor-not-allowed">
             {char.alp}
           </button>
         )

@@ -7,7 +7,7 @@ import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 
 const ExploreNavigation = () => {
   return (
-    <section className="max-md:hidden md:flex sticky top-0 flex-col  gap-6 w-[320px]">
+    <section className="max-md:hidden md:flex sticky top-0 flex-col flex-none  gap-6 w-[320px]">
       <div className="flex flex-col gap-6 rounded-lg px-5 py-[23px] border border-[#CCCCCC]">
         {ExploreNavigationItems.map((item) => (
           <ExploreNavigationItem
