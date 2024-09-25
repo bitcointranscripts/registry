@@ -8,7 +8,7 @@ const ExplorePage = () => {
 
   return (
     <div className="flex flex-col pr-2 text-black">
-        <TranscriptContentPage header="Categories" data={allCategoriesTopic} description="Explore the main areas of focus within the Bitcoin technical ecosystem."  type="words" linkName="speakers"/>
+        <TranscriptContentPage header="Categories" data={allCategoriesTopic} description="Explore the main areas of focus within the Bitcoin technical ecosystem."  type="words" linkName="tags"/>
     </div>
   );
 };
