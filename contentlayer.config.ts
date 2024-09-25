@@ -200,6 +200,30 @@ const createTypesCount = (allTranscripts: ContentTranscriptType[]) => {
   writeFileSync("./public/types-data.json", JSON.stringify(typesAndCount));
 };
 
+function createSpeakers(transcripts: ContentTranscriptType[]) {
+  const speakerCount: Record<string, { count: number, fullName: string, slug: string }> = {};
+
+  transcripts.forEach((file) => {
+    if (file.speakers) {
+      file.speakers.forEach((speaker: string) => {
+        const formattedSpeaker = createSlug(speaker);
+
+        if (formattedSpeaker in speakerCount) {
+          speakerCount[formattedSpeaker].count += 1;
+        } else {
+          speakerCount[formattedSpeaker] = {
+            count: 1,
+            fullName: speaker, // Store the actual name of the speaker
+            slug: formattedSpeaker
+          };
+        }
+      });
+    }
+  });
+
+  writeFileSync("./public/speaker-data.json", JSON.stringify(speakerCount));
+}
+
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
   filePathPattern: `**/*.md`,
@@ -258,5 +282,6 @@ export default makeSource({
     createTypesCount(allDocuments);
     organizeTopics(allDocuments);
     getTranscriptAliases(allDocuments);
+    createSpeakers(allDocuments)
   },
 });

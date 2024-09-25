@@ -2,11 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer utilities {
-  .header-height{
-    height:calc() var(--header-height);
+@layer utilities {
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-} */
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
 /*  fonts declaration */
 @font-face {
   font-family: 'Basis Grotesque Mono Pro';
@@ -14,6 +25,7 @@
   font-weight: 400;
   font-style: normal;
 }
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

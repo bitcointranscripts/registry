@@ -27,9 +27,6 @@ const AlphabetGrouping = ({
       {allCharacters.map((char) => (
         <Link
           key={char.alp}
-          onClick={() => {
-            setScrolled(false);
-          }}
           href={`#${!char.isDisabled ? char.alp.toLowerCase() : ""}`}
           className={` flex justify-center items-center w-8 h-8 text-base 2xl:h-10 2xl:w-10 2xl:text-lg
             ${char.isDisabled && "text-gray-custom-1400 cursor-not-allowed"} ${

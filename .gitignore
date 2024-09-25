@@ -20,6 +20,7 @@
 /public/tag-data.json
 /public/aliases.json
 /public/topics-data.json
+/public/speaker-data.json
 
 # misc
 .DS_Store
