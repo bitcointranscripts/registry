@@ -1,21 +1,22 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ExploreNavigationItems, menuApps } from "@/utils/data";
 import { LanguageSwitcher, ThemeSwitcher } from "../layout/Header";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 
-const MobileMenu = () => {
+const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}) => {
   const links = ExploreNavigationItems;
 
   return (
     <div className='flex flex-col gap-6 bg-white min-h-full overflow-y-scroll'>
-      <section className='flex-col gap-2 hidden'>
+      <section className='flex-col gap-2 '>
         <p className='text-lg font-medium text-black'>Transcripts</p>
         <div className='w-full flex flex-col'>
           {links.map((link) => (
             <Link
               href={link.href}
+              onClick={()=>setOpen(false)}
               className='capitalize py-3 px-4 text-gray-custom-1000 hover:bg-orange-custom-800 hover:font-semibold hover:text-orange-custom-100'
             >
               {link.title}

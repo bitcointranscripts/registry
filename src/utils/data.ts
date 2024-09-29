@@ -68,14 +68,14 @@ export const ExploreNavigationItems = [
     href: "/speakers",
     title: "Speakers",
   },
-  {
-    href: "/types",
-    title: "Types",
-  },
-  {
-    href: "/sources",
-    title: "Sources",
-  },
+  // {
+  //   href: "/types",
+  //   title: "Types",
+  // },
+  // {
+  //   href: "/sources",
+  //   title: "Sources",
+  // },
 ];
 
 export const alphabeticalArrangement = [

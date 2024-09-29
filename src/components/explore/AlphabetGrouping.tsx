@@ -25,7 +25,7 @@ const AlphabetGrouping = ({ currentGroup, groupedData }: IAlphabetGrouping) => {
             className={` flex justify-center items-center w-8 h-8 text-base 2xl:h-10 2xl:w-10 2xl:text-lg
     ${
       currentGroup == char.alp
-        ? "text-orange-custom-100 bg-orange-custom-900 rounded-[4px]"
+        ? "text-orange-custom-100 bg-orange-custom-900 rounded-[4px] font-semibold"
         : ""
     } `}
           >

@@ -228,7 +228,7 @@ const Header = () => {
       </div>
       {open ? (
         <div className='w-full bg-white top-[86px] left-0 right-0 bottom-0 p-4 z-40 pt-3 pb-8 overflow-scroll md:hidden max-md:fixed'>
-          <MobileMenu />
+          <MobileMenu setOpen={setOpen} />
         </div>
       ) : null}
     </Wrapper>
