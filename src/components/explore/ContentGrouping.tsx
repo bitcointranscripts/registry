@@ -60,13 +60,13 @@ const ContentGrouping = ({
             link group
           </a>
           <div
-            className=" pr-2 bg-orange-custom-800 py-2.5 px-4 rounded-md mx-1"
+            className="selection-box pr-2 bg-orange-custom-800 py-2.5 px-4 rounded-md "
           >
             <select
               onChange={onOptionsChange}
               value={currentGroup}
               ref={selectRef}
-              className="pr-3  bg-orange-custom-800   w-full outline-none"
+              className="pr-3  bg-orange-custom-800   w-full outline-none font-medium"
             >
               {Object.keys(groupedData).map((char) => (
                 <option key={char} value={createSlug(char)}>

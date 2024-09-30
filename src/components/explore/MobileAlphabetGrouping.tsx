@@ -35,17 +35,23 @@ const MobileAlphabetGrouping = ({
         {" "}
         link group
       </a>
-      <select
-        onChange={onOptionsChange}
-        ref={selectRef}
-        className="bg-orange-custom-800 max-w-[calc(100vw-32px)]  top-10 w-full py-2.5 px-4 outline-none"
-      >
-        {Object.entries(allCharacters).map((char) => (
-          <option key={char[1].alp} value={char[1].alp} disabled={char[1].isDisabled}>
-            {char[1].alp}{" "}
-          </option>
-        ))}
-      </select>
+      <div className="selection-box pr-2 bg-orange-custom-800 py-2.5 px-4 rounded-md">
+        <select
+          onChange={onOptionsChange}
+          ref={selectRef}
+          className="pr-3  bg-orange-custom-800   w-full outline-none font-medium"
+        >
+          {Object.entries(allCharacters).map((char) => (
+            <option
+              key={char[1].alp}
+              value={char[1].alp}
+              disabled={char[1].isDisabled}
+            >
+              {char[1].alp}{" "}
+            </option>
+          ))}
+        </select>
+      </div>
     </>
   );
 };
