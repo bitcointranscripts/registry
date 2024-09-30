@@ -6,7 +6,7 @@ import Script from "next/script";
 const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Bitcoin transcript registry",
+  title: "Bitcoin Transcripts",
   description: "A collection of technical bitcoin and lightning transcripts",
   icons: {
     icon: "/btctranscripts.png",
