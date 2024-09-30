@@ -18,7 +18,7 @@ export const menuApps = [
     href: "https://bitcoindevs.xyz/",
     image: bitcoindevs,
     alt: "Bitcoin Devs",
-    title: "Build the future of money - Study & contribute to bitcoin and lightning open source",
+    title: "Study & contribute to bitcoin and lightning open source",
   },
   {
     href: "https://chat.bitcoinsearch.xyz",
