@@ -6,6 +6,10 @@
 .pnp.js
 .yarn/install-state.gz
 
+# editor
+.vscode
+
+
 # testing
 /coverage
 
@@ -19,6 +23,8 @@
 /public/types-data.json
 /public/tag-data.json
 /public/aliases.json
+/public/topics-data.json
+/public/speaker-data.json
 
 # misc
 .DS_Store
