@@ -1,9 +1,5 @@
-import { createSlug, SpeakerData, TopicsData } from "./src/utils";
-import {
-  defineDocumentType,
-  defineNestedType,
-  makeSource,
-} from "contentlayer2/source-files";
+import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
 import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
@@ -16,7 +12,6 @@ const Resources = defineNestedType(() => ({
     url: { type: "string" },
   },
 }));
-
 export interface CategoryInfo {
   title: string;
   slug: string;
@@ -235,6 +230,32 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
   writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
 }
 
+function generateSourcesCount(transcripts: ContentTranscriptType[]) {
+  const sourcesArray: TagInfo[] = [];
+  const slugSources: Record<string, number> = {};
+
+  transcripts.forEach((transcript) => {
+    const slug = transcript._raw.flattenedPath.split("/")[0];
+    const isValid = !!transcript.date;
+
+    if (isValid) {
+      if (slugSources[slug] !== undefined) {
+        sourcesArray[slugSources[slug]].count += 1;
+      } else {
+        const sourcesLength = sourcesArray.length;
+        slugSources[slug] = sourcesLength;
+        sourcesArray[sourcesLength] = {
+          slug,
+          name: unsluggify(slug),
+          count: 1,
+        };
+      }
+    }
+  });
+
+  writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+}
+
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
   filePathPattern: `**/*.md`,
@@ -294,5 +315,6 @@ export default makeSource({
     organizeTopics(allDocuments);
     getTranscriptAliases(allDocuments);
     createSpeakers(allDocuments);
+    generateSourcesCount(allDocuments);
   },
 });

@@ -25,7 +25,7 @@ type  ContentKeys = {
   [key: string]: ContentData[];
 };
 
-export type DepreciatedCategories = "tags" | "speakers" | "categories"
+export type DepreciatedCategories = "tags" | "speakers" | "categories" | "sources";
 
 export type GroupedData = Record<string, TopicsData[] | SpeakerData[]>;
 
@@ -185,3 +185,5 @@ export const sortKeysAlphabetically = (data:ContentKeys  ): ContentKeys => {
 
   return sortedData;
 };
+
+export const unsluggify = (slug: string) => slug.replace(/-/g, " ");
