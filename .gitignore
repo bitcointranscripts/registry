@@ -25,6 +25,7 @@
 /public/aliases.json
 /public/topics-data.json
 /public/speaker-data.json
+/public/source-count-data.json
 
 # misc
 .DS_Store

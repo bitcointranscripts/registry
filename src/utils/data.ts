@@ -72,10 +72,10 @@ export const ExploreNavigationItems = [
   //   href: "/types",
   //   title: "Types",
   // },
-  // {
-  //   href: "/sources",
-  //   title: "Sources",
-  // },
+  {
+    href: "/sources",
+    title: "Sources",
+  },
 ];
 
 export const alphabeticalArrangement = [
