@@ -12,8 +12,7 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
         gray: {
@@ -31,6 +30,7 @@ const config: Config = {
           "custom-1200": "#CCCCCC",
           "custom-1300": "#E6E6E6",
           "custom-1400": "#ACACAC",
+          "custom-1500": "#DBDBDB",
         },
         blue: {
           "custom-100": "#2A58FE",
@@ -54,6 +54,9 @@ const config: Config = {
           "custom-100": "#292929",
           "custom-200": "#202020",
           "custom-300": "#464646",
+        },
+        "custom-white": {
+          "custom-100": "#F2F2F2",
         },
       },
       fontFamily: {
