@@ -27,6 +27,10 @@ interface TagInfo {
   count: number;
 }
 
+interface ContentTree {
+  [key: string]: ContentTree | ContentTranscriptType[];
+}
+
 /**
  * Count the occurrences of all tags across transcripts and write to json file
  */
@@ -91,11 +95,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
   });
 
   // Process all tags at once
-  const allTags = new Set(
-    transcripts.flatMap(
-      (transcript) => transcript.tags?.map((tag) => tag) || []
-    )
-  );
+  const allTags = new Set(transcripts.flatMap((transcript) => transcript.tags?.map((tag) => tag) || []));
 
   allTags.forEach((tag) => {
     const catInfo = categoryMap.get(tag);
@@ -117,13 +117,11 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 
   // Add "Miscellaneous" category with remaining uncategorized tags
   if (tagsWithoutCategory.size > 0) {
-    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map(
-      (tag) => ({
-        name: tag,
-        slug: tag,
-        count: tagCounts[tag] || 0,
-      })
-    );
+    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map((tag) => ({
+      name: tag,
+      slug: tag,
+      count: tagCounts[tag] || 0,
+    }));
   }
 
   // Sort tags alphabetically within each category
@@ -141,11 +139,11 @@ function organizeTopics(transcripts: ContentTranscriptType[]) {
 
   transcripts.forEach((transcript) => {
     const slugTags = transcript.tags?.map((tag) => ({
-      slug:createSlug(tag),
-      name:tag
+      slug: createSlug(tag),
+      name: tag,
     }));
 
-    slugTags?.forEach(({slug, name}) => {
+    slugTags?.forEach(({ slug, name }) => {
       if (slugTopics[slug] !== undefined) {
         const index = slugTopics[slug];
         topicsArray[index].count += 1;
@@ -206,11 +204,11 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
 
   transcripts.forEach((transcript) => {
     const slugSpeakersArray = transcript.speakers?.map((speaker) => ({
-      slug:createSlug(speaker),
+      slug: createSlug(speaker),
       name: speaker,
     }));
 
-    slugSpeakersArray?.forEach(({slug, name}) => {
+    slugSpeakersArray?.forEach(({ slug, name }) => {
       if (slugSpeakers[slug] !== undefined) {
         const index = slugSpeakers[slug];
         speakerArray[index].count += 1;
@@ -225,7 +223,6 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
       }
     });
   });
-
 
   writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
 }
@@ -254,6 +251,45 @@ function generateSourcesCount(transcripts: ContentTranscriptType[]) {
   });
 
   writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+}
+
+function organizeContent(transcripts: ContentTranscriptType[]) {
+  const tree: ContentTree = {};
+
+  transcripts.forEach((transcript) => {
+    const parts = transcript.slugAsParams;
+    let current = tree;
+
+    const loopSize = parts.length === 2 ? parts.length - 1 : parts.length - 2;
+
+    for (let i = 0; i < loopSize; i++) {
+      if (!current[parts[i]]) {
+        current[parts[i]] = {};
+      }
+
+      current = current[parts[i]] as ContentTree;
+
+      const penultimateKey = parts[loopSize];
+
+      if (!Array.isArray(current[penultimateKey])) {
+        current[penultimateKey] = [];
+      }
+
+      (current[penultimateKey] as any[]).push({
+        title: transcript.title,
+        speakers: transcript.speakers,
+        date: transcript.date,
+        tags: transcript.tags,
+        sourceFilePath: transcript._raw.sourceFilePath,
+        flattenedPath: transcript._raw.flattenedPath,
+        summary: transcript.summary,
+        body: transcript.body,
+      });
+    }
+  });
+
+  // Save the result as JSON
+  writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
 export const Transcript = defineDocumentType(() => ({
@@ -316,5 +352,6 @@ export default makeSource({
     getTranscriptAliases(allDocuments);
     createSpeakers(allDocuments);
     generateSourcesCount(allDocuments);
+    organizeContent(allDocuments);
   },
 });
