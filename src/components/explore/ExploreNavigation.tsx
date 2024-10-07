@@ -36,7 +36,9 @@ const ExploreNavigationItem = ({
   title: string;
 }) => {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const pagePath = pathname.split("/")[1].toLowerCase()
+  const isActive = pagePath === title.toLowerCase();
+
   return (
     <Link
       data-active={isActive}

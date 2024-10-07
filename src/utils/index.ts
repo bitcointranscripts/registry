@@ -213,7 +213,6 @@ export const showOnlyEnglish = (args: ContentTreeArray[]) => {
 
   const transcripts = args.filter((transcript) => {
     return !languageRegex.test(transcript.flattenedPath);
-    // return transcript.date && !languageRegex.test(transcript.flattenedPath);
   });
 
   return transcripts;
