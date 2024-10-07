@@ -16,11 +16,18 @@ const BreadCrumbs = () => {
     return { name: path || "home", link: route };
   });
 
+  const isActive = allRoutes[allRoutes.length - 1];
+
   return (
     <div className='flex gap-1'>
       {allRoutes.map((link, i) => (
         <div key={link.name} className='flex gap-1 items-center'>
-          <Link className={` text-gray-custom-800 capitalize hover:underline font-medium text-sm    2xl:text-base`} href={link.link}>
+          <Link
+            className={`capitalize hover:underline font-medium text-sm 2xl:text-base ${
+              isActive.name.toLowerCase() === link.name.toLowerCase() ? "text-orange-custom-100 md:text-black" : "text-black md:text-gray-custom-800"
+            }`}
+            href={link.link}
+          >
             {link.name}
           </Link>
           {i !== allRoutes.length - 1 && <p className='text-custom-black-custom-200'>/</p>}
