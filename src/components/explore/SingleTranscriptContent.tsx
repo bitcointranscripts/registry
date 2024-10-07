@@ -6,7 +6,8 @@ type SingleContent = {
   linkName: DepreciatedCategories;
 } & TopicsData;
 const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent) => {
-  const url = linkName === "sources" ? `/${slug}` : `/${linkName}/${slug}`;
+  const url = `/${linkName}/${slug}`;
+
   return (
     <Link
       href={url}
