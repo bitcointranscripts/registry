@@ -114,5 +114,5 @@ export type ContentTreeArray = {
   sourceFilePath: string;
   flattenedPath: string;
   summary?: string | undefined;
-  body: Markdown;
+  body: string;
 };
