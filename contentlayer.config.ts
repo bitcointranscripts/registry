@@ -283,7 +283,7 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
         sourceFilePath: transcript._raw.sourceFilePath,
         flattenedPath: transcript._raw.flattenedPath,
         summary: transcript.summary,
-        body: transcript.body,
+        body: transcript.body.raw,
       });
     }
   });

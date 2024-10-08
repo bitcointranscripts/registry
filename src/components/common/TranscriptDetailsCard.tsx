@@ -13,7 +13,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
   const calculateRemaining = (data: string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
 
   const createSummary = () => {
-    const text = summary?.length ? summary : body.raw.split("\n\n").slice(1, 4).join("\n\n");
+    const text = summary?.length ? summary : body.split("\n\n").slice(1, 4).join("\n\n");
     let transcriptSummary = text.length > 300 ? text.slice(0, 300) + "..." : text;
     transcriptSummary = transcriptSummary.replace(/[^a-zA-Z\s.-]+/g, "").trim();
 
