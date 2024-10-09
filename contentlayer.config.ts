@@ -3,7 +3,7 @@ import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/
 import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
-import { Transcript as ContentTranscriptType } from "./.contentlayer/generated/types";
+import { Transcript as ContentTranscriptType, Markdown } from "./.contentlayer/generated/types";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -275,6 +275,12 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
         current[penultimateKey] = [];
       }
 
+      const createText = (args: Markdown) => {
+        const text = args.raw.replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "").trim();
+
+        return text.length > 300 ? text.slice(0, 300) + "..." : text;
+      };
+
       (current[penultimateKey] as any[]).push({
         title: transcript.title,
         speakers: transcript.speakers,
@@ -283,7 +289,7 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
         sourceFilePath: transcript._raw.sourceFilePath,
         flattenedPath: transcript._raw.flattenedPath,
         summary: transcript.summary,
-        body: transcript.body.raw,
+        body: createText(transcript.body),
       });
     }
   });
