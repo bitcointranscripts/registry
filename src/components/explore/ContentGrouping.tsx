@@ -1,3 +1,5 @@
+"use client" 
+
 import { createSlug, GroupedData } from "@/utils";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
