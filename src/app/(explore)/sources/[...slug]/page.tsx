@@ -10,9 +10,15 @@ import { ContentTree, extractDirectoryData, filterOutIndexes } from "@/utils";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 
 export function generateStaticParams() {
-  return allTranscripts.map((transcript) => ({
-    slug: transcript.slugAsParams,
-  }));
+  return allTranscripts.reduce((acc, { _raw: { flattenedPath }, slugAsParams }) => {
+    const params = flattenedPath.split("/");
+
+    if (!params[params.length - 1].includes("index")) {
+      acc.push({ slug: slugAsParams });
+    }
+
+    return acc;
+  }, [] as { slug: string }[]);
 }
 
 const page = ({ params }: { params: { slug: string[] } }) => {

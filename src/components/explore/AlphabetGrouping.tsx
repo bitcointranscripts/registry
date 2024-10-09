@@ -1,7 +1,7 @@
 import { getAllCharactersProperty, GroupedData } from "@/utils";
 import { alphabeticalArrangement } from "@/utils/data";
 import Link from "next/link";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React from "react";
 export interface IAlphabetGrouping {
   currentGroup: string;
   groupedData: GroupedData | never[];

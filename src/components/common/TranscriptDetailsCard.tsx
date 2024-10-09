@@ -12,16 +12,6 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
 
   const calculateRemaining = (data: string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
 
-  const createSummary = () => {
-    const text = summary?.length ? summary : body.split("\n\n").slice(1, 4).join("\n\n");
-    let transcriptSummary = text.length > 300 ? text.slice(0, 300) + "..." : text;
-    transcriptSummary = transcriptSummary.replace(/[^a-zA-Z\s.-]+/g, "").trim();
-
-    return { transcriptSummary };
-  };
-
-  const { transcriptSummary } = createSummary();
-
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 lg:p-6 flex flex-col gap-4'>
       <section className='flex justify-between'>
@@ -120,7 +110,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
 
       {summary || body ? (
         <section>
-          <p className='text-sm md:text-base text-custom-black-custom-300 leading-[25px] line-clamp-3'>{transcriptSummary}</p>
+          <p className='text-sm md:text-base text-custom-black-custom-300 leading-[25px] line-clamp-3'>{summary ? summary : body}</p>
         </section>
       ) : null}
     </div>
