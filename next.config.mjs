@@ -13,6 +13,10 @@ const nextConfig = {
           destination: "/gh-pages/index.html",
         },
         {
+          source: "/types",
+          destination: "/gh-pages/categories/index.html",
+        },
+        {
           source: "/:path*",
           destination: "/gh-pages/:path*/index.html",
         },
