@@ -1,4 +1,6 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+"use client"
+
+import React, { FC, useState } from "react";
 import BreadCrumbs from "../common/BreadCrumbs";
 import GroupedTranscriptContent from "./GroupedTranscriptContent";
 import AlphabetGrouping from "./AlphabetGrouping";

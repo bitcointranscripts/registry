@@ -1,4 +1,5 @@
 import { type Transcript } from "contentlayer/generated";
+import { ContentTreeArray } from "./data";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -19,13 +20,13 @@ export type ContentData = {
   name: string;
   slug: string;
   count: number;
-}
+};
 
-type  ContentKeys = {
+type ContentKeys = {
   [key: string]: ContentData[];
 };
 
-export type DepreciatedCategories = "tags" | "speakers" | "categories"
+export type DepreciatedCategories = "tags" | "speakers" | "categories" | "sources";
 
 export type GroupedData = Record<string, TopicsData[] | SpeakerData[]>;
 
@@ -82,11 +83,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
     const days_opened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
 
     acc.push({ ...transcript, days_opened });
-    acc.sort(
-      (a, b) =>
-        new Date(b.date as string).getTime() -
-        new Date(a.date as string).getTime()
-    );
+    acc.sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
 
     if (acc.length > 3) acc.pop();
     return acc;
@@ -116,9 +113,7 @@ export function createSlug(name: string): string {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-export function groupDataByAlphabet(
-  items: TopicsData[] | SpeakerData[]
-): Record<string, TopicsData[]> {
+export function groupDataByAlphabet(items: TopicsData[] | SpeakerData[]): Record<string, TopicsData[]> {
   return items
     .sort((a, b) => a.slug.localeCompare(b.slug))
     .reduce((acc, item) => {
@@ -126,11 +121,11 @@ export function groupDataByAlphabet(
 
       // Check if the first character is a digit
       if (!isNaN(Number(firstLetter))) {
-        if (!acc['#']) {
-          acc['#'] = [];
+        if (!acc["#"]) {
+          acc["#"] = [];
         }
         // Add the current item to the '#' group
-        acc['#'].push(item);
+        acc["#"].push(item);
       } else {
         if (!acc[firstLetter]) {
           acc[firstLetter] = [];
@@ -151,14 +146,9 @@ export function getDoubleDigits(count: number) {
   return `${count}`;
 }
 
-export const getAllCharactersProperty = (
-  arrayOfAlphabets: string[],
-  groupedTopics: GroupedData |  never[]
-) => {
+export const getAllCharactersProperty = (arrayOfAlphabets: string[], groupedTopics: GroupedData | never[]) => {
   const newData = arrayOfAlphabets.map((alp) => {
-    const ifFound = Object.entries(groupedTopics).find(
-      (topic) => topic[0] === alp
-    );
+    const ifFound = Object.entries(groupedTopics).find((topic) => topic[0] === alp);
     if (ifFound) {
       return {
         alp,
@@ -174,14 +164,67 @@ export const getAllCharactersProperty = (
   return newData;
 };
 
-
-export const sortKeysAlphabetically = (data:ContentKeys  ): ContentKeys => {
+export const sortKeysAlphabetically = (data: ContentKeys): ContentKeys => {
   const sortedKeys = Object.keys(data).sort((a, b) => a.localeCompare(b));
 
   const sortedData: ContentKeys = {};
   sortedKeys.forEach((key) => {
-      sortedData[key] = data[key];
+    sortedData[key] = data[key];
   });
 
   return sortedData;
+};
+
+export const unsluggify = (slug: string) => slug.replace(/-/g, " ");
+
+export const formatDate = (dateString: string): string | null => {
+  if (!dateString) return null;
+
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  };
+
+  return new Intl.DateTimeFormat("en-GB", options).format(date);
+};
+
+export function filterOutIndexes(arr: {} | ContentTreeArray[]) {
+  let filterIndex: ContentTreeArray[] | string[] = [];
+
+  if (Array.isArray(arr)) {
+    const list = arr.filter((item: ContentTreeArray) => {
+      const url = item.flattenedPath.split("/");
+
+      return !url[url.length - 1].startsWith("_index");
+    });
+    filterIndex = showOnlyEnglish(list) as ContentTreeArray[];
+  } else {
+    filterIndex = Object.keys(arr).filter((item) => !item.startsWith("_index"));
+  }
+
+  return filterIndex;
+}
+
+export const showOnlyEnglish = (args: ContentTreeArray[]) => {
+  const languageCodes = ["zh", "es", "pt"];
+  const languageRegex = new RegExp(`\\.(${languageCodes.join("|")})(\\.md)?$`);
+
+  const transcripts = args.filter((transcript) => {
+    return !languageRegex.test(transcript.flattenedPath);
+  });
+
+  return transcripts;
+};
+
+export const extractDirectoryData = (data: any[]) => {
+  if (!Array.isArray(data)) return { directoryData: null };
+
+  const directoryData = data.find((item) => {
+    const url = item.flattenedPath.split("/");
+    return url[url.length - 1] === "_index";
+  });
+
+  return { directoryData };
 };
