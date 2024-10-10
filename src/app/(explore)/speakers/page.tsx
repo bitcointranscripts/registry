@@ -1,8 +1,6 @@
-"use client"
-
 import React from "react";
-import TranscriptContentPage from "../../../components/explore/TranscriptContentPage";
-import allSpeakers from "../../../../public/speaker-data.json";
+import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
+import allSpeakers from "@/public/speaker-data.json";
 
 const SpeakerPage = () => {
 
