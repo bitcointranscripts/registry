@@ -1,7 +1,7 @@
 import { getAllCharactersProperty, GroupedData } from "@/utils";
 import { alphabeticalArrangement } from "@/utils/data";
 import Link from "next/link";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React from "react";
 export interface IAlphabetGrouping {
   currentGroup: string;
   groupedData: GroupedData | never[];
@@ -24,7 +24,7 @@ const AlphabetGrouping = ({ currentGroup, groupedData }: IAlphabetGrouping) => {
             href={`#${char.alp.toLowerCase()}`}
             className={` flex justify-center items-center w-8 h-8 text-base 2xl:h-10 2xl:w-10 2xl:text-lg
     ${
-      currentGroup == char.alp
+      currentGroup === char.alp
         ? "text-orange-custom-100 bg-orange-custom-900 rounded-[4px] font-semibold"
         : ""
     } `}

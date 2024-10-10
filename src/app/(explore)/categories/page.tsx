@@ -1,8 +1,6 @@
-"use client"
-
 import React from "react";
-import TranscriptContentPage from "../../../components/explore/TranscriptContentPage";
-import allCategoriesTopic from "../../../../public/tag-data.json";
+import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
+import allCategoriesTopic from "@/public/tag-data.json";
 
 const CategoriesPage = () => {
 

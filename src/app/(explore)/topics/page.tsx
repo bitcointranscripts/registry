@@ -1,8 +1,6 @@
-"use client";
-
 import React from "react";
-import TranscriptContentPage from "../../../components/explore/TranscriptContentPage";
-import allTopics from "../../../../public/topics-data.json";
+import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
+import allTopics from "@/public/topics-data.json";
 
 const TopicsPage = () => {
   
