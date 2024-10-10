@@ -9,16 +9,34 @@ import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { ContentTree, extractDirectoryData, filterOutIndexes } from "@/utils";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 
-export function generateStaticParams() {
-  return allTranscripts.reduce((acc, { _raw: { flattenedPath }, slugAsParams }) => {
-    const params = flattenedPath.split("/");
+// forces 404 for paths not generated from `generateStaticParams` function.
+export const dynamicParams = false;
 
-    if (!params[params.length - 1].includes("index")) {
+export function generateStaticParams() {
+  // The flattenedPath and SlugParams are destuctured from the value of the currentElement
+  const all = allTranscripts.reduce((acc, transcript) => {
+    // params and slugAsParams are more or less the same, continued using both from previous code
+    const params = transcript._raw.flattenedPath.split("/");
+
+    // transcript.slugAsParams is typed as a list from contentLayer but its manually casted to `string[]` to specify it's exact type
+    const slugAsParams = transcript.slugAsParams as unknown as string[];
+
+    const is_non_english_dir_or_transcript = /\w+\.[a-z]{2}\b/.test(params[params.length - 1]);
+
+    const lastRouteIndex = params[params.length - 1].includes("index");
+
+    if (!lastRouteIndex) {
       acc.push({ slug: slugAsParams });
+      // converts slug ['adopting-bitcoin', '_index'] to ['adopting-bitcoin']
+      // skips non english dir e.g ['adopting-bitcoin', '_index.es'] is skipped
+    } else if (!is_non_english_dir_or_transcript) {
+      acc.push({ slug: slugAsParams.slice(0, slugAsParams.length - 1) });
     }
 
     return acc;
-  }, [] as { slug: string }[]);
+  }, [] as { slug: string[] }[]);
+
+  return all;
 }
 
 const page = ({ params }: { params: { slug: string[] } }) => {
