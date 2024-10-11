@@ -62,8 +62,8 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   const isDirectoryList = Array.isArray(current);
 
   return (
-    <div className='flex items-start relative lg:gap-[50px] max-h-[calc(100vh-var(--header-height)-24px)]'>
-      <div className='flex flex-col w-full gap-6 lg:gap-10 no-scrollbar'>
+    <div className='flex items-start lg:gap-[50px] max-h-[calc(100vh-var(--header-height)-24px)]'>
+      <div className='flex flex-col w-full gap-6 lg:gap-10 no-scrollbar max-h-[calc(100vh-var(--header-height)-24px)]'>
         <div
           className={`flex flex-col ${
             isDirectoryList ? "border-b border-b-[#9B9B9B] pb-6 md:border-b-0 md:pb-0" : "border-b border-b-[#9B9B9B] pb-6 lg:pb-10"
@@ -95,13 +95,13 @@ const page = ({ params }: { params: { slug: string[] } }) => {
         </div>
 
         {isDirectoryList ? (
-          <div className='flex flex-col gap-6 overflow-scroll h-full mb-8'>
+          <div className='flex flex-col gap-6 h-full pb-8 overflow-scroll'>
             {(displayCurrent as ContentTreeArray[]).map((item, i) => (
               <TranscriptDetailsCard key={i} slug={slug} data={item} />
             ))}
           </div>
         ) : (
-          <div className='flex-col flex gap-10'>
+          <div className='flex-col flex gap-10 max-h-[calc(100vh-var(--header-height)-24px)] overflow-scroll pb-8'>
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-2.5'>
               {(displayCurrent as string[]).map((key, i) => (
                 <Link

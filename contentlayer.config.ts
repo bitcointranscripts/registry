@@ -260,6 +260,10 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
     const parts = transcript.slugAsParams;
     let current = tree;
 
+    const isNonEnglishDir = /\w+\.[a-z]{2}\b/.test(parts[parts.length - 1]);
+    if (isNonEnglishDir) {
+      return;
+    }
     const loopSize = parts.length === 2 ? parts.length - 1 : parts.length - 2;
 
     for (let i = 0; i < loopSize; i++) {
