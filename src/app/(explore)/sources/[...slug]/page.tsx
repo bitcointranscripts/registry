@@ -8,6 +8,8 @@ import BreadCrumbs from "@/components/common/BreadCrumbs";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { ContentTree, extractDirectoryData, filterOutIndexes } from "@/utils";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
+import WorldIcon from "/public/svgs/world-icon.svg";
+import Image from "next/image";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -60,7 +62,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   const isDirectoryList = Array.isArray(current);
 
   return (
-    <div className='flex items-start relative lg:gap-[50px]'>
+    <div className='flex items-start relative lg:gap-[50px] max-h-[calc(100vh-var(--header-height)-24px)]'>
       <div className='flex flex-col w-full gap-6 lg:gap-10 no-scrollbar'>
         <div
           className={`flex flex-col ${
@@ -77,17 +79,29 @@ const page = ({ params }: { params: { slug: string[] } }) => {
             <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>
               {current["_index"] ? current["_index"][0].title : isDirectoryList ? directoryData?.title : slug[slug.length - 1]}
             </h3>
+            {isDirectoryList && directoryData?.source ? (
+              <div className='flex gap-1 items-center pt-6 md:pt-3'>
+                <Image src={WorldIcon} alt='world icon' className='w-[18px] md:w-[20px]' />
+                <Link
+                  href={directoryData?.source}
+                  target='_blank'
+                  className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline'
+                >
+                  {directoryData?.source}
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
 
         {isDirectoryList ? (
-          <div className='flex flex-col gap-6 overflow-scroll pb-[calc(90vh-var(--header-height))]'>
+          <div className='flex flex-col gap-6 overflow-scroll h-full mb-8'>
             {(displayCurrent as ContentTreeArray[]).map((item, i) => (
               <TranscriptDetailsCard key={i} slug={slug} data={item} />
             ))}
           </div>
         ) : (
-          <div className='flex-col flex gap-10 pb-[calc(90vh-var(--header-height))]'>
+          <div className='flex-col flex gap-10'>
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-2.5'>
               {(displayCurrent as string[]).map((key, i) => (
                 <Link
@@ -102,7 +116,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
           </div>
         )}
       </div>
-      <div className='hidden lg:flex sticky top-0 flex-shrink-0 w-fit lg:justify-center xl:min-w-[200px]'></div>
+      <div className='hidden lg:flex sticky top-0 flex-shrink-0 w-fit lg:justify-center 2xl:min-w-[100px] xl:min-w-[200px]'></div>
     </div>
   );
 };

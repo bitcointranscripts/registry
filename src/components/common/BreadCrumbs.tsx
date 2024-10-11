@@ -19,11 +19,11 @@ const BreadCrumbs = () => {
   const isActive = allRoutes[allRoutes.length - 1];
 
   return (
-    <div className='flex gap-1'>
+    <div className='flex gap-1 flex-wrap'>
       {allRoutes.map((link, i) => (
         <div key={link.name} className='flex gap-1 items-center'>
           <Link
-            className={`capitalize hover:underline font-medium text-sm 2xl:text-base ${
+            className={`capitalize hover:underline font-medium text-sm 2xl:text-base text-nowrap ${
               isActive.name.toLowerCase() === link.name.toLowerCase() ? "text-orange-custom-100 md:text-black" : "text-black md:text-gray-custom-800"
             }`}
             href={link.link}

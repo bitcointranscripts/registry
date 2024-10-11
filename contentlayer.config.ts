@@ -290,6 +290,7 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
         flattenedPath: transcript._raw.flattenedPath,
         summary: transcript.summary,
         body: createText(transcript.body),
+        source: transcript.source,
       });
     }
   });

@@ -17,7 +17,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
       <section className='flex justify-between'>
         <div className='flex flex-col gap-2 w-full'>
           <section className='flex flex-col md:flex-row gap-3 md:justify-between md:items-center w-full'>
-            <div className='flex gap-2'>
+            <div className='flex gap-2 flex-wrap'>
               {slug
                 .join(" / ")
                 .split(" ")
