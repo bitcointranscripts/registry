@@ -13,7 +13,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
   const calculateRemaining = (data: string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
 
   return (
-    <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 lg:p-6 flex flex-col gap-4'>
+    <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
       <section className='flex justify-between'>
         <div className='flex flex-col gap-2 w-full'>
           <section className='flex flex-col md:flex-row gap-3 md:justify-between md:items-center w-full'>
@@ -24,7 +24,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
                 .map((slg, i) => (
                   <p
                     key={`${slg}-${i}`}
-                    className={`text-xs md:text-sm xl:text-base leading-[20.64px] ${
+                    className={`text-xs md:text-sm 2xl:text-base leading-[20.64px] ${
                       slg === "/" ? "text-custom-black-custom-200" : "text-gray-custom-800"
                     } font-medium capitalize`}
                   >
@@ -35,13 +35,13 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
 
             <div className='flex gap-2 items-center h-fit'>
               <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
-              <p className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+              <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
             </div>
           </section>
 
           <Link
             href={`/${url}`}
-            className='font-bold text-base leading-[21.86px] md:text-xl xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
+            className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
           </Link>
@@ -61,14 +61,14 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
                     <Link
                       key={idx}
                       href={`/speakers/${createSlug(speaker)}`}
-                      className='py-[2px] px-5 capitalize rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-xl:text-[13px] max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
+                      className='py-[2px] px-5 capitalize rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
                     >
                       {speaker}
                     </Link>
                   ))}
 
                   {calculateRemaining(speakers) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-xl:text-[13px] max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
                       + {calculateRemaining(speakers)} more
                     </p>
                   )}
@@ -90,14 +90,14 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
                     <Link
                       key={idx}
                       href={`/tags/${createSlug(tag)}`}
-                      className='py-[2px] px-5 capitalize rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-xl:text-[13px] max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
+                      className='py-[2px] px-5 capitalize rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
                     >
                       {unsluggify(tag)}
                     </Link>
                   ))}
 
                   {calculateRemaining(tags) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-xl:text-[13px] max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
                       + {calculateRemaining(tags)} more
                     </p>
                   )}
@@ -110,7 +110,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
 
       {summary || body ? (
         <section>
-          <p className='text-sm md:text-base text-custom-black-custom-300 leading-[25px] line-clamp-3'>{summary ? summary : body}</p>
+          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 2xl:leading-[25px] line-clamp-3'>{summary ? summary : body}</p>
         </section>
       ) : null}
     </div>

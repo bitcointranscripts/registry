@@ -63,11 +63,11 @@ const page = ({ params }: { params: { slug: string[] } }) => {
 
   return (
     <div className='flex items-start lg:gap-[50px] max-h-[calc(100vh-var(--header-height)-24px)]'>
-      <div className='flex flex-col w-full gap-6 lg:gap-10 no-scrollbar max-h-[calc(100vh-var(--header-height)-24px)]'>
+      <div className='flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar max-h-[calc(100vh-var(--header-height)-24px)]'>
         <div
           className={`flex flex-col ${
             isDirectoryList ? "border-b border-b-[#9B9B9B] pb-6 md:border-b-0 md:pb-0" : "border-b border-b-[#9B9B9B] pb-6 lg:pb-10"
-          } gap-6`}
+          } gap-5 2xl:gap-6`}
         >
           <BreadCrumbs />
           <div className='flex flex-col'>
