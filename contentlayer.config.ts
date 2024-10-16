@@ -1,13 +1,9 @@
-import { createSlug, SpeakerData, TopicsData } from "./src/utils";
-import {
-  defineDocumentType,
-  defineNestedType,
-  makeSource,
-} from "contentlayer2/source-files";
+import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
 import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
-import { Transcript as ContentTranscriptType } from "./.contentlayer/generated/types";
+import { Transcript as ContentTranscriptType, Markdown } from "./.contentlayer/generated/types";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -16,7 +12,6 @@ const Resources = defineNestedType(() => ({
     url: { type: "string" },
   },
 }));
-
 export interface CategoryInfo {
   title: string;
   slug: string;
@@ -30,6 +25,10 @@ interface TagInfo {
   name: string;
   slug: string;
   count: number;
+}
+
+interface ContentTree {
+  [key: string]: ContentTree | ContentTranscriptType[];
 }
 
 /**
@@ -96,11 +95,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
   });
 
   // Process all tags at once
-  const allTags = new Set(
-    transcripts.flatMap(
-      (transcript) => transcript.tags?.map((tag) => tag) || []
-    )
-  );
+  const allTags = new Set(transcripts.flatMap((transcript) => transcript.tags?.map((tag) => tag) || []));
 
   allTags.forEach((tag) => {
     const catInfo = categoryMap.get(tag);
@@ -122,13 +117,11 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 
   // Add "Miscellaneous" category with remaining uncategorized tags
   if (tagsWithoutCategory.size > 0) {
-    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map(
-      (tag) => ({
-        name: tag,
-        slug: tag,
-        count: tagCounts[tag] || 0,
-      })
-    );
+    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map((tag) => ({
+      name: tag,
+      slug: tag,
+      count: tagCounts[tag] || 0,
+    }));
   }
 
   // Sort tags alphabetically within each category
@@ -146,11 +139,11 @@ function organizeTopics(transcripts: ContentTranscriptType[]) {
 
   transcripts.forEach((transcript) => {
     const slugTags = transcript.tags?.map((tag) => ({
-      slug:createSlug(tag),
-      name:tag
+      slug: createSlug(tag),
+      name: tag,
     }));
 
-    slugTags?.forEach(({slug, name}) => {
+    slugTags?.forEach(({ slug, name }) => {
       if (slugTopics[slug] !== undefined) {
         const index = slugTopics[slug];
         topicsArray[index].count += 1;
@@ -211,11 +204,11 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
 
   transcripts.forEach((transcript) => {
     const slugSpeakersArray = transcript.speakers?.map((speaker) => ({
-      slug:createSlug(speaker),
+      slug: createSlug(speaker),
       name: speaker,
     }));
 
-    slugSpeakersArray?.forEach(({slug, name}) => {
+    slugSpeakersArray?.forEach(({ slug, name }) => {
       if (slugSpeakers[slug] !== undefined) {
         const index = slugSpeakers[slug];
         speakerArray[index].count += 1;
@@ -231,8 +224,83 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
     });
   });
 
-
   writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
+}
+
+function generateSourcesCount(transcripts: ContentTranscriptType[]) {
+  const sourcesArray: TagInfo[] = [];
+  const slugSources: Record<string, number> = {};
+
+  transcripts.forEach((transcript) => {
+    const slug = transcript._raw.flattenedPath.split("/")[0];
+    const isValid = !!transcript.date;
+
+    if (isValid) {
+      if (slugSources[slug] !== undefined) {
+        sourcesArray[slugSources[slug]].count += 1;
+      } else {
+        const sourcesLength = sourcesArray.length;
+        slugSources[slug] = sourcesLength;
+        sourcesArray[sourcesLength] = {
+          slug,
+          name: unsluggify(slug),
+          count: 1,
+        };
+      }
+    }
+  });
+
+  writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+}
+
+function organizeContent(transcripts: ContentTranscriptType[]) {
+  const tree: ContentTree = {};
+
+  transcripts.forEach((transcript) => {
+    const parts = transcript.slugAsParams;
+    let current = tree;
+
+    const isNonEnglishDir = /\w+\.[a-z]{2}\b/.test(parts[parts.length - 1]);
+    if (isNonEnglishDir) {
+      return;
+    }
+    const loopSize = parts.length === 2 ? parts.length - 1 : parts.length - 2;
+
+    for (let i = 0; i < loopSize; i++) {
+      if (!current[parts[i]]) {
+        current[parts[i]] = {};
+      }
+
+      current = current[parts[i]] as ContentTree;
+
+      const penultimateKey = parts[loopSize];
+
+      if (!Array.isArray(current[penultimateKey])) {
+        current[penultimateKey] = [];
+      }
+
+      const createText = (args: Markdown) => {
+        const text = args.raw.replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "").trim();
+
+        return text.length > 300 ? text.slice(0, 300) + "..." : text;
+      };
+
+      (current[penultimateKey] as any[]).push({
+        title: transcript.title,
+        speakers: transcript.speakers,
+        date: transcript.date,
+        tags: transcript.tags,
+        sourceFilePath: transcript._raw.sourceFilePath,
+        flattenedPath: transcript._raw.flattenedPath,
+        summary: transcript.summary,
+        body: createText(transcript.body),
+        source: transcript.source,
+      });
+    }
+  });
+
+  // Save the result as JSON
+  writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
 export const Transcript = defineDocumentType(() => ({
@@ -268,7 +336,7 @@ export const Transcript = defineDocumentType(() => ({
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
     },
     slugAsParams: {
-      type: "string",
+      type: "list",
       resolve: (doc) => doc._raw.flattenedPath.split("/"),
     },
   },
@@ -294,5 +362,7 @@ export default makeSource({
     organizeTopics(allDocuments);
     getTranscriptAliases(allDocuments);
     createSpeakers(allDocuments);
+    generateSourcesCount(allDocuments);
+    organizeContent(allDocuments);
   },
 });
