@@ -5,6 +5,7 @@ import bitcointldr from "/public/images/bitcoin-tldr.jpg";
 import savingSatoshi from "/public/images/saving-satoshi.jpg";
 import transcriptsreview from "/public/images/bitcoin-transcripts-review.jpg";
 import bitcoindevs from "/public/images/bitcoin-devs.jpg";
+import { IsoDateTimeString, Markdown } from "contentlayer2/core";
 
 export type MenuApp = {
   href: string;
@@ -24,8 +25,7 @@ export const menuApps = [
     href: "https://chat.bitcoinsearch.xyz",
     image: chatbtc,
     alt: "ChatBTC image",
-    title:
-      "Interactive AI chat to learn about bitcoin technology and its history",
+    title: "Interactive AI chat to learn about bitcoin technology and its history",
   },
   {
     href: "https://bitcoinsearch.xyz/",
@@ -37,15 +37,13 @@ export const menuApps = [
     href: "https://tldr.bitcoinsearch.xyz/",
     image: bitcointldr,
     alt: "Bitcoin TLDR",
-    title:
-      "Daily summary of key bitcoin tech development discussions and updates",
+    title: "Daily summary of key bitcoin tech development discussions and updates",
   },
   {
     href: "https://savingsatoshi.com",
     image: savingSatoshi,
     alt: "Saving Satoshi",
-    title:
-      "Engaging bitcoin dev intro for coders using technical texts and code challenges",
+    title: "Engaging bitcoin dev intro for coders using technical texts and code challenges",
   },
   {
     href: "https://review.btctranscripts.com/",
@@ -72,10 +70,10 @@ export const ExploreNavigationItems = [
   //   href: "/types",
   //   title: "Types",
   // },
-  // {
-  //   href: "/sources",
-  //   title: "Sources",
-  // },
+  {
+    href: "/sources",
+    title: "Sources",
+  },
 ];
 
 export const alphabeticalArrangement = [
@@ -107,3 +105,14 @@ export const alphabeticalArrangement = [
   "Y",
   "Z",
 ];
+
+export type ContentTreeArray = {
+  title: string;
+  speakers?: string[] | undefined;
+  date?: IsoDateTimeString | undefined;
+  tags?: string[] | undefined;
+  sourceFilePath: string;
+  flattenedPath: string;
+  summary?: string | undefined;
+  body: string;
+};
