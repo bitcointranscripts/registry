@@ -181,8 +181,8 @@ const createTypesCount = (allTranscripts: ContentTranscriptType[]) => {
   ];
 
   allTranscripts.forEach((transcript) => {
-    if (transcript.categories) {
-      transcript.categories.forEach((type: string) => {
+    if (transcript.types) {
+      transcript.types.forEach((type: string) => {
         const formattedType = createSlug(type);
         if (relevantTypes.includes(formattedType)) {
           if (formattedType in typesAndCount) {
@@ -303,32 +303,70 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
   writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
+const allowedFields = [
+  "title",
+  "date",
+  "summary",
+  "episode",
+  "additional_resources",
+  "speakers",
+  "tags",
+  "media",
+  "source_file",
+  "transcript_by",
+  "categories",
+  "aliases",
+  "translation_by",
+  "needs",
+];
+
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
   filePathPattern: `**/*.md`,
   contentType: "markdown",
   fields: {
     title: { type: "string", required: true },
-    speakers: { type: "list", of: { type: "string" } },
     date: { type: "date" },
-    transcript_by: { type: "string" },
-    Transcript_by: { type: "string" },
-    categories: { type: "list", of: { type: "string" } },
-    tag: { type: "list", of: { type: "string" } },
+    summary: { type: "string" },
+    episode: { type: "number" },
+    additional_resources: { type: "list", of: Resources },
+    speakers: { type: "list", of: { type: "string" } },
     tags: { type: "list", of: { type: "string" } },
     media: { type: "string" },
-    translation_by: { type: "string" },
-    episode: { type: "number" },
+    source_file: { type: "string" },
+    transcript_by: { type: "string" },
+    categories: { type: "list", of: { type: "string" } },
     aliases: { type: "list", of: { type: "string" } },
-    video: { type: "string" },
-    hosts: { type: "list", of: { type: "string" } },
-    source: { type: "string" },
-    transcription_coverage: { type: "string" },
-    summary: { type: "string" },
+    translation_by: { type: "string" },
     needs: { type: "string" },
-    aditional_resources: { type: "list", of: Resources },
-    additional_resources: { type: "list", of: Resources },
+    types: { type: "list", of: { type: "string" } },
+    source: { type: "string" },
+    website: { type: "string" },
     weight: { type: "number" },
+    hosts: { type: "list", of: { type: "string" } },
+    transcription_coverage: { type: "string" },
+
+    // title: { type: "string", required: true },
+    // speakers: { type: "list", of: { type: "string" } },
+    // date: { type: "date" },
+    // transcript_by: { type: "string" },
+    // Transcript_by: { type: "string" },
+    // categories: { type: "list", of: { type: "string" } },
+    // tag: { type: "list", of: { type: "string" } },
+    // tags: { type: "list", of: { type: "string" } },
+    // media: { type: "string" },
+    // translation_by: { type: "string" },
+    // episode: { type: "number" },
+    // aliases: { type: "list", of: { type: "string" } },
+    // video: { type: "string" },
+    // hosts: { type: "list", of: { type: "string" } },
+    // source: { type: "string" },
+    // transcription_coverage: { type: "string" },
+    // summary: { type: "string" },
+    // needs: { type: "string" },
+    // aditional_resources: { type: "list", of: Resources },
+    // additional_resources: { type: "list", of: Resources },
+    // weight: { type: "number" },
   },
   computedFields: {
     url: {
@@ -343,7 +381,7 @@ export const Transcript = defineDocumentType(() => ({
 }));
 
 export default makeSource({
-  contentDirPath: path.join(process.cwd(), "public", "bitcoin-transcript"),
+  contentDirPath: path.join(process.cwd(), "public", "refine-taxonomies"),
   documentTypes: [Transcript],
   contentDirExclude: [
     ".github",
