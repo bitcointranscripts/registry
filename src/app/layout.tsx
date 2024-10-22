@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={manrope.className}>
         <Header />
-        <div>{children}</div>
+        {children}
       </body>
       <Script async src='https://visits.bitcoindevs.xyz/script.js' data-website-id='06384ada-7f1c-44c2-a6d9-d830fb23e122'></Script>
     </html>
