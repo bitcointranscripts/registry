@@ -31,6 +31,7 @@ const config: Config = {
           "custom-1300": "#E6E6E6",
           "custom-1400": "#ACACAC",
           "custom-1500": "#DBDBDB",
+          "custom-1600": "#BEBEBE",
         },
         blue: {
           "custom-100": "#2A58FE",
