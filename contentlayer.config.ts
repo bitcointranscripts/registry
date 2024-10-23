@@ -1,9 +1,9 @@
-import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
-import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
-import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
-import { Transcript as ContentTranscriptType, Markdown } from "./.contentlayer/generated/types";
+import { writeFileSync } from "fs";
+import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
+import { Transcript as ContentTranscriptType, Markdown, Source as ContentSourceType } from "./.contentlayer/generated/types";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -64,7 +64,7 @@ const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
     }
   }
 
-  writeFileSync("./public/aliases.json", JSON.stringify(aliases));
+  fs.writeFileSync("./public/aliases.json", JSON.stringify(aliases));
 };
 
 const getCategories = () => {
@@ -129,7 +129,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
     tagsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
   });
 
-  writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
+  fs.writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
   return { tagsByCategory, tagsWithoutCategory };
 }
 
@@ -159,7 +159,7 @@ function organizeTopics(transcripts: ContentTranscriptType[]) {
     });
   });
 
-  writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
+  fs.writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
 }
 /**
  * Count the occurrences of all types across transcripts and write to json file
@@ -195,7 +195,7 @@ const createTypesCount = (allTranscripts: ContentTranscriptType[]) => {
     }
   });
 
-  writeFileSync("./public/types-data.json", JSON.stringify(typesAndCount));
+  fs.writeFileSync("./public/types-data.json", JSON.stringify(typesAndCount));
 };
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
@@ -224,10 +224,10 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
     });
   });
 
-  writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
+  fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
 }
 
-function generateSourcesCount(transcripts: ContentTranscriptType[]) {
+function generateSourcesCount(transcripts: ContentTranscriptType[], sources: ContentSourceType[]) {
   const sourcesArray: TagInfo[] = [];
   const slugSources: Record<string, number> = {};
 
@@ -241,8 +241,13 @@ function generateSourcesCount(transcripts: ContentTranscriptType[]) {
       } else {
         const sourcesLength = sourcesArray.length;
         slugSources[slug] = sourcesLength;
+        // const getTranscriptName = (slug: string) => sources.find((source) => source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
+
+        // console.log({ title: getTranscriptName(slug) });
+
         sourcesArray[sourcesLength] = {
           slug,
+          // name: getTranscriptName(slug),
           name: unsluggify(slug),
           count: 1,
         };
@@ -250,7 +255,7 @@ function generateSourcesCount(transcripts: ContentTranscriptType[]) {
     }
   });
 
-  writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+  fs.writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
 }
 
 function organizeContent(transcripts: ContentTranscriptType[]) {
@@ -300,25 +305,8 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
   });
 
   // Save the result as JSON
-  writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
+  fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
-
-const allowedFields = [
-  "title",
-  "date",
-  "summary",
-  "episode",
-  "additional_resources",
-  "speakers",
-  "tags",
-  "media",
-  "source_file",
-  "transcript_by",
-  "categories",
-  "aliases",
-  "translation_by",
-  "needs",
-];
 
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
@@ -326,47 +314,28 @@ export const Transcript = defineDocumentType(() => ({
   contentType: "markdown",
   fields: {
     title: { type: "string", required: true },
-    date: { type: "date" },
-    summary: { type: "string" },
-    episode: { type: "number" },
-    additional_resources: { type: "list", of: Resources },
     speakers: { type: "list", of: { type: "string" } },
+    date: { type: "date" },
+    transcript_by: { type: "string" },
+    Transcript_by: { type: "string" },
+    categories: { type: "list", of: { type: "string" } },
+    tag: { type: "list", of: { type: "string" } },
     tags: { type: "list", of: { type: "string" } },
     media: { type: "string" },
-    source_file: { type: "string" },
-    transcript_by: { type: "string" },
-    categories: { type: "list", of: { type: "string" } },
-    aliases: { type: "list", of: { type: "string" } },
     translation_by: { type: "string" },
-    needs: { type: "string" },
-    types: { type: "list", of: { type: "string" } },
-    source: { type: "string" },
-    website: { type: "string" },
-    weight: { type: "number" },
+    episode: { type: "number" },
+    aliases: { type: "list", of: { type: "string" } },
+    video: { type: "string" },
     hosts: { type: "list", of: { type: "string" } },
+    source: { type: "string" },
     transcription_coverage: { type: "string" },
-
-    // title: { type: "string", required: true },
-    // speakers: { type: "list", of: { type: "string" } },
-    // date: { type: "date" },
-    // transcript_by: { type: "string" },
-    // Transcript_by: { type: "string" },
-    // categories: { type: "list", of: { type: "string" } },
-    // tag: { type: "list", of: { type: "string" } },
-    // tags: { type: "list", of: { type: "string" } },
-    // media: { type: "string" },
-    // translation_by: { type: "string" },
-    // episode: { type: "number" },
-    // aliases: { type: "list", of: { type: "string" } },
-    // video: { type: "string" },
-    // hosts: { type: "list", of: { type: "string" } },
-    // source: { type: "string" },
-    // transcription_coverage: { type: "string" },
-    // summary: { type: "string" },
-    // needs: { type: "string" },
-    // aditional_resources: { type: "list", of: Resources },
-    // additional_resources: { type: "list", of: Resources },
-    // weight: { type: "number" },
+    summary: { type: "string" },
+    needs: { type: "string" },
+    aditional_resources: { type: "list", of: Resources },
+    additional_resources: { type: "list", of: Resources },
+    weight: { type: "number" },
+    types: { type: "list", of: { type: "string" } },
+    source_file: { type: "string" },
   },
   computedFields: {
     url: {
@@ -380,9 +349,43 @@ export const Transcript = defineDocumentType(() => ({
   },
 }));
 
+export const Source = defineDocumentType(() => ({
+  name: "Source",
+  filePathPattern: `**/_index{,.??}.md`,
+  contentType: "markdown",
+  fields: {
+    title: { type: "string", required: true },
+    source: { type: "string" },
+    transcription_coverage: { type: "string" },
+    hosts: { type: "list", of: { type: "string" } },
+    weight: { type: "number" },
+    website: { type: "string" },
+    types: { type: "list", of: { type: "string" } },
+    aditional_resources: { type: "list", of: Resources },
+  },
+  computedFields: {
+    url: {
+      type: "string",
+      resolve: (doc) => `/${doc._raw.flattenedPath.split("/").slice(0, -1).join("/")}`,
+    },
+    language: {
+      type: "string",
+      resolve: (doc) => {
+        const index = doc._raw.flattenedPath.split("/").pop();
+        const lan = index?.split(".").length === 2 ? index?.split(".")[1] : "en";
+        return lan;
+      },
+    },
+    slugAsParams: {
+      type: "list",
+      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: path.join(process.cwd(), "public", "refine-taxonomies"),
-  documentTypes: [Transcript],
+  documentTypes: [Source, Transcript],
   contentDirExclude: [
     ".github",
     ".gitignore",
@@ -394,13 +397,13 @@ export default makeSource({
     "2018-08-17-richard-bondi-bitcoin-cli-regtest.es.md",
   ],
   onSuccess: async (importData) => {
-    const { allDocuments } = await importData();
-    organizeTags(allDocuments);
-    createTypesCount(allDocuments);
-    organizeTopics(allDocuments);
-    getTranscriptAliases(allDocuments);
-    createSpeakers(allDocuments);
-    generateSourcesCount(allDocuments);
-    organizeContent(allDocuments);
+    const { allTranscripts, allSources } = await importData();
+    organizeTags(allTranscripts);
+    createTypesCount(allTranscripts);
+    organizeTopics(allTranscripts);
+    getTranscriptAliases(allTranscripts);
+    createSpeakers(allTranscripts);
+    generateSourcesCount(allTranscripts, allSources);
+    organizeContent(allTranscripts);
   },
 });
