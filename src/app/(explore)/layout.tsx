@@ -9,15 +9,15 @@ export default function ExploreLayout({
 }) {
   return (
     <>
-      <Wrapper>
-        <section className="flex gap-[50px] md:pb-[100px] pt-2 md:pt-6">
+      <section className="pt-2 md:pt-6 h-[calc(100vh-var(--header-height)-10px)] overflow-y-auto">
+        <Wrapper className="flex gap-[50px] md:pb-[100px]">
           <ExploreNavigation />
           <div className="w-full scroll-smooth">{children}</div>
 
           {/* Include shared UI here e.g. a header or sidebar */}
-        </section>
-      </Wrapper>
-      <FooterComponent />
+        </Wrapper>
+        <FooterComponent />
+      </section>
     </>
   );
 }

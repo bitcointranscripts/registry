@@ -24,7 +24,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({ header, data, descr
   return (
     <div className='flex items-start relative lg:gap-[50px]'>
       <div className='flex flex-col w-full gap-6 lg:gap-10 no-scrollbar'>
-        <div className='block lg:hidden sticky top-[calc(var(--header-height))]'>
+        <div className='block lg:hidden sticky top-0'>
           {type == "alphabet" && <MobileAlphabetGrouping currentGroup={currentGroup} groupedData={groupedData} />}
           {type == "words" && <ContentGrouping groupedData={groupedData} currentGroup={currentGroup} screen='mobile' />}
         </div>
@@ -64,7 +64,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({ header, data, descr
         </div>
       </div>
 
-      <div className='hidden lg:flex sticky top-[calc(var(--header-height)+24px)] self-start flex-shrink-0 w-fit lg:justify-center '>
+      <div className='hidden lg:flex sticky top-0 self-start flex-shrink-0 w-fit lg:justify-center '>
         {type === "alphabet" && <AlphabetGrouping groupedData={groupedData} currentGroup={currentGroup} />}
         {type == "words" && <ContentGrouping groupedData={groupedData} currentGroup={currentGroup} screen='desktop' />}
       </div>
