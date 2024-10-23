@@ -12,8 +12,7 @@ const BreadCrumbs = () => {
       .split("/")
       .slice(0, idx + 1)
       .join("/");
-
-    return { name: path || "home", link: route };
+    return { name: path || "home", link: route || "/" };
   });
 
   const isActive = allRoutes[allRoutes.length - 1];
