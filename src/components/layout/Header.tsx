@@ -189,7 +189,9 @@ const Header = () => {
     <div className='flex items-center justify-center border-b-[0.5px] border-b-gray-custom-200 max-md:border-b-0 w-full sticky top-0 z-20'>
       <Wrapper className='h-[var(--header-height)] flex items-center w-full justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
         <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
-          <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
+          <Link href="/">
+            <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
+          </Link>
           <nav className='md:hidden items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
             <Link href='/categories'>Transcripts</Link>
             <Link href='/about' className='hidden'>
