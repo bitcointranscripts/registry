@@ -1,9 +1,8 @@
 import path from "path";
 import * as fs from "fs";
-import { writeFileSync } from "fs";
-import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import { createSlug, createText, SpeakerData, TopicsData, unsluggify } from "./src/utils";
 import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
-import { Transcript as ContentTranscriptType, Markdown, Source as ContentSourceType } from "./.contentlayer/generated/types";
+import { Transcript as ContentTranscriptType, Source as ContentSourceType } from "./.contentlayer/generated/types";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -161,42 +160,6 @@ function organizeTopics(transcripts: ContentTranscriptType[]) {
 
   fs.writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
 }
-/**
- * Count the occurrences of all types across transcripts and write to json file
- */
-const createTypesCount = (allTranscripts: ContentTranscriptType[]) => {
-  const typesAndCount: Record<string, number> = {};
-  const relevantTypes = [
-    "video",
-    "core-dev-tech",
-    "podcast",
-    "conference",
-    "meeting",
-    "club",
-    "meetup",
-    "hackathon",
-    "workshop",
-    "residency",
-    "developer-tools",
-  ];
-
-  allTranscripts.forEach((transcript) => {
-    if (transcript.types) {
-      transcript.types.forEach((type: string) => {
-        const formattedType = createSlug(type);
-        if (relevantTypes.includes(formattedType)) {
-          if (formattedType in typesAndCount) {
-            typesAndCount[formattedType] += 1;
-          } else {
-            typesAndCount[formattedType] = 1;
-          }
-        }
-      });
-    }
-  });
-
-  fs.writeFileSync("./public/types-data.json", JSON.stringify(typesAndCount));
-};
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
   const slugSpeakers: any = {};
@@ -233,30 +196,49 @@ function generateSourcesCount(transcripts: ContentTranscriptType[], sources: Con
 
   transcripts.forEach((transcript) => {
     const slug = transcript._raw.flattenedPath.split("/")[0];
-    const isValid = !!transcript.date;
 
-    if (isValid) {
-      if (slugSources[slug] !== undefined) {
-        sourcesArray[slugSources[slug]].count += 1;
-      } else {
-        const sourcesLength = sourcesArray.length;
-        slugSources[slug] = sourcesLength;
-        // const getTranscriptName = (slug: string) => sources.find((source) => source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
+    if (slugSources[slug] !== undefined) {
+      sourcesArray[slugSources[slug]].count += 1;
+    } else {
+      const sourcesLength = sourcesArray.length;
+      slugSources[slug] = sourcesLength;
+      const getTranscriptName = (slug: string) => sources.find((source) => source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
 
-        // console.log({ title: getTranscriptName(slug) });
-
-        sourcesArray[sourcesLength] = {
-          slug,
-          // name: getTranscriptName(slug),
-          name: unsluggify(slug),
-          count: 1,
-        };
-      }
+      sourcesArray[sourcesLength] = {
+        slug,
+        name: getTranscriptName(slug),
+        count: 1,
+      };
     }
   });
 
   fs.writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+  return { sourcesArray, slugSources };
 }
+
+const createTypesCount = (transcripts: ContentTranscriptType[], sources: ContentSourceType[]) => {
+  const { sourcesArray, slugSources } = generateSourcesCount(transcripts, sources);
+  const nestedTypes: any = {};
+
+  sources.forEach((transcript) => {
+    if (transcript.types) {
+      const type = transcript.types[0];
+      const slug = transcript.slugAsParams[0];
+
+      const sourceIndex = slugSources[slug];
+      const getSource = sourcesArray[sourceIndex] ?? null;
+
+      if (!nestedTypes[type]) {
+        nestedTypes[type] = [];
+      } else {
+        if (nestedTypes[type].includes(getSource) || getSource === null) return;
+        nestedTypes[type].push(getSource);
+      }
+    }
+  });
+
+  fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypes));
+};
 
 function organizeContent(transcripts: ContentTranscriptType[]) {
   const tree: ContentTree = {};
@@ -266,42 +248,26 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
     let current = tree;
 
     const isNonEnglishDir = /\w+\.[a-z]{2}\b/.test(parts[parts.length - 1]);
-    if (isNonEnglishDir) {
-      return;
-    }
-    const loopSize = parts.length === 2 ? parts.length - 1 : parts.length - 2;
+    if (isNonEnglishDir) return;
 
-    for (let i = 0; i < loopSize; i++) {
+    for (let i = 0; i < parts.length - 1; i++) {
       if (!current[parts[i]]) {
-        current[parts[i]] = {};
+        current[parts[i]] = i === parts.length - 2 ? [] : {};
       }
-
       current = current[parts[i]] as ContentTree;
-
-      const penultimateKey = parts[loopSize];
-
-      if (!Array.isArray(current[penultimateKey])) {
-        current[penultimateKey] = [];
-      }
-
-      const createText = (args: Markdown) => {
-        const text = args.raw.replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "").trim();
-
-        return text.length > 300 ? text.slice(0, 300) + "..." : text;
-      };
-
-      (current[penultimateKey] as any[]).push({
-        title: transcript.title,
-        speakers: transcript.speakers,
-        date: transcript.date,
-        tags: transcript.tags,
-        sourceFilePath: transcript._raw.sourceFilePath,
-        flattenedPath: transcript._raw.flattenedPath,
-        summary: transcript.summary,
-        body: createText(transcript.body),
-        source: transcript.source,
-      });
     }
+
+    (current as unknown as any[]).push({
+      title: transcript.title,
+      speakers: transcript.speakers,
+      date: transcript.date,
+      tags: transcript.tags,
+      sourceFilePath: transcript._raw.sourceFilePath,
+      flattenedPath: transcript._raw.flattenedPath,
+      summary: transcript.summary,
+      body: createText(transcript.body),
+      source: transcript.source,
+    });
   });
 
   // Save the result as JSON
@@ -361,7 +327,7 @@ export const Source = defineDocumentType(() => ({
     weight: { type: "number" },
     website: { type: "string" },
     types: { type: "list", of: { type: "string" } },
-    aditional_resources: { type: "list", of: Resources },
+    additional_resources: { type: "list", of: Resources },
   },
   computedFields: {
     url: {
@@ -399,7 +365,7 @@ export default makeSource({
   onSuccess: async (importData) => {
     const { allTranscripts, allSources } = await importData();
     organizeTags(allTranscripts);
-    createTypesCount(allTranscripts);
+    createTypesCount(allTranscripts, allSources);
     organizeTopics(allTranscripts);
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);

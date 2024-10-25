@@ -7,6 +7,7 @@ type SingleContent = {
 } & TopicsData;
 const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent) => {
   const url = `/${linkName}/${slug}`;
+  // const url = linkName === "sources" ? `${slug}` : `/${linkName}/${slug}`;
 
   return (
     <Link

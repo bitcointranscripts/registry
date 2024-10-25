@@ -3,10 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContentTreeArray } from "@/utils/data";
 import allSources from "@/public/sources-data.json";
-import { allTranscripts } from "contentlayer/generated";
+import { allSources as allContentSources } from "contentlayer/generated";
 import BreadCrumbs from "@/components/common/BreadCrumbs";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
-import { ContentTree, extractDirectoryData, filterOutIndexes } from "@/utils";
+import { ContentTree, filterOutIndexes } from "@/utils";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import Image from "next/image";
@@ -15,30 +15,15 @@ import Image from "next/image";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  // The flattenedPath and SlugParams are destuctured from the value of the currentElement
-  const all = allTranscripts.reduce((acc, transcript) => {
-    // params and slugAsParams are more or less the same, continued using both from previous code
-    const params = transcript._raw.flattenedPath.split("/");
-
-    // transcript.slugAsParams is typed as a list from contentLayer but its manually casted to `string[]` to specify it's exact type
-    const slugAsParams = transcript.slugAsParams as unknown as string[];
-
-    const is_non_english_dir_or_transcript = /\w+\.[a-z]{2}\b/.test(params[params.length - 1]);
-
-    const lastRouteIndex = params[params.length - 1].includes("index");
-
-    if (!lastRouteIndex) {
-      acc.push({ slug: slugAsParams });
-      // converts slug ['adopting-bitcoin', '_index'] to ['adopting-bitcoin']
-      // skips non english dir e.g ['adopting-bitcoin', '_index.es'] is skipped
-    } else if (!is_non_english_dir_or_transcript) {
-      acc.push({ slug: slugAsParams.slice(0, slugAsParams.length - 1) });
+  const allSlugs = allContentSources.map(({ slugAsParams, language }) => {
+    if (language === "en") {
+      return { slug: slugAsParams };
+    } else {
+      return { slug: [language, ...slugAsParams] };
     }
+  });
 
-    return acc;
-  }, [] as { slug: string[] }[]);
-
-  return all;
+  return allSlugs;
 }
 
 const page = ({ params }: { params: { slug: string[] } }) => {
@@ -57,7 +42,9 @@ const page = ({ params }: { params: { slug: string[] } }) => {
 
   const displayCurrent = filterOutIndexes(current);
 
-  const { directoryData } = extractDirectoryData(current);
+  const pageDetails = allContentSources.find((source) => {
+    return source.slugAsParams[0] === slug[0] && source.language === "en";
+  });
 
   const isDirectoryList = Array.isArray(current);
 
@@ -76,18 +63,16 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <p>Back</p>
             </Link>
 
-            <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>
-              {current["_index"] ? current["_index"][0].title : isDirectoryList ? directoryData?.title : slug[slug.length - 1]}
-            </h3>
-            {isDirectoryList && directoryData?.source ? (
+            <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>{pageDetails?.title ?? slug[slug.length - 1]}</h3>
+            {isDirectoryList && pageDetails?.source ? (
               <div className='flex gap-1 items-center pt-6 md:pt-3'>
                 <Image src={WorldIcon} alt='world icon' className='w-[18px] md:w-[20px]' />
                 <Link
-                  href={directoryData?.source}
+                  href={pageDetails?.source ?? ""}
                   target='_blank'
                   className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline'
                 >
-                  {directoryData?.source}
+                  {pageDetails.source ?? ""}
                 </Link>
               </div>
             ) : null}
