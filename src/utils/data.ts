@@ -66,10 +66,10 @@ export const ExploreNavigationItems = [
     href: "/speakers",
     title: "Speakers",
   },
-  // {
-  //   href: "/types",
-  //   title: "Types",
-  // },
+  {
+    href: "/types",
+    title: "Types",
+  },
   {
     href: "/sources",
     title: "Sources",

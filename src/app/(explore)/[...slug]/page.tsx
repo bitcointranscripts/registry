@@ -58,7 +58,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
         >
           <BreadCrumbs />
           <div className='flex flex-col'>
-            <Link href={`/sources/${slug.slice(0, -1).join("/")}`} className='flex gap-1 items-center'>
+            <Link href={`/${slug.slice(0, -1).join("/")}`} className='flex gap-1 items-center'>
               <ArrowLinkRight className='rotate-180 w-5 md:w-6' />
               <p>Back</p>
             </Link>
@@ -91,7 +91,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               {(displayCurrent as string[]).map((key, i) => (
                 <Link
                   key={`${key}-${i}}`}
-                  href={`/sources/${[...slug, key].join("/")}`}
+                  href={`/${[...slug, key].join("/")}`}
                   className='flex capitalize cursor-pointer border max-w-[100%] border-gray-custom-1200 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100'
                 >
                   <span className='text-wrap break-words max-w-[80%]'>{key}</span>
