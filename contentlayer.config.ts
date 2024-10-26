@@ -202,7 +202,8 @@ function generateSourcesCount(transcripts: ContentTranscriptType[], sources: Con
     } else {
       const sourcesLength = sourcesArray.length;
       slugSources[slug] = sourcesLength;
-      const getTranscriptName = (slug: string) => sources.find((source) => source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
+      const getTranscriptName = (slug: string) =>
+        sources.find((source) => source.language === "en" && source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
 
       sourcesArray[sourcesLength] = {
         slug,

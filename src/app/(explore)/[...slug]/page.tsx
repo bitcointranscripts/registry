@@ -58,7 +58,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
         >
           <BreadCrumbs />
           <div className='flex flex-col'>
-            <Link href={`/${slug.slice(0, -1).join("/")}`} className='flex gap-1 items-center'>
+            <Link href={slug.slice(0, -1).join("/") === "" ? `/sources` : `/${slug.slice(0, -1).join("/")}`} className='flex gap-1 items-center'>
               <ArrowLinkRight className='rotate-180 w-5 md:w-6' />
               <p>Back</p>
             </Link>
