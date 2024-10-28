@@ -202,12 +202,13 @@ function generateSourcesCount(transcripts: ContentTranscriptType[], sources: Con
     } else {
       const sourcesLength = sourcesArray.length;
       slugSources[slug] = sourcesLength;
-      const getTranscriptName = (slug: string) =>
+
+      const getSourceName = (slug: string) =>
         sources.find((source) => source.language === "en" && source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
 
       sourcesArray[sourcesLength] = {
         slug,
-        name: getTranscriptName(slug),
+        name: getSourceName(slug),
         count: 1,
       };
     }
@@ -223,18 +224,19 @@ const createTypesCount = (transcripts: ContentTranscriptType[], sources: Content
 
   sources.forEach((transcript) => {
     if (transcript.types) {
-      const type = transcript.types[0];
-      const slug = transcript.slugAsParams[0];
+      transcript.types.forEach((type) => {
+        const slug = transcript.slugAsParams[0];
 
-      const sourceIndex = slugSources[slug];
-      const getSource = sourcesArray[sourceIndex] ?? null;
+        const sourceIndex = slugSources[slug];
+        const getSource = sourcesArray[sourceIndex] ?? null;
 
-      if (!nestedTypes[type]) {
-        nestedTypes[type] = [];
-      } else {
-        if (nestedTypes[type].includes(getSource) || getSource === null) return;
-        nestedTypes[type].push(getSource);
-      }
+        if (!nestedTypes[type]) {
+          nestedTypes[type] = [];
+        } else {
+          if (nestedTypes[type].includes(getSource) || getSource === null) return;
+          nestedTypes[type].push(getSource);
+        }
+      });
     }
   });
 

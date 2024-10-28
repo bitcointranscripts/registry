@@ -32,8 +32,23 @@ const ExploreNavigation = () => {
 
 const ExploreNavigationItem = ({ href, title }: { href: string; title: string }) => {
   const pathname = usePathname();
-  const pagePath = pathname.split("/")[1].toLowerCase();
-  const isActive = pagePath === title.toLowerCase();
+  let pagePath = pathname.split("/")[1].toLowerCase();
+
+  const switchState = () => {
+    let isActive = false;
+    const navList = ExploreNavigationItems.map((item) => item.title.toLowerCase()).includes(pagePath);
+
+    if (navList) {
+      isActive = pagePath === title.toLowerCase();
+    } else if (!navList) {
+      pagePath = "sources";
+      isActive = pagePath === title.toLowerCase();
+    }
+
+    return { isActive };
+  };
+
+  const { isActive } = switchState();
 
   return (
     <Link

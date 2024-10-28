@@ -1,29 +1,22 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ContentTreeArray } from "@/utils/data";
+import LinkIcon from "/public/svgs/link-icon.svg";
+import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
-import { allSources as allContentSources } from "contentlayer/generated";
+import { ContentTree, filterOutIndexes } from "@/utils";
 import BreadCrumbs from "@/components/common/BreadCrumbs";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
-import { ContentTree, filterOutIndexes } from "@/utils";
+import { allSources as allContentSources } from "contentlayer/generated";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
-import WorldIcon from "/public/svgs/world-icon.svg";
-import Image from "next/image";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const allSlugs = allContentSources.map(({ slugAsParams, language }) => {
-    if (language === "en") {
-      return { slug: slugAsParams };
-    } else {
-      return { slug: [language, ...slugAsParams] };
-    }
-  });
-
-  return allSlugs;
+  return allContentSources.map(({ slugAsParams }) => ({ slug: slugAsParams }));
 }
 
 const page = ({ params }: { params: { slug: string[] } }) => {
@@ -43,7 +36,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   const displayCurrent = filterOutIndexes(current);
 
   const pageDetails = allContentSources.find((source) => {
-    return source.slugAsParams[0] === slug[0] && source.language === "en";
+    return source.slugAsParams.join("/") === slug.join("/") && source.language === "en";
   });
 
   const isDirectoryList = Array.isArray(current);
@@ -64,15 +57,28 @@ const page = ({ params }: { params: { slug: string[] } }) => {
             </Link>
 
             <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>{pageDetails?.title ?? slug[slug.length - 1]}</h3>
-            {isDirectoryList && pageDetails?.source ? (
+            {isDirectoryList && pageDetails?.website ? (
               <div className='flex gap-1 items-center pt-6 md:pt-3'>
                 <Image src={WorldIcon} alt='world icon' className='w-[18px] md:w-[20px]' />
                 <Link
-                  href={pageDetails?.source ?? ""}
+                  href={pageDetails?.website ?? ""}
                   target='_blank'
                   className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline'
                 >
-                  {pageDetails.source ?? ""}
+                  {pageDetails.website ?? ""}
+                </Link>
+              </div>
+            ) : null}
+
+            {isDirectoryList && pageDetails?.source ? (
+              <div className='flex gap-1 items-center pt-6 md:pt-3'>
+                <Image src={LinkIcon} alt='link icon' className='w-[18px] md:w-[20px]' />
+                <Link
+                  href={pageDetails?.source ?? ""}
+                  target='_blank'
+                  className='py-[2px] px-4 rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
+                >
+                  source
                 </Link>
               </div>
             ) : null}
