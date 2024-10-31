@@ -225,16 +225,17 @@ const createTypesCount = (transcripts: ContentTranscriptType[], sources: Content
   sources.forEach((transcript) => {
     if (transcript.types) {
       transcript.types.forEach((type) => {
+        const slugType = type.charAt(0).toUpperCase() + type.slice(1);
         const slug = transcript.slugAsParams[0];
 
         const sourceIndex = slugSources[slug];
         const getSource = sourcesArray[sourceIndex] ?? null;
 
-        if (!nestedTypes[type]) {
-          nestedTypes[type] = [];
+        if (!nestedTypes[slugType]) {
+          nestedTypes[slugType] = [];
         } else {
-          if (nestedTypes[type].includes(getSource) || getSource === null) return;
-          nestedTypes[type].push(getSource);
+          if (nestedTypes[slugType].includes(getSource) || getSource === null) return;
+          nestedTypes[slugType].push(getSource);
         }
       });
     }
