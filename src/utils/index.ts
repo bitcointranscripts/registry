@@ -283,3 +283,29 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
     transcripts,
   };
 };
+
+export function extractListOfHeadings(text: string): string[] {
+  const lines: string[] = text.split('\n');
+  const headings: string[] = [];
+
+  lines.forEach(line => {
+      if (line.match(/[#]+\s+\w+/gi)) {
+          headings.push(line.trim());
+      }
+  });
+
+  return headings;
+}
+
+export function extractListOfHeadings(text: string): string[] {
+  const lines: string[] = text.split('\n');
+  const headings: string[] = [];
+
+  lines.forEach(line => {
+      if (line.match(/[#]+\s+\w+/gi)) {
+          headings.push(line.trim());
+      }
+  });
+
+  return headings;
+}
