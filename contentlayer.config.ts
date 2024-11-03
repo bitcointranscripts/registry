@@ -324,7 +324,7 @@ export const Transcript = defineDocumentType(() => ({
     },
     slugAsParams: {
       type: "list",
-      resolve: (doc) => doc._raw.flattenedPath.split("/"),
+      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
     },
     language: {
       type: "string",
