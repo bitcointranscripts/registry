@@ -92,9 +92,11 @@ const page = ({ params }: { params: { slug: string[] } }) => {
 
         {isDirectoryList ? (
           <div className='flex flex-col gap-6 h-full pb-8 overflow-scroll'>
-            {(displayCurrent as ContentTreeArray[]).map((item, i) => (
-              <TranscriptDetailsCard key={i} slug={slug} data={item} />
-            ))}
+            {(displayCurrent as ContentTreeArray[])
+              .sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime() || a.title.localeCompare(b.title))
+              .map((item, i) => (
+                <TranscriptDetailsCard key={i} slug={slug} data={item} />
+              ))}
           </div>
         ) : (
           <div className='flex-col flex gap-10 overflow-scroll pb-8'>
