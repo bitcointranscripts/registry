@@ -247,3 +247,19 @@ export const sortObjectAndArrays = (args: { [category: string]: TagInfo[] }) => 
       .map(([key, value]) => [key, value.sort((a, b) => a.name.localeCompare(b.name))])
   );
 };
+
+export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
+  const countObject: { [key: string]: number } = {};
+
+  Object.entries(args).map(([key, value]) => {
+    countObject[key] = value.reduce((acc, curr) => acc + curr.count, 0);
+  });
+
+  const sortObject: { [key: string]: number } = Object.keys(countObject)
+    .sort()
+    .reduce((acc, curr) => {
+      acc[curr] = countObject[curr];
+      return acc;
+    }, {} as typeof countObject);
+  return sortObject;
+};

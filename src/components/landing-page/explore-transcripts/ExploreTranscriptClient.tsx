@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Carousel } from "@bitcoin-dev-project/bdp-ui";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { ExploreTranscriptCard } from "../TranscriptCard";
-import { sortObjectAndArrays } from "@/utils";
+import { countItemsAndSort } from "@/utils";
 
 interface TagInfo {
   name: string;
@@ -19,8 +19,8 @@ interface ExploreTranscriptClientProps {
 }
 
 const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientProps) => {
-  const sortedCategories = sortObjectAndArrays(categories);
-  const sortedTypes = sortObjectAndArrays(types);
+  const sortedCategories = countItemsAndSort(categories);
+  const sortedTypes = countItemsAndSort(types);
 
   return (
     <div className='flex items-center justify-center w-full'>
@@ -37,7 +37,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
             <Carousel.Container>
               {Object.entries(sortedCategories).map(([key, value]) => (
                 <Carousel.Item key={key}>
-                  <ExploreTranscriptCard title={key} transcripts={value.length} url={key} key={key} type='CATEGORY' />
+                  <ExploreTranscriptCard title={key} transcripts={value} url={key} key={key} type='CATEGORY' />
                 </Carousel.Item>
               ))}
             </Carousel.Container>
@@ -62,7 +62,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
             <Carousel.Container>
               {Object.entries(sortedTypes).map(([key, value]) => (
                 <Carousel.Item key={key}>
-                  <ExploreTranscriptCard title={key} url={key} transcripts={value.length} key={key} type='TYPE' />
+                  <ExploreTranscriptCard title={key} url={key} transcripts={value} key={key} type='TYPE' />
                 </Carousel.Item>
               ))}
             </Carousel.Container>
