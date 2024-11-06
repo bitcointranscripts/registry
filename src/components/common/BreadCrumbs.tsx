@@ -3,17 +3,27 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { ExploreNavigationItems } from "@/utils/data";
 
 const BreadCrumbs = () => {
   const pathname = usePathname();
 
-  const allRoutes = pathname.split("/").map((path, idx) => {
+  const navListWithoutSources = ExploreNavigationItems.filter((item) => item.href !== "/sources").map((item) => item.href.slice(1));
+
+  const pathnameArray = pathname.split("/");
+  const isNotSourcesPage = navListWithoutSources.includes(pathnameArray[1]);
+
+  const allRoutes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")
       .slice(0, idx + 1)
       .join("/");
     return { name: path || "home", link: route || "/" };
   });
+
+  if (!isNotSourcesPage && pathnameArray[1] !== "sources") {
+    allRoutes.splice(1, 0, { name: "Sources", link: "/sources" });
+  }
 
   const isActive = allRoutes[allRoutes.length - 1];
 

@@ -1,4 +1,4 @@
-import { type Transcript } from "contentlayer/generated";
+import { Markdown, type Transcript } from "contentlayer/generated";
 import { ContentTreeArray } from "./data";
 
 export interface ContentTree {
@@ -22,11 +22,17 @@ export type ContentData = {
   count: number;
 };
 
+interface TagInfo {
+  name: string;
+  slug: string;
+  count: number;
+}
+
 type ContentKeys = {
   [key: string]: ContentData[];
 };
 
-export type DepreciatedCategories = "tags" | "speakers" | "categories" | "sources";
+export type DepreciatedCategories = "tags" | "speakers" | "categories" | "sources" | "types";
 
 export type GroupedData = Record<string, TopicsData[] | SpeakerData[]>;
 
@@ -227,4 +233,33 @@ export const extractDirectoryData = (data: any[]) => {
   });
 
   return { directoryData };
+};
+
+export const createText = (args: Markdown) => {
+  const text = args.raw.replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "").trim();
+  return text.length > 300 ? text.slice(0, 300) + "..." : text;
+};
+
+export const sortObjectAndArrays = (args: { [category: string]: TagInfo[] }) => {
+  return Object.fromEntries(
+    Object.entries(args)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, value]) => [key, value.sort((a, b) => a.name.localeCompare(b.name))])
+  );
+};
+
+export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
+  const countObject: { [key: string]: number } = {};
+
+  Object.entries(args).map(([key, value]) => {
+    countObject[key] = value.reduce((acc, curr) => acc + curr.count, 0);
+  });
+
+  const sortObject: { [key: string]: number } = Object.keys(countObject)
+    .sort()
+    .reduce((acc, curr) => {
+      acc[curr] = countObject[curr];
+      return acc;
+    }, {} as typeof countObject);
+  return sortObject;
 };

@@ -79,7 +79,7 @@ export const ExploreTranscriptCard = ({
       linkUrl = `/tags/#${parseUrl}`;
       break;
     case "TYPE":
-      linkUrl = `/categories/${parseUrl}`;
+      linkUrl = `/types#${parseUrl}`;
       break;
     default:
       break;

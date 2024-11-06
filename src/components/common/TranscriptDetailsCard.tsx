@@ -33,10 +33,12 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
                 ))}
             </div>
 
-            <div className='flex gap-2 items-center h-fit'>
-              <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
-              <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
-            </div>
+            {date && (
+              <div className='flex gap-2 items-center h-fit'>
+                <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
+                <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+              </div>
+            )}
           </section>
 
           <Link

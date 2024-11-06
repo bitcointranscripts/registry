@@ -5,8 +5,8 @@ const nextConfig = {
     return {
       fallback: [
         {
-          source: '/:path*.:ext([^/]+)', // intercept all paths ending with a file extension
-          destination: '/gh-pages/:path*.:ext', // rewrite to gh-pages/[path_here].ext
+          source: "/:path*.:ext([^/]+)", // intercept all paths ending with a file extension
+          destination: "/gh-pages/:path*.:ext", // rewrite to gh-pages/[path_here].ext
         },
         {
           source: "/transcripts",
@@ -20,8 +20,12 @@ const nextConfig = {
           source: "/:path*",
           destination: "/gh-pages/:path*/index.html",
         },
-      ]
-    }
+        {
+          source: "/sources/:path((?!.*\\.[^/]+).*)", // Matches /source/[any path without a file extension]
+          destination: "/[...slug]/:path*", // Replace with your catch-all route
+        },
+      ],
+    };
   },
 };
 
