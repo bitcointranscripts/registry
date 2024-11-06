@@ -1,9 +1,8 @@
-import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
-import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
-import { writeFileSync } from "fs";
 import path from "path";
 import * as fs from "fs";
-import { Transcript as ContentTranscriptType, Markdown } from "./.contentlayer/generated/types";
+import { createSlug, createText, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
+import { Transcript as ContentTranscriptType, Source as ContentSourceType } from "./.contentlayer/generated/types";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -64,7 +63,7 @@ const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
     }
   }
 
-  writeFileSync("./public/aliases.json", JSON.stringify(aliases));
+  fs.writeFileSync("./public/aliases.json", JSON.stringify(aliases));
 };
 
 const getCategories = () => {
@@ -129,7 +128,7 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
     tagsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
   });
 
-  writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
+  fs.writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
   return { tagsByCategory, tagsWithoutCategory };
 }
 
@@ -159,44 +158,8 @@ function organizeTopics(transcripts: ContentTranscriptType[]) {
     });
   });
 
-  writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
+  fs.writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
 }
-/**
- * Count the occurrences of all types across transcripts and write to json file
- */
-const createTypesCount = (allTranscripts: ContentTranscriptType[]) => {
-  const typesAndCount: Record<string, number> = {};
-  const relevantTypes = [
-    "video",
-    "core-dev-tech",
-    "podcast",
-    "conference",
-    "meeting",
-    "club",
-    "meetup",
-    "hackathon",
-    "workshop",
-    "residency",
-    "developer-tools",
-  ];
-
-  allTranscripts.forEach((transcript) => {
-    if (transcript.categories) {
-      transcript.categories.forEach((type: string) => {
-        const formattedType = createSlug(type);
-        if (relevantTypes.includes(formattedType)) {
-          if (formattedType in typesAndCount) {
-            typesAndCount[formattedType] += 1;
-          } else {
-            typesAndCount[formattedType] = 1;
-          }
-        }
-      });
-    }
-  });
-
-  writeFileSync("./public/types-data.json", JSON.stringify(typesAndCount));
-};
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
   const slugSpeakers: any = {};
@@ -224,34 +187,62 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
     });
   });
 
-  writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
+  fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
 }
 
-function generateSourcesCount(transcripts: ContentTranscriptType[]) {
+function generateSourcesCount(transcripts: ContentTranscriptType[], sources: ContentSourceType[]) {
   const sourcesArray: TagInfo[] = [];
   const slugSources: Record<string, number> = {};
 
   transcripts.forEach((transcript) => {
     const slug = transcript._raw.flattenedPath.split("/")[0];
-    const isValid = !!transcript.date;
 
-    if (isValid) {
-      if (slugSources[slug] !== undefined) {
-        sourcesArray[slugSources[slug]].count += 1;
-      } else {
-        const sourcesLength = sourcesArray.length;
-        slugSources[slug] = sourcesLength;
-        sourcesArray[sourcesLength] = {
-          slug,
-          name: unsluggify(slug),
-          count: 1,
-        };
-      }
+    if (slugSources[slug] !== undefined) {
+      sourcesArray[slugSources[slug]].count += 1;
+    } else {
+      const sourcesLength = sourcesArray.length;
+      slugSources[slug] = sourcesLength;
+
+      const getSourceName = (slug: string) =>
+        sources.find((source) => source.language === "en" && source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
+
+      sourcesArray[sourcesLength] = {
+        slug,
+        name: getSourceName(slug),
+        count: 1,
+      };
     }
   });
 
-  writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+  fs.writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+  return { sourcesArray, slugSources };
 }
+
+const createTypesCount = (transcripts: ContentTranscriptType[], sources: ContentSourceType[]) => {
+  const { sourcesArray, slugSources } = generateSourcesCount(transcripts, sources);
+  const nestedTypes: any = {};
+
+  sources.forEach((transcript) => {
+    if (transcript.types) {
+      transcript.types.forEach((type) => {
+        const slugType = type.charAt(0).toUpperCase() + type.slice(1);
+        const slug = transcript.slugAsParams[0];
+
+        const sourceIndex = slugSources[slug];
+        const getSource = sourcesArray[sourceIndex] ?? null;
+
+        if (!nestedTypes[slugType]) {
+          nestedTypes[slugType] = [];
+        } else {
+          if (nestedTypes[slugType].includes(getSource) || getSource === null) return;
+          nestedTypes[slugType].push(getSource);
+        }
+      });
+    }
+  });
+
+  fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypes));
+};
 
 function organizeContent(transcripts: ContentTranscriptType[]) {
   const tree: ContentTree = {};
@@ -261,46 +252,30 @@ function organizeContent(transcripts: ContentTranscriptType[]) {
     let current = tree;
 
     const isNonEnglishDir = /\w+\.[a-z]{2}\b/.test(parts[parts.length - 1]);
-    if (isNonEnglishDir) {
-      return;
-    }
-    const loopSize = parts.length === 2 ? parts.length - 1 : parts.length - 2;
+    if (isNonEnglishDir) return;
 
-    for (let i = 0; i < loopSize; i++) {
+    for (let i = 0; i < parts.length - 1; i++) {
       if (!current[parts[i]]) {
-        current[parts[i]] = {};
+        current[parts[i]] = i === parts.length - 2 ? [] : {};
       }
-
       current = current[parts[i]] as ContentTree;
-
-      const penultimateKey = parts[loopSize];
-
-      if (!Array.isArray(current[penultimateKey])) {
-        current[penultimateKey] = [];
-      }
-
-      const createText = (args: Markdown) => {
-        const text = args.raw.replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "").trim();
-
-        return text.length > 300 ? text.slice(0, 300) + "..." : text;
-      };
-
-      (current[penultimateKey] as any[]).push({
-        title: transcript.title,
-        speakers: transcript.speakers,
-        date: transcript.date,
-        tags: transcript.tags,
-        sourceFilePath: transcript._raw.sourceFilePath,
-        flattenedPath: transcript._raw.flattenedPath,
-        summary: transcript.summary,
-        body: createText(transcript.body),
-        source: transcript.source,
-      });
     }
+
+    (current as unknown as any[]).push({
+      title: transcript.title,
+      speakers: transcript.speakers,
+      date: transcript.date,
+      tags: transcript.tags,
+      sourceFilePath: transcript._raw.sourceFilePath,
+      flattenedPath: transcript._raw.flattenedPath,
+      summary: transcript.summary,
+      body: createText(transcript.body),
+      source: transcript.source,
+    });
   });
 
   // Save the result as JSON
-  writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
+  fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
 export const Transcript = defineDocumentType(() => ({
@@ -329,6 +304,8 @@ export const Transcript = defineDocumentType(() => ({
     aditional_resources: { type: "list", of: Resources },
     additional_resources: { type: "list", of: Resources },
     weight: { type: "number" },
+    types: { type: "list", of: { type: "string" } },
+    source_file: { type: "string" },
   },
   computedFields: {
     url: {
@@ -342,9 +319,43 @@ export const Transcript = defineDocumentType(() => ({
   },
 }));
 
+export const Source = defineDocumentType(() => ({
+  name: "Source",
+  filePathPattern: `**/_index{,.??}.md`,
+  contentType: "markdown",
+  fields: {
+    title: { type: "string", required: true },
+    source: { type: "string" },
+    transcription_coverage: { type: "string" },
+    hosts: { type: "list", of: { type: "string" } },
+    weight: { type: "number" },
+    website: { type: "string" },
+    types: { type: "list", of: { type: "string" } },
+    additional_resources: { type: "list", of: Resources },
+  },
+  computedFields: {
+    url: {
+      type: "string",
+      resolve: (doc) => `/${doc._raw.flattenedPath.split("/").slice(0, -1).join("/")}`,
+    },
+    language: {
+      type: "string",
+      resolve: (doc) => {
+        const index = doc._raw.flattenedPath.split("/").pop();
+        const lan = index?.split(".").length === 2 ? index?.split(".")[1] : "en";
+        return lan;
+      },
+    },
+    slugAsParams: {
+      type: "list",
+      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
+    },
+  },
+}));
+
 export default makeSource({
-  contentDirPath: path.join(process.cwd(), "public", "bitcoin-transcript"),
-  documentTypes: [Transcript],
+  contentDirPath: path.join(process.cwd(), "public", "refine-taxonomies"),
+  documentTypes: [Source, Transcript],
   contentDirExclude: [
     ".github",
     ".gitignore",
@@ -356,13 +367,13 @@ export default makeSource({
     "2018-08-17-richard-bondi-bitcoin-cli-regtest.es.md",
   ],
   onSuccess: async (importData) => {
-    const { allDocuments } = await importData();
-    organizeTags(allDocuments);
-    createTypesCount(allDocuments);
-    organizeTopics(allDocuments);
-    getTranscriptAliases(allDocuments);
-    createSpeakers(allDocuments);
-    generateSourcesCount(allDocuments);
-    organizeContent(allDocuments);
+    const { allTranscripts, allSources } = await importData();
+    organizeTags(allTranscripts);
+    createTypesCount(allTranscripts, allSources);
+    organizeTopics(allTranscripts);
+    getTranscriptAliases(allTranscripts);
+    createSpeakers(allTranscripts);
+    generateSourcesCount(allTranscripts, allSources);
+    organizeContent(allTranscripts);
   },
 });

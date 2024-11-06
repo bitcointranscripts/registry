@@ -38,7 +38,7 @@ const GroupedTranscriptContent = ({
       id={topicsByAlphabet[0].toLowerCase()}
       className="flex flex-col gap-7 "
     >
-      <h4 className="font-bold text-2xl">{topicsByAlphabet[0]}</h4>
+      <h4 className="font-bold text-2xl capitalize">{topicsByAlphabet[0]}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {topicsByAlphabet[1].map((topics, i) => (
           <SingleTranscriptContent
@@ -55,7 +55,7 @@ const GroupedTranscriptContent = ({
       id={createSlug(topicsByAlphabet[0])}
       className="flex flex-col gap-7"
     >
-      <h4 className="font-bold text-2xl">{topicsByAlphabet[0]}</h4>
+      <h4 className="font-bold text-2xl capitalize">{topicsByAlphabet[0]}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {topicsByAlphabet[1] &&
         topicsByAlphabet[1].map((data, i) => (
