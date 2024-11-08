@@ -32,7 +32,7 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
   --basic-mono-font: basic-mono;
-  --header-height: 100px;
+  --header-height: 86px;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -49,6 +49,11 @@ body {
   color: rgb(var(--foreground-rgb));
 } */
 
+@media (min-width: 768px) {
+  :root {
+    --header-height: 100px;
+  }
+}
 
 @layer utilities {
   .text-balance {

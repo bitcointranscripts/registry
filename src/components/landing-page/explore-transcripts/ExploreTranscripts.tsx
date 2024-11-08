@@ -10,7 +10,7 @@ function getTags() {
   return JSON.parse(fileContents);
 }
 
-const getTypes = (): { [key: string]: number } => {
+const getTypes = () => {
   const filePath = path.join(process.cwd(), "public", "types-data.json");
   const fileContents = fs.readFileSync(filePath, "utf8");
   return JSON.parse(fileContents);
