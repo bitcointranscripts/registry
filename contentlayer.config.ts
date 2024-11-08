@@ -354,7 +354,7 @@ export const Source = defineDocumentType(() => ({
 }));
 
 export default makeSource({
-  contentDirPath: path.join(process.cwd(), "public", "refine-taxonomies"),
+  contentDirPath: path.join(process.cwd(), "public", "bitcoin-transcript"),
   documentTypes: [Source, Transcript],
   contentDirExclude: [
     ".github",

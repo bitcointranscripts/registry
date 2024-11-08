@@ -5,7 +5,3 @@
 	path = public/gh-pages
 	url = https://github.com/bitcointranscripts/bitcointranscripts.github.io.git
 	branch = gh-pages
-[submodule "public/refine-taxonomies"]
-	path = public/refine-taxonomies
-	url = https://github.com/kouloumos/bitcointranscripts
-	branch = refine-taxonomies
