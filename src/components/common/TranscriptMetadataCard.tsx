@@ -97,7 +97,7 @@ const TranscriptMetadataComponent = ({
             header={
               <>
                 <BookmarkIcon width={"19px"} color="#000000" />
-                <p className="text-base lg:text-lg font-semibold">Topic</p>
+                <p className="text-base lg:text-lg font-semibold">Topics</p>
               </>
             }
             footer={

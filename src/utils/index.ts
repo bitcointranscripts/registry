@@ -244,7 +244,7 @@ export function extractListOfHeadings(text: string): string[] {
   const headings: string[] = [];
 
   lines.forEach(line => {
-      if (line.match(/[#]+\s+\w+/gi)) {
+      if (line.match(/^[#]+\s+\w+/gi)) {
           headings.push(line.trim());
       }
   });

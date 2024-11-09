@@ -3,15 +3,17 @@
 
 .wmde-markdown {
     background-color: transparent;
+    font-family: "Manrope", sans-serif;
 }
 
-.wmde-markdown h2 {
-    padding-left: 21px;
+.wmde-markdown h1,
+h2,
+h3 {
+    padding-left: 10px;
     border-left: 8px solid #F7931A;
     color: #000;
     border-bottom: none !important;
     padding-top: 6px;
-    font-family: "Manrope", sans-serif;
     padding-bottom: 6px;
     margin: 8px 0px !important;
     font-size: 1.125rem;
@@ -19,7 +21,8 @@
 }
 
 .wmde-markdown p {
-    margin: 0px !important;
+
+    margin-bottom: 8px;
     color: #000;
     font-size: 0.875rem;
     font-weight: 500;
@@ -31,13 +34,16 @@
 }
 
 @media (min-width: 1024px) {
-    .wmde-markdown h2 {
+
+    .wmde-markdown h1,
+    h2,
+    h3 {
         /* margin: 0px !important; */
         color: #000;
         padding-top: 10px;
         padding-bottom: 10px;
         margin: 12px 0px !important;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .wmde-markdown p {
@@ -54,7 +60,10 @@
 }
 
 @media (min-width: 1536px) {
-    .wmde-markdown h2 {
+
+    .wmde-markdown h1,
+    h2,
+    h3 {
         margin: 12px 0px !important;
         font-size: 1.75rem;
     }

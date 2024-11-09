@@ -1,7 +1,7 @@
 "use client";
 
 import { Resources } from "contentlayer/generated";
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import TranscriptTabContent from "../individual-transcript/TranscriptTabContent";
 import ContentGrouping from "../explore/ContentGrouping";
 import { TopicsData } from "@/utils";
@@ -12,12 +12,14 @@ const ContentSwitch = ({
   extraInfo,
   currentHeading,
   groupedHeading,
+  setCurrentHeading
 }: {
   summary?: string;
   markdown: string;
   extraInfo?: Resources[];
   currentHeading?: string;
   groupedHeading?: Record<string, TopicsData[]>;
+  setCurrentHeading?: React.Dispatch<SetStateAction<string>>
 }) => {
   const [openSection, setOpenSection] = useState({
     transcript: true,
@@ -78,11 +80,11 @@ const ContentSwitch = ({
         />
       </div>
 
-      <div className="relative h-full max-h-[calc(100vh-20px-var(--header-height))] overflow-auto">
+      <div className="relative h-full">
         {openSection.transcript ? (
           <div className="relative">
-            <div className="pt-4">
-              <TranscriptTabContent markdown={markdown} />
+            <div className="pt-4  selection:bg-[#B4D5FF]">
+              <TranscriptTabContent markdown={markdown}  setCurrentHeading={setCurrentHeading} />
             </div>
           </div>
         ) : null}
