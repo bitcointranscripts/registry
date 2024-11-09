@@ -8,6 +8,7 @@ import AlphabetGrouping from "../explore/AlphabetGrouping";
 import ContentGrouping from "../explore/ContentGrouping";
 import { createSlug, extractListOfHeadings } from "@/utils";
 import Wrapper from "../layout/Wrapper";
+import { twMerge } from "tailwind-merge";
 
 const IndividualTranscript = ({ transcript }: { transcript: Transcript }) => {
   const [currentHeading, setCurrentHeading] = useState("");
@@ -25,9 +26,9 @@ const IndividualTranscript = ({ transcript }: { transcript: Transcript }) => {
 
   return (
     <Wrapper className="relative py-10 flex flex-col gap-6 lg:gap-7 2xl:gap-10 mx-auto w-full">
-      <BreadCrumbs />
-      <div className="flex gap-4 w-full justify-between ">
-        <div className=" w-full relative">
+      <BreadCrumbs  type="transcript"/>
+      <div className="flex gap-4  justify-between w-full ">
+        <div className=" w-full relative flex flex-col">
           <div className=" w-full">
             <TranscriptMetadataComponent
               title={transcript.title}
@@ -39,28 +40,31 @@ const IndividualTranscript = ({ transcript }: { transcript: Transcript }) => {
           </div>
           
           <div>
-            <div className="pt-4 md:pt-5 2xl:pt-6  ">
+            <div className="pt-4 md:pt-5 2xl:pt-6">
               <ContentSwitch
                 markdown={transcript.body.raw}
                 summary={transcript?.summary}
                 extraInfo={transcript?.additional_resources}
                 currentHeading={currentHeading}
                 groupedHeading={groupedHeading}
+                setCurrentHeading={setCurrentHeading}
               />
             </div>
           </div>
         </div>
-        <div>
-        <div className="hidden lg:block  w-full sticky top-[110px]">
+
+<div>
+        <div className="hidden lg:flex w-full sticky lg:flex-auto top-[110px] max-w-[350px] 2xl:max-w-[465px]"> 
             <ContentGrouping
               currentGroup={currentHeading}
               groupedData={groupedHeading}
-              className="!w-full rounded-xl max-h-[calc(90vh-var(--header-height))]"
+              className={twMerge(`!w-full rounded-xl max-h-[calc(90vh-var(--header-height))]`,
+                Object.keys(groupedHeading).length < 1 && "!invisible"
+              )}
               screen="desktop"
-            />
+            /> 
           </div>
-        </div>
-     
+          </div>  
       </div>
     </Wrapper>
   );

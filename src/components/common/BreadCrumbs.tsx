@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { ExploreNavigationItems } from "@/utils/data";
 
-const BreadCrumbs = () => {
+const BreadCrumbs = ({type} : {type?:string}) => {
   const pathname = usePathname();
 
   const navListWithoutSources = ExploreNavigationItems.filter((item) => item.href !== "/sources").map((item) => item.href.slice(1));
@@ -18,7 +18,12 @@ const BreadCrumbs = () => {
       .split("/")
       .slice(0, idx + 1)
       .join("/");
-    return { name: path || "home", link: route || "/" };
+
+      if(type === "transcript"){
+        return { name: path || "home", link: `/sources${route}` };
+      }
+        
+    return { name: path || "home", link: route };
   });
 
   if (!isNotSourcesPage && pathnameArray[1] !== "sources") {
