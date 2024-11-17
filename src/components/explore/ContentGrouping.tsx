@@ -1,6 +1,6 @@
 "use client";
 
-import { createSlug, GroupedData } from "@/utils";
+import { createContentSlug, createSlug, GroupedData } from "@/utils";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
@@ -27,10 +27,11 @@ const ContentGrouping = ({
     }
   };
 
+console.log(createContentSlug("Fee Management"), "test")
   useEffect(() => {
     if (currentGroup) {
       if (selectRef.current) {
-        selectRef.current.value = createSlug(currentGroup);
+        selectRef.current.value = `#${currentGroup}`;
       }
     }
   }, [currentGroup]);
@@ -47,9 +48,9 @@ const ContentGrouping = ({
           {Object.keys(groupedData).map((char) => (
             <Link
               key={char}
-              href={`#${createSlug(char)}`}
-              className={` flex    text-sm  2xl:text-lg leading-5   ${
-                createSlug(currentGroup) == createSlug(char)
+              href={`#${createContentSlug(char)}`}
+              className={`flex text-sm  2xl:text-lg leading-5   ${
+                createContentSlug(currentGroup) == createContentSlug(char)
                   ? "text-orange-custom-100 rounded-[4px] font-semibold"
                   : ""
               } `}
@@ -73,7 +74,7 @@ const ContentGrouping = ({
               className="pr-3  bg-orange-custom-800   w-full outline-none font-medium"
             >
               {Object.keys(groupedData).map((char) => (
-                <option key={char} value={createSlug(char)}>
+                <option key={char} value={createContentSlug(char)}>
                   {char}{" "}
                 </option>
               ))}

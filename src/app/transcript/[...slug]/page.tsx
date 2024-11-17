@@ -39,9 +39,7 @@ const Page = ({ params }: { params: { slug: string[] } }) => {
     return notFound();
   }
   return (
-    <div>
       <IndividualTranscript  transcript={transcript}/>
-    </div>
   );
 };
 

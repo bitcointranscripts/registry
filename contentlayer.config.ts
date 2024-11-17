@@ -322,10 +322,6 @@ export const Transcript = defineDocumentType(() => ({
       type: "string",
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
     },
-    slugAsParams: {
-      type: "list",
-      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
-    },
     language: {
       type: "string",
       resolve: (doc) => {
@@ -333,6 +329,10 @@ export const Transcript = defineDocumentType(() => ({
         const lan = transcript?.split(".").length === 2 ? transcript?.split(".")[1] : "en";
         return lan;
       },
+    },
+    slugAsParams: {
+      type: "list",
+      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
     },
   },
 }));

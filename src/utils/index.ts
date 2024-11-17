@@ -89,12 +89,22 @@ export function createSlug(name: string): string {
   return name
     .toLowerCase()
     .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/[^\w\-]+/gi, "") // Remove all non-word chars
     .replace(/\-\-+/g, "-") // Replace multiple - with single -
     .replace(/^-+/, "") // Trim - from start of text
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
+
+export function createContentSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\p{L}\p{N}\-_]+/giu, "") // Remove all non-alphanumeric characters except hyphen
+    .replace(/\-\-+/g, "-") // Replace multiple hyphens with a single hyphen
+    .replace(/^-+/, "") // Trim hyphens from the start
+    .replace(/-+$/, ""); // Trim hyphens from the end
+}
 export function groupDataByAlphabet(items: TopicsData[] | SpeakerData[]): Record<string, TopicsData[]> {
   return items
     .sort((a, b) => a.slug.localeCompare(b.slug))
@@ -289,20 +299,7 @@ export function extractListOfHeadings(text: string): string[] {
   const headings: string[] = [];
 
   lines.forEach(line => {
-      if (line.match(/[#]+\s+\w+/gi)) {
-          headings.push(line.trim());
-      }
-  });
-
-  return headings;
-}
-
-export function extractListOfHeadings(text: string): string[] {
-  const lines: string[] = text.split('\n');
-  const headings: string[] = [];
-
-  lines.forEach(line => {
-      if (line.match(/^[#]+\s+\w+/gi)) {
+      if (/^[#]+\s/.test(line)) {
           headings.push(line.trim());
       }
   });

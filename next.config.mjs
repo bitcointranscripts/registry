@@ -9,6 +9,10 @@ const nextConfig = {
           destination: "/gh-pages/:path*.:ext", // rewrite to gh-pages/[path_here].ext
         },
         {
+          source: "/:path((?!.*\\.[^/]+).*)", // Matches paths without a file extension
+          destination: "/transcript/:path*", // Rewrite to /transcripts/[path...]
+        },
+        {
           source: "/transcripts",
           destination: "/gh-pages/index.html",
         },
@@ -20,10 +24,10 @@ const nextConfig = {
           source: "/:path*",
           destination: "/gh-pages/:path*/index.html",
         },
-        {
-          source: "/sources/:path((?!.*\\.[^/]+).*)", // Matches /source/[any path without a file extension]
-          destination: "/[...slug]/:path*", // Replace with your catch-all route
-        },
+        // {
+        //   source: "/sources/:path((?!.*\\.[^/]+).*)", // Matches /source/[any path without a file extension]
+        //   destination: "/[...slug]/:path*", // Replace with your catch-all route
+        // },
       ],
     };
   },

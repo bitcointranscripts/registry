@@ -2,6 +2,7 @@ import React, { SetStateAction } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import "./markdown.css";
 import { InView } from "react-intersection-observer";
+import { createContentSlug } from "@/utils";
 
 function formatSpeakerText(text: string): string {
   // Regular expression pattern for "Speaker: HH:MM:SS"
@@ -15,7 +16,13 @@ function formatSpeakerText(text: string): string {
   });
 }
 
-const TranscriptTabContent = ({ markdown, setCurrentHeading }: { markdown: string;   setCurrentHeading?: React.Dispatch<SetStateAction<string>> }) => {
+const TranscriptTabContent = ({
+  markdown,
+  setCurrentHeading,
+}: {
+  markdown: string;
+  setCurrentHeading?: React.Dispatch<SetStateAction<string>>;
+}) => {
   const formattedMarkdown = formatSpeakerText(markdown);
 
   return (
@@ -27,47 +34,51 @@ const TranscriptTabContent = ({ markdown, setCurrentHeading }: { markdown: strin
           return (
             <InView
               as="div"
-              onChange={(inView, entry) =>{
-                if(setCurrentHeading && inView){
-                  setCurrentHeading(entry.target.id)
+              rootMargin="-30% 0% -70% 0%"
+              onChange={(inView, entry) => {
+                console.log(props.id, "test")
+                if (setCurrentHeading && inView) {
+                  setCurrentHeading(createContentSlug(props?.id || ""));
                 }
-              }
-              }
+              }}
             >
-              <h1>{children}</h1>
+              <h1 id={createContentSlug(props?.id || "")}>{children}</h1>
             </InView>
           );
         },
         h2: ({ children = [], className, ...props }) => {
           return (
             <InView
-            as="div"
-            onChange={(inView, entry) =>{
-              if(setCurrentHeading && inView){
-                setCurrentHeading(entry.target.id)
-              }
-            }
-            }
-          >
-            <h2>{children}</h2>
+              as="div"
+              rootMargin="-30% 0% -70% 0%"
+              onChange={(inView, entry) => {
+                if (setCurrentHeading && inView) {
+                  console.log(props.id, "test")
+                  setCurrentHeading(createContentSlug(props?.id || ""));
+                }
+              }}
+            >
+              <h2 id={createContentSlug(props?.id || "")}>{children}</h2>
             </InView>
           );
         },
-        h3: ({ children = []}) => {
+        h3: ({ children = [], ...props }) => {
           return (
             <InView
               as="div"
-              onChange={(inView, entry) =>
-
-                console.log("test changed", inView, entry)
-              }
+              rootMargin="-30% 0% -70% 0%"
+              onChange={(inView) => {
+                if (setCurrentHeading && inView) {
+                  console.log(props.id, "test")
+                  setCurrentHeading(createContentSlug(props?.id || ""));
+                }
+              }}
             >
-              <h3>{children}</h3>
+              <h3 id={createContentSlug(props?.id || "")}>{children}</h3>
             </InView>
           );
         },
       }}
-      
     />
   );
 };

@@ -29,7 +29,7 @@ const ContentSwitch = ({
 
   return (
     <div className="flex flex-col relative">
-      <div className="sticky bg-white z-10 top-[86px] lg:top-[--header-height]  md:pt-6 h-full flex gap-4 md:gap-10 xl:gap-16 justify-between items-center border-b border-b-gray-custom-1200">
+      <div className="sticky bg-white z-10 top-0 lg:top-0  md:pt-6 h-full flex gap-4 md:gap-10 xl:gap-16 justify-start items-center border-b border-b-gray-custom-1200">
         <SwitchItem
           title="Transcript"
           isOpen={openSection.transcript}
@@ -72,7 +72,7 @@ const ContentSwitch = ({
           />
         )}
       </div>
-      <div className="block w-full pt-4 lg:hidden sticky top-[110px] md:top-[152px] z-[5]">
+      <div className="block w-full pt-4 lg:hidden sticky top-[20px] md:top-[152px] z-[5]">
         <ContentGrouping
           currentGroup={currentHeading || ""}
           groupedData={groupedHeading || []}
@@ -80,7 +80,7 @@ const ContentSwitch = ({
         />
       </div>
 
-      <div className="relative h-full">
+      <div className="relative h-full lg:max-w-[90%]">
         {openSection.transcript ? (
           <div className="relative">
             <div className="pt-4  selection:bg-[#B4D5FF]">
