@@ -36,30 +36,6 @@ export type DepreciatedCategories = "tags" | "speakers" | "categories" | "source
 
 export type GroupedData = Record<string, TopicsData[] | SpeakerData[]>;
 
-export function organizeContent(transcripts: Transcript[]): ContentTree {
-  const tree: ContentTree = {};
-
-  transcripts.forEach((transcript) => {
-    const parts = transcript.slugAsParams;
-    let current = tree;
-
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (!(parts[i] in current)) {
-        current[parts[i]] = {};
-      }
-      current = current[parts[i]] as ContentTree;
-    }
-
-    const lastName = parts[parts.length - 1];
-    if (!(lastName in current)) {
-      current[lastName] = [];
-    }
-    (current[lastName] as Transcript[]).push(transcript);
-  });
-
-  return tree;
-}
-
 export function shuffle(data: Transcript[]) {
   let currIndex = data.length;
 
@@ -196,18 +172,17 @@ export const formatDate = (dateString: string): string | null => {
   return new Intl.DateTimeFormat("en-GB", options).format(date);
 };
 
-export function filterOutIndexes(arr: {} | ContentTreeArray[]) {
-  let filterIndex: ContentTreeArray[] | string[] = [];
+export function loopArrOrObject(arr: {} | ContentTreeArray[]) {
+  let filterIndex: any[] = [];
 
   if (Array.isArray(arr)) {
-    const list = arr.filter((item: ContentTreeArray) => {
-      const url = item.flattenedPath.split("/");
-
-      return !url[url.length - 1].startsWith("_index");
-    });
-    filterIndex = showOnlyEnglish(list) as ContentTreeArray[];
+    filterIndex = arr;
   } else {
-    filterIndex = Object.keys(arr).filter((item) => !item.startsWith("_index"));
+    filterIndex = Object.entries(arr).map(([key, values]) => ({
+      route: key,
+      title: (values as unknown as any).metadata.title,
+      count: (values as unknown as any).data.length,
+    }));
   }
 
   return filterIndex;
@@ -262,4 +237,49 @@ export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
       return acc;
     }, {} as typeof countObject);
   return sortObject;
+};
+
+export const constructSlugPaths = (slug: string[]) => {
+  const languageCodes = ["zh", "es", "pt"];
+  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !languageCodes.includes(slug[0]);
+  const englishSlug = ["en", ...slug];
+  const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
+  [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];
+
+  let slugPaths = newSlug;
+  const addDataKeyToSlug = [...slugPaths.slice(0, 2), "data", ...slugPaths.slice(2)];
+  slugPaths = slugPaths.length >= 3 ? addDataKeyToSlug : slugPaths;
+
+  return { slugPaths };
+};
+
+export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: string[], isRoot: boolean) => {
+  if (!isRoot || paths.length === 0) return { transcripts: [] };
+
+  const transcripts = allTranscripts.reduce((acc, curr) => {
+    const { url, title, speakers, date, tags, _raw, summary, body } = curr;
+
+    if (paths.includes(url)) {
+      acc.push({
+        title,
+        speakers,
+        date,
+        tags,
+        sourceFilePath: _raw.sourceFilePath,
+        flattenedPath: _raw.flattenedPath,
+        summary,
+        body: createText(body),
+      });
+    }
+    return acc.sort((a, b) => {
+      const sortByTime = new Date(b.date!).getTime() - new Date(a.date!).getTime();
+      const sortByTitle = a.title.localeCompare(b.title);
+
+      return sortByTime || sortByTitle;
+    });
+  }, [] as Array<ContentTreeArray>);
+
+  return {
+    transcripts,
+  };
 };

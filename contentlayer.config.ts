@@ -1,6 +1,6 @@
 import path from "path";
 import * as fs from "fs";
-import { createSlug, createText, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
 import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
 import { Transcript as ContentTranscriptType, Source as ContentSourceType } from "./.contentlayer/generated/types";
 
@@ -244,37 +244,47 @@ const createTypesCount = (transcripts: ContentTranscriptType[], sources: Content
   fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypes));
 };
 
-function organizeContent(transcripts: ContentTranscriptType[]) {
-  const tree: ContentTree = {};
+function organizeContent(transcripts: ContentTranscriptType[], sources: ContentSourceType[]) {
+  const tree: any = {};
 
-  transcripts.forEach((transcript) => {
-    const parts = transcript.slugAsParams;
-    let current = tree;
+  sources.forEach((source) => {
+    const { _id, slugAsParams, language, _raw, weight, body, hosts, transcription_coverage, url, type, types, ...metaData } = source;
+    const params = source.slugAsParams;
+    const topParam = params[0] as string;
+    const nestedSource = params.length > 1;
 
-    const isNonEnglishDir = /\w+\.[a-z]{2}\b/.test(parts[parts.length - 1]);
-    if (isNonEnglishDir) return;
-
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (!current[parts[i]]) {
-        current[parts[i]] = i === parts.length - 2 ? [] : {};
-      }
-      current = current[parts[i]] as ContentTree;
+    if (!tree[topParam]) {
+      tree[topParam] = {};
     }
+    const allTranscriptsForSourceLanguage = transcripts.filter(
+      (transcript) => transcript._raw.sourceFileDir === source._raw.sourceFileDir && transcript.language === language
+    );
 
-    (current as unknown as any[]).push({
-      title: transcript.title,
-      speakers: transcript.speakers,
-      date: transcript.date,
-      tags: transcript.tags,
-      sourceFilePath: transcript._raw.sourceFilePath,
-      flattenedPath: transcript._raw.flattenedPath,
-      summary: transcript.summary,
-      body: createText(transcript.body),
-      source: transcript.source,
-    });
+    const allTranscriptsForSourceLanguageURLs = allTranscriptsForSourceLanguage.map((transcript) => transcript.url);
+
+    if (!nestedSource) {
+      tree[topParam] = {
+        ...tree[topParam],
+        [language]: {
+          data: allTranscriptsForSourceLanguageURLs.length ? allTranscriptsForSourceLanguageURLs : {},
+          metadata: {
+            ...metaData,
+          },
+        },
+      };
+    } else {
+      tree[topParam][language].data = {
+        ...tree[topParam][language].data,
+        [params[1]]: {
+          data: allTranscriptsForSourceLanguageURLs.length ? allTranscriptsForSourceLanguageURLs : {},
+          metadata: {
+            ...metaData,
+          },
+        },
+      };
+    }
   });
 
-  // Save the result as JSON
   fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
@@ -315,6 +325,14 @@ export const Transcript = defineDocumentType(() => ({
     slugAsParams: {
       type: "list",
       resolve: (doc) => doc._raw.flattenedPath.split("/"),
+    },
+    language: {
+      type: "string",
+      resolve: (doc) => {
+        const transcript = doc._raw.flattenedPath.split("/").pop();
+        const lan = transcript?.split(".").length === 2 ? transcript?.split(".")[1] : "en";
+        return lan;
+      },
     },
   },
 }));
@@ -374,6 +392,6 @@ export default makeSource({
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
-    organizeContent(allTranscripts);
+    organizeContent(allTranscripts, allSources);
   },
 });
