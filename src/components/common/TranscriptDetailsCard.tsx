@@ -15,38 +15,19 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
       <section className='flex justify-between'>
-        <div className='flex flex-col gap-2 w-full'>
-          <section className='flex flex-col md:flex-row gap-3 md:justify-between md:items-center w-full'>
-            <div className='flex gap-2 flex-wrap'>
-              {slug
-                .join(" / ")
-                .split(" ")
-                .map((slg, i) => (
-                  <p
-                    key={`${slg}-${i}`}
-                    className={`text-xs md:text-sm 2xl:text-base leading-[20.64px] ${
-                      slg === "/" ? "text-custom-black-custom-200" : "text-gray-custom-800"
-                    } font-medium capitalize`}
-                  >
-                    {unsluggify(slg)}
-                  </p>
-                ))}
-            </div>
-
-            {date && (
-              <div className='flex gap-2 items-center h-fit'>
-                <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
-                <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
-              </div>
-            )}
-          </section>
-
+        <div className='flex md:flex-row flex-col justify-between gap-2 w-full'>
           <Link
             href={`/${url}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
           </Link>
+          {date && (
+            <div className='flex gap-2 items-center h-fit'>
+              <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
+              <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+            </div>
+          )}
         </div>
       </section>
 
