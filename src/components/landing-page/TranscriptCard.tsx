@@ -20,9 +20,14 @@ const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) 
         transcripts ? "min-w-[400px] max-md:min-w-[292px]" : "max-w-[580px] w-full"
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
-      <section className='flex justify-between items-center gap-4'>
-        <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{data?.title}</p>
-        {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800'>{daysOpened} days ago</p> : null}
+      <section className='flex flex-col'>
+        <Link href={`/${data.slugAsParams[0]}`} className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4'>
+          {data.slugAsParams[0]}
+        </Link>
+        <section className='flex justify-between items-center gap-4'>
+          <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{data?.title}</p>
+          {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800'>{daysOpened} days ago</p> : null}
+        </section>
       </section>
 
       {transcripts ? (
