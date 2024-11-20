@@ -322,10 +322,6 @@ export const Transcript = defineDocumentType(() => ({
       type: "string",
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
     },
-    slugAsParams: {
-      type: "list",
-      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
-    },
     language: {
       type: "string",
       resolve: (doc) => {
@@ -333,6 +329,19 @@ export const Transcript = defineDocumentType(() => ({
         const lan = transcript?.split(".").length === 2 ? transcript?.split(".")[1] : "en";
         return lan;
       },
+    },
+    languageURL:{
+      type:"string",
+      resolve:(doc)=> {
+        const transcript = doc._raw.flattenedPath.split("/").pop();
+        const pathWithoutDot = doc._raw.flattenedPath.replace(/[.]\w+/gi,"")
+        const lan = transcript?.split(".").length === 2 ? `/${transcript?.split(".")[1]}` : "";
+        return `${lan}/${pathWithoutDot}`
+      }
+    },
+    slugAsParams: {
+      type: "list",
+      resolve: (doc) => doc._raw.flattenedPath.split("/").slice(0, -1),
     },
   },
 }));

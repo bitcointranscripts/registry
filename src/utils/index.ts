@@ -89,12 +89,22 @@ export function createSlug(name: string): string {
   return name
     .toLowerCase()
     .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/[^\w\-]+/gi, "") // Remove all non-word chars
     .replace(/\-\-+/g, "-") // Replace multiple - with single -
     .replace(/^-+/, "") // Trim - from start of text
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
+
+export function createContentSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\p{L}\p{N}\-_]+/giu, "") // Remove all non-alphanumeric characters except hyphen
+    .replace(/\-\-+/g, "-") // Replace multiple hyphens with a single hyphen
+    .replace(/^-+/, "") // Trim hyphens from the start
+    .replace(/-+$/, ""); // Trim hyphens from the end
+}
 export function groupDataByAlphabet(items: TopicsData[] | SpeakerData[]): Record<string, TopicsData[]> {
   return items
     .sort((a, b) => a.slug.localeCompare(b.slug))
@@ -239,12 +249,57 @@ export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
   return sortObject;
 };
 
+export const constructSlugPaths = (slug: string[]) => {
+  const languageCodes = ["zh", "es", "pt"];
+  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !languageCodes.includes(slug[0]);
+  const englishSlug = ["en", ...slug];
+  const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
+  [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];
+
+  let slugPaths = newSlug;
+  const addDataKeyToSlug = [...slugPaths.slice(0, 2), "data", ...slugPaths.slice(2)];
+  slugPaths = slugPaths.length >= 3 ? addDataKeyToSlug : slugPaths;
+
+  return { slugPaths };
+};
+
+export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: string[], isRoot: boolean) => {
+  if (!isRoot || paths.length === 0) return { transcripts: [] };
+
+  const transcripts = allTranscripts.reduce((acc, curr) => {
+    const { url, title, speakers, date, tags, _raw, summary, body } = curr;
+
+    if (paths.includes(url)) {
+      acc.push({
+        title,
+        speakers,
+        date,
+        tags,
+        sourceFilePath: _raw.sourceFilePath,
+        flattenedPath: _raw.flattenedPath,
+        summary,
+        body: createText(body),
+      });
+    }
+    return acc.sort((a, b) => {
+      const sortByTime = new Date(b.date!).getTime() - new Date(a.date!).getTime();
+      const sortByTitle = a.title.localeCompare(b.title);
+
+      return sortByTime || sortByTitle;
+    });
+  }, [] as Array<ContentTreeArray>);
+
+  return {
+    transcripts,
+  };
+};
+
 export function extractListOfHeadings(text: string): string[] {
   const lines: string[] = text.split('\n');
   const headings: string[] = [];
 
   lines.forEach(line => {
-      if (line.match(/^[#]+\s+\w+/gi)) {
+      if (/^[#]+\s/.test(line)) {
           headings.push(line.trim());
       }
   });

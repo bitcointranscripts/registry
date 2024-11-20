@@ -4,18 +4,15 @@ import { LanguageCodes } from "@/config";
 import { notFound } from "next/navigation";
 import IndividualTranscript from "@/components/individual-transcript/IndividualTranscript";
 
-export function generateStaticParams() {
+// forces 404 for paths not generated from `generateStaticParams` function.
+export const dynamicParams = false;
 
+export function generateStaticParams() {
   const allSingleTranscriptPaths = allTranscripts.map((transcript) => {
-    const isLanguageEnglish = transcript.language === "en";
-    if (isLanguageEnglish) {
-      return {
-        slug: transcript.slugAsParams as string[],
-      };
-    }
+    const slugForLanguage = transcript.languageURL.split("/").filter(path => Boolean(path.trim()));
     return {
-      slug: [transcript.language, ...transcript.slugAsParams] as string[],
-    };
+      slug: slugForLanguage
+    }
   });
 
   return allSingleTranscriptPaths;
@@ -39,9 +36,7 @@ const Page = ({ params }: { params: { slug: string[] } }) => {
     return notFound();
   }
   return (
-    <div>
       <IndividualTranscript  transcript={transcript}/>
-    </div>
   );
 };
 
