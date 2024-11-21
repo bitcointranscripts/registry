@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { Transcript } from "../../../.contentlayer/generated/types";
 import { createSlug } from "@/utils";
+import SourceCountData from "@/public/source-count-data.json";
 
 interface TranscriptCardProps {
   data: Transcript;
@@ -13,6 +14,8 @@ interface TranscriptCardProps {
 const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) => {
   const remainingSpeakers = data?.speakers?.length && data?.speakers.length > 2 ? data?.speakers.length - 2 : 0;
 
+  const mappedKeyToName = SourceCountData.find((source) => source.slug === data.slugAsParams[0])?.name;
+
   return (
     <Link
       href={`${data.url}`}
@@ -21,9 +24,9 @@ const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) 
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex flex-col'>
-        <Link href={`/${data.slugAsParams[0]}`} className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4'>
-          {data.slugAsParams[0]}
-        </Link>
+        <p className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4 line-clamp-1'>
+          {mappedKeyToName ?? data.slugAsParams[0]}
+        </p>
         <section className='flex justify-between items-center gap-4'>
           <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{data?.title}</p>
           {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800'>{daysOpened} days ago</p> : null}
