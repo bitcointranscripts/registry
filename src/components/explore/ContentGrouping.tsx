@@ -2,7 +2,7 @@
 
 import { createContentSlug, createSlug, GroupedData } from "@/utils";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { SetStateAction, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 export interface IContentGrouping {
@@ -26,8 +26,7 @@ const ContentGrouping = ({
       linkRef.current.click();
     }
   };
-
-console.log(createContentSlug("Fee Management"), "test")
+  
   useEffect(() => {
     if (currentGroup) {
       if (selectRef.current) {
@@ -41,7 +40,7 @@ console.log(createContentSlug("Fee Management"), "test")
       {screen === "desktop" && (
         <div
           className={twMerge(
-            " flex-col p-5 hidden lg:flex gap-2.5 border max-h-[calc(95vh-var(--header-height))] overflow-auto no-scrollbar border-gray-custom-1200 rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
+            " flex-col p-5 hidden lg:flex gap-2.5 border max-h-[calc(95vh-var(--header-height))] overflow-auto scroller border-gray-custom-1200 rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
             className
           )}
         >

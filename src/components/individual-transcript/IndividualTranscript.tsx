@@ -8,33 +8,47 @@ import ContentGrouping from "../explore/ContentGrouping";
 import { createSlug, extractListOfHeadings } from "@/utils";
 import Wrapper from "../layout/Wrapper";
 import { twMerge } from "tailwind-merge";
+import FooterComponent from "../layout/FooterComponent";
+import BaseBreadCrumbs, {
+  BaseBreadCrumbsType,
+} from "../common/BaseBreadCrumbs";
 
-const IndividualTranscript = ({ transcript }: { transcript: Transcript }) => {
+const IndividualTranscript = ({
+  breadCrumbs,
+  transcript,
+}: {
+  breadCrumbs: BaseBreadCrumbsType[];
+  transcript: Transcript;
+}) => {
   const [currentHeading, setCurrentHeading] = useState("");
- 
+
   const allHeadings = extractListOfHeadings(transcript.body.raw).map(
     (heading) => {
       return {
-      name: heading.replace(/[#]+\s+/gi, ""),
-      slug: createSlug(heading),
-      count: 0,
-      }
+        name: heading.replace(/[#]+\s+/gi, ""),
+        slug: createSlug(heading),
+        count: 0,
+      };
     }
   );
-  
+
   const groupedHeading = allHeadings.reduce(
     (heading, headingNow) => ({ ...heading, [headingNow.name]: headingNow }),
     {}
   );
-
+  const staticRoutes = [
+    { name: "Home", link: "/", isActive: false },
+    { name: "Sources", link: "/sources", isActive: false },
+  ];
+  const finalRoutes = [...staticRoutes, ...breadCrumbs];
   return (
-    <Wrapper className="relative flex flex-col gap-6 lg:gap-7 2xl:gap-10 mx-auto h-[calc(100vh-var(--header-height))] w-full overflow-y-auto scroll-smooth">
-      <div className="py-4 lg:pt-7 2xl:pt-10">
-      <BreadCrumbs />
+    <Wrapper className="relative flex flex-col !px-0 gap-6 lg:gap-7 2xl:gap-10 mx-auto h-[calc(100vh-var(--header-height))] w-full overflow-y-auto scroll-smooth">
+      <div className="py-4 lg:pt-7 2xl:pt-10 px-4 lg:px-10 2xl:px-[60px]">
+        <BaseBreadCrumbs crumbsArray={finalRoutes} />
       </div>
 
-      <div className="flex gap-4  justify-between w-full ">
-        <div className=" w-full relative flex flex-col">
+      <div className="flex gap-4 justify-between px-4 lg:px-10 2xl:px-[60px]">
+        <div className=" w-full relative flex flex-col flex-1 ">
           <div className=" w-full">
             <TranscriptMetadataComponent
               title={transcript.title}
@@ -46,7 +60,7 @@ const IndividualTranscript = ({ transcript }: { transcript: Transcript }) => {
           </div>
 
           <div>
-            <div className="pt-4 md:pt-5 2xl:pt-6">
+            <div className="pt-4 md:pt-5 2xl:pt-6 pb-[var(--header-height)] xl:pb-[calc(60vh-var(--header-height))]">
               <ContentSwitch
                 markdown={transcript.body.raw}
                 summary={transcript?.summary}
@@ -71,6 +85,7 @@ const IndividualTranscript = ({ transcript }: { transcript: Transcript }) => {
           />
         </div>
       </div>
+      <FooterComponent />
     </Wrapper>
   );
 };

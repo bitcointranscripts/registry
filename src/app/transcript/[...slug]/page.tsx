@@ -1,42 +1,70 @@
 import React from "react";
 import { allTranscripts } from "contentlayer/generated";
-import { LanguageCodes } from "@/config";
+import allSources from "@/public/sources-data.json";
 import { notFound } from "next/navigation";
 import IndividualTranscript from "@/components/individual-transcript/IndividualTranscript";
+import { createSlug } from "@/utils";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
   const allSingleTranscriptPaths = allTranscripts.map((transcript) => {
-    const slugForLanguage = transcript.languageURL.split("/").filter(path => Boolean(path.trim()));
+    const slugForLanguage = transcript.languageURL
+      .split("/")
+      .filter((path) => Boolean(path.trim()));
     return {
-      slug: slugForLanguage
-    }
+      slug: slugForLanguage,
+    };
   });
-
   return allSingleTranscriptPaths;
 }
 
 const Page = ({ params }: { params: { slug: string[] } }) => {
   const slugArray = params.slug;
-  const isNonEnglishLanguage = LanguageCodes.includes(slugArray[0]);
-  let transcriptUrl = "";
-  if (isNonEnglishLanguage) {
-    const languageCode = slugArray.shift();
-    slugArray[slugArray.length - 1] = slugArray[slugArray.length - 1] + `.${languageCode}`;
-    transcriptUrl = `/${slugArray.join("/")}`;
-  } else {
-    transcriptUrl = `/${slugArray.join("/")}`;
-  }
+  let transcriptUrl = `/${slugArray.join("/")}`;
 
-  const transcript = allTranscripts.find(transcript => transcript.url === transcriptUrl)
+  const transcript = allTranscripts.find(
+    (transcript) => transcript.languageURL === transcriptUrl
+  );
 
-  if(!transcript) {
+  if (!transcript) {
     return notFound();
   }
+
+  let data: any = allSources;
+console.log(transcript.language,transcript.title)
+  const breadCrumbRoutes = transcript.slugAsParams.map(
+    (crumb: string, index: number) => {
+      let title = "";
+      const languageNumber = transcript.slugAsParams.length - (index + 1);
+      data = data[crumb as keyof typeof allSources];
+      if (index === 0) {
+        title = data[transcript.language]?.metadata.title;
+        data = data[transcript.language]?.data;
+      } else if (index === transcript.slugAsParams.length - 1) {
+        title = transcript.title;
+      } else {
+        title = data?.metadata.title;
+        data = data?.data;
+      }
+
+      return {
+        name: title,
+        link: transcript.languageURL
+          .split("/")
+          .slice(0, languageNumber === 0 ? undefined : -languageNumber)
+          .join("/"),
+        isActive: index === transcript.slugAsParams.length - 1,
+      };
+    }
+  );
+
   return (
-      <IndividualTranscript  transcript={transcript}/>
+    <IndividualTranscript
+      breadCrumbs={[...breadCrumbRoutes]}
+      transcript={transcript}
+    />
   );
 };
 

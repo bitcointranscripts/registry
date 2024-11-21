@@ -111,6 +111,7 @@ export type ContentTreeArray = {
   speakers?: string[] | undefined;
   date?: IsoDateTimeString | undefined;
   tags?: string[] | undefined;
+  languageURL?: string;
   sourceFilePath: string;
   flattenedPath: string;
   summary?: string | undefined;

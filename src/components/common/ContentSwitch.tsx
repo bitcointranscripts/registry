@@ -72,13 +72,15 @@ const ContentSwitch = ({
           />
         )}
       </div>
-      <div className="block w-full pt-4 lg:hidden sticky top-[20px] md:top-[152px] z-[5]">
+      
+      {Object.keys({...groupedHeading}).length > 0 &&
+      <div className="block w-full pt-4 lg:hidden sticky top-[20px] md:top-[65px] z-[5]">
         <ContentGrouping
           currentGroup={currentHeading || ""}
           groupedData={groupedHeading || []}
           screen="mobile"
         />
-      </div>
+      </div> }
 
       <div className="relative h-full lg:max-w-[90%]">
         {openSection.transcript ? (

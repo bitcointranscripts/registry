@@ -5,8 +5,8 @@ const nextConfig = {
     return {
       fallback: [
         {
-          source: "/:path*.:ext([^/]+)", // intercept all paths ending with a file extension
-          destination: "/gh-pages/:path*.:ext", // rewrite to gh-pages/[path_here].ext
+          source: "/:path*.:ext([a-zA-Z0-9_+]{1,4})", // Match extensions that are 1-4 AlphaNumeric characters long
+          destination: "/gh-pages/:path*.:ext", // Rewrite to gh-pages/[path_here].ext
         },
         {
           source: "/tags/:path",
@@ -29,16 +29,8 @@ const nextConfig = {
           destination: "/gh-pages/pt/index.html",
         },
         {
-          source: "/:path((?!.*\\.[^/]+).*)", // Matches paths without a file extension
+          source: "/:path((?!.*\\.[a-zA-Z0-9]{1,4}$).*)", // Matches paths without a valid file extension
           destination: "/transcript/:path*", // Rewrite to /transcripts/[path...]
-        },
-        {
-          source: "/transcripts",
-          destination: "/gh-pages/index.html",
-        },
-        {
-          source: "/types",
-          destination: "/gh-pages/categories/index.html",
         },
         {
           source: "/:path*",

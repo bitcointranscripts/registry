@@ -11,6 +11,7 @@ import Link from "next/link";
 import { createSlug } from "@/utils";
 import AiGeneratedIcon from "../svgs/AIGeneratedIcon";
 import { format, isDate } from "date-fns";
+import Pill from "./Pill";
 
 interface ITranscriptMetadataComponent {
   title: string;
@@ -85,10 +86,13 @@ const TranscriptMetadataComponent = ({
               </>
             }
             footer={
-              <div className="pl-5">
+              <div className="pl-2.5">
+                {formattedDate ? 
                 <p className="text-xs md:text-sm lg:text-base 2xl:text-lg md:font-medium">
                   {formattedDate}
-                </p>
+                </p>:
+                 <p className="pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
+            }
               </div>
             }
           />
@@ -102,16 +106,12 @@ const TranscriptMetadataComponent = ({
             }
             footer={
               <div className="flex flex-wrap gap-2">
-                {topics &&
+                {(topics && topics.length > 0) ?
                   topics.map((topic) => (
-                    <Link
-                      key={topic}
-                      href={`/tags/${createSlug(topic)}`}
-                      className="max-content py-1 px-4 rounded-[5px] bg-gray-custom-700 max-md:px-3 max-md:py-[2px] text-xs md:text-sm 2xl:text-base max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]"
-                    >
-                      {topic}
-                    </Link>
-                  ))}
+                    <Pill key={topic} name={topic} slug={`/tags/${createSlug(topic)}`} />
+                  )):
+                  <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
+                }
               </div>
             }
           />
@@ -125,16 +125,12 @@ const TranscriptMetadataComponent = ({
             }
             footer={
               <div className="flex flex-wrap gap-2">
-                {speakers &&
+                {speakers && speakers.length > 0 ?
                   speakers.map((speaker) => (
-                    <Link
-                      href={`/speakers/${createSlug(speaker)}`}
-                      key={speaker}
-                      className=" max-content py-[4.11px] px-[16.43px] rounded-[5.13px] bg-gray-custom-700 max-md:px-3 max-md:py-[2px] text-xs md:text-sm 2xl:text-base max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]"
-                    >
-                      {speaker}
-                    </Link>
-                  ))}
+                    <Pill key={speaker} name={speaker} slug={`/speakers/${createSlug(speaker)}`} />
+                  )):
+                  <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
+                }
               </div>
             }
           />
@@ -149,16 +145,16 @@ const TranscriptMetadataComponent = ({
                   height={24}
                   className="w-5"
                 />
-                <p className="text-base lg:text-lg font-semibold">
+                <p className="text-base  lg:text-lg font-semibold">
                   Transcript by
                 </p>
               </>
             }
             footer={
-              <div className="pl-5">
+              <div className="pl-5 pt-1.5 flex items-center ">
                 {isAiGenerated ? (
                   <>
-                    <a className="text-blue-custom-100 no-underline border-b border-blue-custom-100 max-w-[max-content] text-sm 2xl:text-base flex gap-1 items-start cursor-pointer">
+                    <a href="https://review.btctranscripts.com/" className="text-blue-custom-100 no-underline border-b border-blue-custom-100 max-w-[max-content] text-sm 2xl:text-base flex gap-1 items-start cursor-pointer">
                     <AiGeneratedIcon className="-mt-0.5" />
                       <span>
                         AI Generated (Review for sats)

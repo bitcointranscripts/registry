@@ -34,9 +34,9 @@ const TranscriptTabContent = ({
           return (
             <InView
               as="div"
-              rootMargin="-30% 0% -70% 0%"
-              onChange={(inView, entry) => {
-                console.log(props.id, "test")
+              threshold={1}
+              rootMargin="35% 0% -65% 0%"
+              onChange={(inView) => {
                 if (setCurrentHeading && inView) {
                   setCurrentHeading(createContentSlug(props?.id || ""));
                 }
@@ -50,31 +50,15 @@ const TranscriptTabContent = ({
           return (
             <InView
               as="div"
-              rootMargin="-30% 0% -70% 0%"
+              threshold={1}
+              rootMargin="35% 0% -65% 0%"
               onChange={(inView, entry) => {
                 if (setCurrentHeading && inView) {
-                  console.log(props.id, "test")
                   setCurrentHeading(createContentSlug(props?.id || ""));
                 }
               }}
             >
               <h2 id={createContentSlug(props?.id || "")}>{children}</h2>
-            </InView>
-          );
-        },
-        h3: ({ children = [], ...props }) => {
-          return (
-            <InView
-              as="div"
-              rootMargin="-30% 0% -70% 0%"
-              onChange={(inView) => {
-                if (setCurrentHeading && inView) {
-                  console.log(props.id, "test")
-                  setCurrentHeading(createContentSlug(props?.id || ""));
-                }
-              }}
-            >
-              <h3 id={createContentSlug(props?.id || "")}>{children}</h3>
             </InView>
           );
         },

@@ -267,7 +267,7 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
   if (!isRoot || paths.length === 0) return { transcripts: [] };
 
   const transcripts = allTranscripts.reduce((acc, curr) => {
-    const { url, title, speakers, date, tags, _raw, summary, body } = curr;
+    const { url, title, speakers, date, tags, _raw, summary, body, languageURL } = curr;
 
     if (paths.includes(url)) {
       acc.push({
@@ -275,6 +275,7 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
         speakers,
         date,
         tags,
+        languageURL,
         sourceFilePath: _raw.sourceFilePath,
         flattenedPath: _raw.flattenedPath,
         summary,
@@ -299,7 +300,7 @@ export function extractListOfHeadings(text: string): string[] {
   const headings: string[] = [];
 
   lines.forEach(line => {
-      if (/^[#]+\s/.test(line)) {
+      if (/^#{1,2}\s/.test(line)) {
           headings.push(line.trim());
       }
   });
