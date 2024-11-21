@@ -1,5 +1,5 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
-import { ContentTreeArray } from "./data";
+import { ContentTreeArray, LANGUAGECODES } from "./data";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -250,8 +250,7 @@ export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
 };
 
 export const constructSlugPaths = (slug: string[]) => {
-  const languageCodes = ["zh", "es", "pt"];
-  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !languageCodes.includes(slug[0]);
+  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !LANGUAGECODES.includes(slug[0]);
   const englishSlug = ["en", ...slug];
   const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
   [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];
@@ -293,6 +292,41 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
   return {
     transcripts,
   };
+};
+
+export const createLanguageTreeArray = (languageTree: any) => {
+  const getValues = Object.entries(languageTree).map(([key, value]) => {
+    const valDetails = (value as unknown as any).data;
+
+    const extractCount = (arr: {} | []) => {
+      let count: number = 0;
+
+      if (Array.isArray(arr)) {
+        count = arr.length;
+      } else {
+        let initialCount = 0;
+
+        const keysPresent = Object.keys(valDetails);
+        keysPresent.forEach((key) => {
+          const item = valDetails[key]?.data.length;
+          initialCount += item;
+        });
+        count = initialCount;
+      }
+
+      return count;
+    };
+
+    const getSourceDetails = {
+      slug: key,
+      name: (value as unknown as any)?.metadata.title,
+      count: extractCount(valDetails),
+    };
+
+    return getSourceDetails;
+  });
+
+  return getValues;
 };
 
 export function extractHeadings(text: string): string[] {

@@ -1,9 +1,9 @@
-import { DepreciatedCategories, getDoubleDigits, TopicsData } from "@/utils";
+import { getDoubleDigits, TopicsData } from "@/utils";
 import Link from "next/link";
 import React from "react";
 
 type SingleContent = {
-  linkName: DepreciatedCategories;
+  linkName: string;
 } & TopicsData;
 const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent) => {
   const url = linkName === "sources" ? `/${slug}` : `/${linkName}/${slug}`;

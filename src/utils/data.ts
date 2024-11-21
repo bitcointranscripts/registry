@@ -5,7 +5,7 @@ import bitcointldr from "/public/images/bitcoin-tldr.jpg";
 import savingSatoshi from "/public/images/saving-satoshi.jpg";
 import transcriptsreview from "/public/images/bitcoin-transcripts-review.jpg";
 import bitcoindevs from "/public/images/bitcoin-devs.jpg";
-import { IsoDateTimeString, Markdown } from "contentlayer2/core";
+import { IsoDateTimeString } from "contentlayer2/core";
 
 export type MenuApp = {
   href: string;
@@ -117,3 +117,5 @@ export type ContentTreeArray = {
   summary?: string | undefined;
   body: string;
 };
+
+export const LANGUAGECODES = ["zh", "es", "pt"];

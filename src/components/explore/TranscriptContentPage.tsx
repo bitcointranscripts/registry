@@ -21,7 +21,7 @@ interface ITranscriptContentPage {
   mobileDescription?: string;
   data: any /* A Json that changes could be topics, speakers, categories  */;
   type: "alphabet" | "words";
-  linkName: DepreciatedCategories;
+  linkName: string;
 }
 
 const TranscriptContentPage: FC<ITranscriptContentPage> = ({
