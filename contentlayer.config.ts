@@ -19,13 +19,21 @@ const Resources = defineNestedType(() => ({
     url: { type: "string" },
   },
 }));
-export interface CategoryInfo {
+export interface Topic {
   title: string;
   slug: string;
   optech_url: string;
   categories: string[];
   aliases?: string[];
   excerpt: string;
+}
+
+// The full processed topic we use internally
+interface ProcessedTopic {
+  name: string;            // Display name (from topic.title or original tag)
+  slug: string;           // Slugified identifier
+  count: number;          // Number of occurrences
+  categories: string[];   // List of categories it belongs to
 }
 
 interface TagInfo {
@@ -55,91 +63,95 @@ const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
   fs.writeFileSync("./public/aliases.json", JSON.stringify(aliases));
 };
 
-const getCategories = () => {
-  const filePath = path.join(process.cwd(), "public", "categories.json");
+const getTopics = () => {
+  const filePath = path.join(process.cwd(), "public", "topics.json");
   const fileContents = fs.readFileSync(filePath, "utf8");
   return JSON.parse(fileContents);
 };
 
-
-function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
-  const categories: CategoryInfo[] = getCategories();
-  const topicsMap = new Map<string, TopicsData>();
-  const categoryMap = new Map<string, CategoryInfo>();
-  const topicsByCategory: { [category: string]: TopicsData[] } = {};
-  const uncategorizedTopics = new Set<string>();
-
-  // Initialize category map and category arrays
-  categories.forEach((cat) => {
-    cat.categories.forEach((category) => {
-      if (!topicsByCategory[category]) {
-        topicsByCategory[category] = [];
-      }
-    });
-    categoryMap.set(createSlug(cat.slug), cat);
-    cat.aliases?.forEach((alias) => categoryMap.set(alias, cat));
+function buildTopicsMap(transcripts: ContentTranscriptType[], topics: Topic[]): Map<string, ProcessedTopic> {
+  // Create topics lookup map (includes aliases)
+  const topicsLookup = new Map<string, Topic>();
+  topics.forEach(topic => {
+    topicsLookup.set(topic.slug, topic);
+    topic.aliases?.forEach(alias => topicsLookup.set(alias, topic));
   });
 
-  // Process all transcripts to build topic counts and names
-  transcripts.forEach((transcript) => {
-    transcript.tags?.forEach((tag) => {
+  // Build the main topics map
+  const processedTopics = new Map<string, ProcessedTopic>();
+
+  // Process all transcripts
+  transcripts.forEach(transcript => {
+    transcript.tags?.forEach(tag => {
       const slug = createSlug(tag);
-      
-      if (!topicsMap.has(slug)) {
-        // Get the proper name from categories if it exists
-        const categoryInfo = categoryMap.get(slug);
-        const name = categoryInfo ? categoryInfo.title : tag;
-        
-        topicsMap.set(slug, {
-          name,
+      const topic = topicsLookup.get(slug);
+
+      if (!processedTopics.has(slug)) {
+        processedTopics.set(slug, {
+          name: topic?.title || tag,
           slug,
-          count: 1
+          count: 1,
+          categories: topic?.categories || ["Miscellaneous"],
         });
       } else {
-        const topicInfo = topicsMap.get(slug)!;
-        topicInfo.count += 1;
+        const processed = processedTopics.get(slug)!;
+        processed.count += 1;
       }
     });
   });
 
-  // Organize topics into categories
-  topicsMap.forEach((topicInfo, slug) => {
-    const categoryInfo = categoryMap.get(slug);
-    
-    if (categoryInfo) {
-      categoryInfo.categories.forEach((category) => {
-        topicsByCategory[category].push(topicInfo);
-      });
-    } else {
-      uncategorizedTopics.add(slug);
-    }
-  });
+  return processedTopics;
+}
 
-  // Add miscellaneous category
-  if (uncategorizedTopics.size > 0) {
-    topicsByCategory["Miscellaneous"] = Array.from(uncategorizedTopics)
-      .map(slug => topicsMap.get(slug)!)
-      .sort((a, b) => a.name.localeCompare(b.name));
+function generateAlphabeticalList(processedTopics: Map<string, ProcessedTopic>): TopicsData[] {
+  const result: TopicsData[] = [];
+  // The cateogories property is not needed for this list, so we drop it
+  for (const { name, slug, count } of processedTopics.values()) {
+    result.push({ name, slug, count });
   }
+  return result.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function generateCategorizedList(processedTopics: Map<string, ProcessedTopic>): Record<string, TopicsData[]> {
+  const categorizedTopics: Record<string, TopicsData[]> = {};
+
+  Array.from(processedTopics.values()).forEach(({ name, slug, count, categories }) => {
+    categories.forEach(category => {
+      if (!categorizedTopics[category]) {
+        categorizedTopics[category] = [];
+      }
+      categorizedTopics[category].push({ name, slug, count });
+    });
+  });
 
   // Sort topics within each category
-  Object.keys(topicsByCategory).forEach((category) => {
-    topicsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
+  Object.values(categorizedTopics).forEach(topics => {
+    topics.sort((a, b) => a.name.localeCompare(b.name));
   });
 
-  // Create alphabetical list of all topics
-  const allTopicsArray = Array.from(topicsMap.values())
-    .sort((a, b) => a.name.localeCompare(b.name));
+  return categorizedTopics;
+}
 
-  // Write both JSON files
+function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
+  // Get topics
+  const topics = getTopics();
+
+  // Build the primary data structure
+  const processedTopics = buildTopicsMap(transcripts, topics);
+
+  // Generate both output formats
+  const alphabeticalList = generateAlphabeticalList(processedTopics);
+  const categorizedList = generateCategorizedList(processedTopics);
+
+  // Write output files
   fs.writeFileSync(
-    "./public/topics-by-category-counts.json", 
-    JSON.stringify(topicsByCategory, null, 2)
+    "./public/topics-counts.json",
+    JSON.stringify(alphabeticalList, null, 2)
   );
-  
+
   fs.writeFileSync(
-    "./public/topics-counts.json", 
-    JSON.stringify(allTopicsArray, null, 2)
+    "./public/topics-by-category-counts.json",
+    JSON.stringify(categorizedList, null, 2)
   );
 }
 

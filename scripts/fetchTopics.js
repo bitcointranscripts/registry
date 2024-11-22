@@ -3,7 +3,7 @@ const path = require("path");
 const https = require("https");
 
 const url = "https://bitcoinops.org/topics.json";
-const outputPath = path.join(__dirname, "..", "public", "categories.json");
+const outputPath = path.join(__dirname, "..", "public", "topics.json");
 
 https
   .get(url, (res) => {
@@ -15,9 +15,9 @@ https
 
     res.on("end", () => {
       fs.writeFileSync(outputPath, data);
-      console.log("Categories data has been fetched and saved to public folder.");
+      console.log("Topics data has been fetched and saved to public folder.");
     });
   })
   .on("error", (err) => {
-    console.error("Error fetching categories:", err.message);
+    console.error("Error fetching topics:", err.message);
   });
