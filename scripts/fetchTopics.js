@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const url = "https://bitcoinops.org/topics.json";
+const url = "https://raw.githubusercontent.com/bitcoinsearch/topics-index/refs/heads/main/topics.json";
 const outputPath = path.join(__dirname, "..", "public", "topics.json");
 
 https

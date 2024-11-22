@@ -120,13 +120,23 @@ function generateCategorizedList(processedTopics: Map<string, ProcessedTopic>): 
       if (!categorizedTopics[category]) {
         categorizedTopics[category] = [];
       }
-      categorizedTopics[category].push({ name, slug, count });
+      
+      // Check if topic name contains category name and ends with "(Miscellaneous)"
+      const modifiedName = name.includes(category) && name.endsWith("(Miscellaneous)") 
+        ? "Miscellaneous"
+        : name;
+      
+      categorizedTopics[category].push({ name: modifiedName, slug, count });
     });
   });
 
   // Sort topics within each category
   Object.values(categorizedTopics).forEach(topics => {
-    topics.sort((a, b) => a.name.localeCompare(b.name));
+    topics.sort((a, b) => {
+      if (a.name == "Miscellaneous") return 1;
+      if (b.name == "Miscellaneous") return -1;
+      return a.name.localeCompare(b.name)
+    });
   });
 
   return categorizedTopics;
