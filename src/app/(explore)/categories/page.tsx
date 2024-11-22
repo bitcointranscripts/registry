@@ -1,6 +1,6 @@
 import React from "react";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
-import allCategoriesTopic from "@/public/tag-data.json";
+import allCategoriesTopic from "@/public/topics-by-category-counts.json";
 
 const CategoriesPage = () => {
 

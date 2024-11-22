@@ -38,25 +38,6 @@ interface ContentTree {
   [key: string]: ContentTree | ContentTranscriptType[];
 }
 
-/**
- * Count the occurrences of all tags across transcripts and write to json file
- */
-function createTagCount(allTranscripts: ContentTranscriptType[]): {
-  tagCounts: Record<string, number>;
-} {
-  const tagCounts: Record<string, number> = {};
-
-  for (const file of allTranscripts) {
-    if (!file.tags) continue;
-
-    for (const tag of file.tags) {
-      const formattedTag = createSlug(tag);
-      tagCounts[formattedTag] = (tagCounts[formattedTag] || 0) + 1;
-    }
-  }
-
-  return { tagCounts };
-}
 
 const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
   const aliases: Record<string, string> = {};
@@ -80,99 +61,86 @@ const getCategories = () => {
   return JSON.parse(fileContents);
 };
 
-function organizeTags(transcripts: ContentTranscriptType[]) {
+
+function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
   const categories: CategoryInfo[] = getCategories();
-  const { tagCounts } = createTagCount(transcripts);
-
-  const tagsByCategory: { [category: string]: TagInfo[] } = {};
-  const tagsWithoutCategory = new Set<string>();
-  const categorizedTags = new Set<string>();
-
-  // Create a map for faster category lookup
+  const topicsMap = new Map<string, TopicsData>();
   const categoryMap = new Map<string, CategoryInfo>();
+  const topicsByCategory: { [category: string]: TopicsData[] } = {};
+  const uncategorizedTopics = new Set<string>();
 
+  // Initialize category map and category arrays
   categories.forEach((cat) => {
     cat.categories.forEach((category) => {
-      if (!tagsByCategory[category]) {
-        tagsByCategory[category] = [];
+      if (!topicsByCategory[category]) {
+        topicsByCategory[category] = [];
       }
     });
     categoryMap.set(createSlug(cat.slug), cat);
     cat.aliases?.forEach((alias) => categoryMap.set(alias, cat));
   });
 
-  // Process all tags at once
-  const allTags = new Set(
-    transcripts.flatMap(
-      (transcript) => transcript.tags?.map((tag) => tag) || []
-    )
-  );
-
-  allTags.forEach((tag) => {
-    const catInfo = categoryMap.get(tag);
-    if (catInfo) {
-      catInfo.categories.forEach((category) => {
-        if (!tagsByCategory[category].some((t) => t.slug === tag)) {
-          tagsByCategory[category].push({
-            name: catInfo.title,
-            slug: tag,
-            count: tagCounts[tag] || 0,
-          });
-        }
-      });
-      categorizedTags.add(tag);
-    } else {
-      tagsWithoutCategory.add(tag);
-    }
-  });
-
-  // Add "Miscellaneous" category with remaining uncategorized tags
-  if (tagsWithoutCategory.size > 0) {
-    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map(
-      (tag) => ({
-        name: tag,
-        slug: tag,
-        count: tagCounts[tag] || 0,
-      })
-    );
-  }
-
-  // Sort tags alphabetically within each category
-  Object.keys(tagsByCategory).forEach((category) => {
-    tagsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
-  });
-
-  fs.writeFileSync("./public/tag-data.json", JSON.stringify(tagsByCategory));
-  return { tagsByCategory, tagsWithoutCategory };
-}
-
-function organizeTopics(transcripts: ContentTranscriptType[]) {
-  const slugTopics: any = {};
-  const topicsArray: TopicsData[] = [];
-
+  // Process all transcripts to build topic counts and names
   transcripts.forEach((transcript) => {
-    const slugTags = transcript.tags?.map((tag) => ({
-      slug: createSlug(tag),
-      name: tag,
-    }));
-
-    slugTags?.forEach(({ slug, name }) => {
-      if (slugTopics[slug] !== undefined) {
-        const index = slugTopics[slug];
-        topicsArray[index].count += 1;
-      } else {
-        const topicsLength = topicsArray.length;
-        slugTopics[slug] = topicsLength;
-        topicsArray[topicsLength] = {
-          slug,
+    transcript.tags?.forEach((tag) => {
+      const slug = createSlug(tag);
+      
+      if (!topicsMap.has(slug)) {
+        // Get the proper name from categories if it exists
+        const categoryInfo = categoryMap.get(slug);
+        const name = categoryInfo ? categoryInfo.title : tag;
+        
+        topicsMap.set(slug, {
           name,
-          count: 1,
-        };
+          slug,
+          count: 1
+        });
+      } else {
+        const topicInfo = topicsMap.get(slug)!;
+        topicInfo.count += 1;
       }
     });
   });
 
-  fs.writeFileSync("./public/topics-data.json", JSON.stringify(topicsArray));
+  // Organize topics into categories
+  topicsMap.forEach((topicInfo, slug) => {
+    const categoryInfo = categoryMap.get(slug);
+    
+    if (categoryInfo) {
+      categoryInfo.categories.forEach((category) => {
+        topicsByCategory[category].push(topicInfo);
+      });
+    } else {
+      uncategorizedTopics.add(slug);
+    }
+  });
+
+  // Add miscellaneous category
+  if (uncategorizedTopics.size > 0) {
+    topicsByCategory["Miscellaneous"] = Array.from(uncategorizedTopics)
+      .map(slug => topicsMap.get(slug)!)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  // Sort topics within each category
+  Object.keys(topicsByCategory).forEach((category) => {
+    topicsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
+  });
+
+  // Create alphabetical list of all topics
+  const allTopicsArray = Array.from(topicsMap.values())
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  // Write both JSON files
+  fs.writeFileSync(
+    "./public/topics-by-category-counts.json", 
+    JSON.stringify(topicsByCategory, null, 2)
+  );
+  
+  fs.writeFileSync(
+    "./public/topics-counts.json", 
+    JSON.stringify(allTopicsArray, null, 2)
+  );
 }
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
@@ -468,13 +436,11 @@ export default makeSource({
     "STYLE.md",
     "twitter_handles.json",
     ".json",
-    "2018-08-17-richard-bondi-bitcoin-cli-regtest.es.md",
   ],
   onSuccess: async (importData) => {
     const { allTranscripts, allSources } = await importData();
-    organizeTags(allTranscripts);
+    generateTopicsCounts(allTranscripts);
     createTypesCount(allTranscripts, allSources);
-    organizeTopics(allTranscripts);
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
