@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ExploreNavigationItems } from "@/utils/data";
+import { ExploreNavigationItems, LANGUAGECODES } from "@/utils/data";
 
 export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]; current: any }) => {
   const pathname = usePathname();
@@ -13,16 +13,17 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
   const pathnameArray = pathname.replace(`/${language}`, "").split("/");
   const isNotSourcesPage = navListWithoutSources.includes(pathnameArray[1]);
 
+  const isEnglishSlug = language === "en" && language.length == 2 && !LANGUAGECODES.includes(language);
   const allRoutes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")
-      .slice(0, idx + 1)
+      .slice(0, idx + (isEnglishSlug ? 1 : 2))
       .join("/");
     return { name: path || "home", link: route || "/" };
   });
 
   if (!isNotSourcesPage && pathnameArray[1] !== "sources") {
-    allRoutes.splice(1, 0, { name: "Sources", link: "/sources" });
+    allRoutes.splice(1, 0, { name: "Sources", link: `${isEnglishSlug ? "/sources" : `/${language}`}` });
   }
 
   const breadCrumbData = () => {
