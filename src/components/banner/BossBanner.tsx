@@ -1,9 +1,10 @@
-"use client"
+"use client";
+
 import { Banner } from "@bitcoin-dev-project/bdp-ui";
 
 const BossBanner = () => {
   return (
-    <div className={`w-full bg-bdp-background sticky top-[var(--header-height)] z-50`}>
+    <div className={`w-full bg-bdp-background sticky`}>
       <Banner
         headingText="Start your career in bitcoin open source —"
         linkText="APPLY TODAY"
