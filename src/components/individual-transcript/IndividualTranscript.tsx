@@ -1,41 +1,37 @@
 "use client";
 import React, { useState } from "react";
 import { Transcript } from "contentlayer/generated";
-import BreadCrumbs from "../common/BreadCrumbs";
 import TranscriptMetadataComponent from "../common/TranscriptMetadataCard";
-import ContentSwitch from "../common/ContentSwitch";
 import ContentGrouping from "../explore/ContentGrouping";
-import { createSlug, extractListOfHeadings } from "@/utils";
+import { ContentData, createContentSlug, extractHeadings, GroupedData } from "@/utils";
 import Wrapper from "../layout/Wrapper";
 import { twMerge } from "tailwind-merge";
 import FooterComponent from "../layout/FooterComponent";
-import BaseBreadCrumbs, {
-  BaseBreadCrumbsType,
-} from "../common/BaseBreadCrumbs";
+import BaseCrumbLists, { BaseCrumbType } from "../common/BaseCrumbLists";
+import Tabs from "../common/Tabs";
+
+
+type HeadingObject = Record<string, ContentData[]>;;
 
 const IndividualTranscript = ({
   breadCrumbs,
   transcript,
 }: {
-  breadCrumbs: BaseBreadCrumbsType[];
+  breadCrumbs: BaseCrumbType[];
   transcript: Transcript;
 }) => {
   const [currentHeading, setCurrentHeading] = useState("");
 
-  const allHeadings = extractListOfHeadings(transcript.body.raw).map(
-    (heading) => {
-      return {
-        name: heading.replace(/[#]+\s+/gi, ""),
-        slug: createSlug(heading),
-        count: 0,
-      };
-    }
-  );
+  const allHeadings =  extractHeadings(transcript.body.raw).reduce<HeadingObject>((acc, key, index)=>{
+    //  removing the # from the string
+    let keyWithoutHash  = key.replace(/[#]+\s+/gi, "")
+    acc[keyWithoutHash] = [{
+      name: keyWithoutHash,
+      slug: createContentSlug(key), 
+    }]
+     return acc;
+  }, {})
 
-  const groupedHeading = allHeadings.reduce(
-    (heading, headingNow) => ({ ...heading, [headingNow.name]: headingNow }),
-    {}
-  );
   const staticRoutes = [
     { name: "Home", link: "/", isActive: false },
     { name: "Sources", link: "/sources", isActive: false },
@@ -44,7 +40,7 @@ const IndividualTranscript = ({
   return (
     <Wrapper className="relative flex flex-col !px-0 gap-6 lg:gap-7 2xl:gap-10 mx-auto h-[calc(100vh-var(--header-height))] w-full overflow-y-auto scroll-smooth">
       <div className="py-4 lg:pt-7 2xl:pt-10 px-4 lg:px-10 2xl:px-[60px]">
-        <BaseBreadCrumbs crumbsArray={finalRoutes} />
+        <BaseCrumbLists crumbsArray={finalRoutes} />
       </div>
 
       <div className="flex gap-4 justify-between px-4 lg:px-10 2xl:px-[60px]">
@@ -61,12 +57,12 @@ const IndividualTranscript = ({
 
           <div>
             <div className="pt-4 md:pt-5 2xl:pt-6 pb-[var(--header-height)] xl:pb-[calc(60vh-var(--header-height))]">
-              <ContentSwitch
+              <Tabs
                 markdown={transcript.body.raw}
                 summary={transcript?.summary}
                 extraInfo={transcript?.additional_resources}
                 currentHeading={currentHeading}
-                groupedHeading={groupedHeading}
+                groupedHeading={allHeadings}
                 setCurrentHeading={setCurrentHeading}
               />
             </div>
@@ -76,10 +72,10 @@ const IndividualTranscript = ({
         <div className="hidden lg:flex w-full sticky lg:flex-auto top-6 max-w-[300px] 2xl:max-w-[465px] self-start">
           <ContentGrouping
             currentGroup={currentHeading}
-            groupedData={groupedHeading}
+            groupedData={allHeadings as unknown as GroupedData}
             className={twMerge(
               `!w-full rounded-xl max-h-[calc(90vh-var(--header-height))]`,
-              Object.keys(groupedHeading).length < 1 && "!invisible"
+              Object.keys(allHeadings).length < 1 && "!invisible"
             )}
             screen="desktop"
           />

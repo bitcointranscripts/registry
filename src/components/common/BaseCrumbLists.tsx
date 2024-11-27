@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { FC } from "react";
 
-export type BaseBreadCrumbsType = {
+export type BaseCrumbType = {
   name: string;
   link: string;
   isActive: boolean;
 };
 
-const BaseBreadCrumbs = ({crumbsArray}:{crumbsArray:BaseBreadCrumbsType[]}) => {
+const BaseCrumbLists = ({crumbsArray}:{crumbsArray:BaseCrumbType[]}) => {
   return (
     <div className="flex gap-1 flex-wrap">
       {crumbsArray.map((link, i) => (
@@ -31,4 +30,4 @@ const BaseBreadCrumbs = ({crumbsArray}:{crumbsArray:BaseBreadCrumbsType[]}) => {
   );
 };
 
-export default BaseBreadCrumbs;
+export default BaseCrumbLists;

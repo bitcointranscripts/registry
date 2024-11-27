@@ -19,7 +19,7 @@ export type SpeakerData = {
 export type ContentData = {
   name: string;
   slug: string;
-  count: number;
+  count?: number;
 };
 
 interface TagInfo {
@@ -95,7 +95,7 @@ export function createSlug(name: string): string {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-
+// This is needed to handle different languages slug for individual content and not clear them out
 export function createContentSlug(name: string): string {
   return name
     .toLowerCase()
@@ -295,7 +295,7 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
   };
 };
 
-export function extractListOfHeadings(text: string): string[] {
+export function extractHeadings(text: string): string[] {
   const lines: string[] = text.split('\n');
   const headings: string[] = [];
 

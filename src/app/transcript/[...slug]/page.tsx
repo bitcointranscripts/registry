@@ -4,6 +4,7 @@ import allSources from "@/public/sources-data.json";
 import { notFound } from "next/navigation";
 import IndividualTranscript from "@/components/individual-transcript/IndividualTranscript";
 import { createSlug } from "@/utils";
+import { BaseCrumbType } from "@/components/common/BaseCrumbLists";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -32,29 +33,38 @@ const Page = ({ params }: { params: { slug: string[] } }) => {
     return notFound();
   }
 
-  let data: any = allSources;
-console.log(transcript.language,transcript.title)
-  const breadCrumbRoutes = transcript.slugAsParams.map(
+  let sourcesData: any = allSources;
+
+  // This  function returns an array of breadcrumb which we use to display navigation
+  const breadcrumbRoutes:BaseCrumbType[] = transcript.slugAsParams.map(
     (crumb: string, index: number) => {
       let title = "";
       const languageNumber = transcript.slugAsParams.length - (index + 1);
-      data = data[crumb as keyof typeof allSources];
+      const link = transcript.languageURL
+      .split("/")
+      .slice(0, languageNumber === 0 ? undefined : -languageNumber)
+      .join("/");
+
+      // Needed to update the object when we go down the tree
+      sourcesData = sourcesData[crumb as keyof typeof allSources];
+      // Checks if the index is 0 so we can update the title and the data to the new sourcesData
       if (index === 0) {
-        title = data[transcript.language]?.metadata.title;
-        data = data[transcript.language]?.data;
-      } else if (index === transcript.slugAsParams.length - 1) {
+        title = sourcesData[transcript.language]?.metadata.title;
+        sourcesData = sourcesData[transcript.language]?.data;       
+      } 
+      // Checks if it's the last item in the map and updates the title to the transcripts title
+      else if (index === transcript.slugAsParams.length - 1) {
         title = transcript.title;
-      } else {
-        title = data?.metadata.title;
-        data = data?.data;
+      } 
+      // if it's neither the last or the first update the title and sourcesData
+      else {
+        title = sourcesData?.metadata.title;
+        sourcesData = sourcesData?.data;
       }
 
       return {
         name: title,
-        link: transcript.languageURL
-          .split("/")
-          .slice(0, languageNumber === 0 ? undefined : -languageNumber)
-          .join("/"),
+        link,
         isActive: index === transcript.slugAsParams.length - 1,
       };
     }
@@ -62,7 +72,7 @@ console.log(transcript.language,transcript.title)
 
   return (
     <IndividualTranscript
-      breadCrumbs={[...breadCrumbRoutes]}
+      breadCrumbs={[...breadcrumbRoutes]}
       transcript={transcript}
     />
   );

@@ -4,98 +4,80 @@ import { Resources } from "contentlayer/generated";
 import React, { SetStateAction, useState } from "react";
 import TranscriptTabContent from "../individual-transcript/TranscriptTabContent";
 import ContentGrouping from "../explore/ContentGrouping";
-import { TopicsData } from "@/utils";
+import { ContentData, GroupedData, TopicsData } from "@/utils";
 
-const ContentSwitch = ({
+const Tabs = ({
   summary,
   markdown,
   extraInfo,
   currentHeading,
   groupedHeading,
-  setCurrentHeading
+  setCurrentHeading,
 }: {
   summary?: string;
   markdown: string;
   extraInfo?: Resources[];
   currentHeading?: string;
-  groupedHeading?: Record<string, TopicsData[]>;
-  setCurrentHeading?: React.Dispatch<SetStateAction<string>>
+  groupedHeading?: Record<string, ContentData[]>;
+  setCurrentHeading?: React.Dispatch<SetStateAction<string>>;
 }) => {
-  const [openSection, setOpenSection] = useState({
-    transcript: true,
-    summary: false,
-    extraInfo: false,
-  });
+  const [openTabs, setOpenTabs] = useState<
+    "transcript" | "summary" | "extraInfo"
+  >("transcript");
 
   return (
     <div className="flex flex-col relative">
       <div className="sticky bg-white z-10 top-0 lg:top-0  md:pt-6 h-full flex gap-4 md:gap-10 xl:gap-16 justify-start items-center border-b border-b-gray-custom-1200">
-        <SwitchItem
+        <Tab
           title="Transcript"
-          isOpen={openSection.transcript}
-          onClick={() =>
-            setOpenSection((prev) => ({
-              ...prev,
-              transcript: true,
-              summary: false,
-              extraInfo: false,
-            }))
-          }
+          isOpen={openTabs === "transcript"}
+          onClick={() => setOpenTabs("transcript")}
         />
         {summary && (
-          <SwitchItem
+          <Tab
             title="Summary"
-            isOpen={openSection.summary}
-            onClick={() =>
-              setOpenSection((prev) => ({
-                ...prev,
-                summary: true,
-                transcript: false,
-                extraInfo: false,
-              }))
-            }
+            isOpen={openTabs === "summary"}
+            onClick={() => setOpenTabs("summary")}
           />
         )}
 
         {extraInfo && (
-          <SwitchItem
+          <Tab
             title="Extra Info"
-            isOpen={openSection.extraInfo}
-            onClick={() =>
-              setOpenSection((prev) => ({
-                ...prev,
-                extraInfo: true,
-                transcript: false,
-                summary: false,
-              }))
-            }
+            isOpen={openTabs === "extraInfo"}
+            onClick={() => setOpenTabs("extraInfo")}
           />
         )}
       </div>
-      
-      {Object.keys({...groupedHeading}).length > 0 &&
-      <div className="block w-full pt-4 lg:hidden sticky top-[20px] md:top-[65px] z-[5]">
-        <ContentGrouping
-          currentGroup={currentHeading || ""}
-          groupedData={groupedHeading || []}
-          screen="mobile"
-        />
-      </div> }
+
+     {/* This is needed since the layout for the mobile design changes and goes under the tabs */}
+      {Object.keys({ ...groupedHeading }).length > 0 && (
+        <div className="block w-full pt-4 lg:hidden sticky top-[20px] md:top-[65px] z-[5]">
+          <ContentGrouping
+            currentGroup={currentHeading || ""}
+            groupedData={(groupedHeading as GroupedData) || []}
+            screen="mobile"
+          />
+        </div>
+      )}
 
       <div className="relative h-full lg:max-w-[90%]">
-        {openSection.transcript ? (
+        {openTabs === "transcript" && (
           <div className="relative">
             <div className="pt-4  selection:bg-[#B4D5FF]">
-              <TranscriptTabContent markdown={markdown}  setCurrentHeading={setCurrentHeading} />
+              <TranscriptTabContent
+                markdown={markdown}
+                setCurrentHeading={setCurrentHeading}
+              />
             </div>
           </div>
-        ) : null}
-        {openSection.summary ? (
+        )}
+        {openTabs === "summary" && (
           <section className="pt-4">
             <p>{summary}</p>
           </section>
-        ) : null}
-        {openSection.extraInfo ? (
+        )}
+        {openTabs === "extraInfo" && (
           <section className="flex flex-col pt-4">
             {extraInfo?.map((info) => (
               <p className="text-base 2xl:text-lg font-medium leading-8">
@@ -111,13 +93,13 @@ const ContentSwitch = ({
               </p>
             ))}
           </section>
-        ) : null}
+        )}
       </div>
     </div>
   );
 };
 
-const SwitchItem = ({
+const Tab = ({
   title,
   isOpen,
   onClick,
@@ -139,12 +121,12 @@ const SwitchItem = ({
         >
           {title}
         </p>
-        {isOpen ? (
+        {isOpen && (
           <div className="h-1 bg-orange-custom-100 w-full absolute bottom-0"></div>
-        ) : null}
+        )}
       </section>
     </button>
   );
 };
 
-export default ContentSwitch;
+export default Tabs;

@@ -4,15 +4,20 @@ import "./markdown.css";
 import { InView } from "react-intersection-observer";
 import { createContentSlug } from "@/utils";
 
+
 function formatSpeakerText(text: string): string {
-  // Regular expression pattern for "Speaker: HH:MM:SS"
-  const pattern = /(\b\w+(?: \w+)*):? (\d{2}:\d{2}:\d{2})/g;
+  // Regular expression pattern to match "Speaker" or "Speaker:" followed by a timestamp
+  const pattern = /(\b\w+(?: \w+)?\s*):? (\d{2}:\d{2}:\d{2})/g;
 
+  // Replace matched text with formatted HTML
   return text.replace(pattern, (match, speaker, time) => {
-    const formattedSpeaker = `<span className=" font-bold text-black text-base leading-[1.36rem]">${speaker}:</span>`;
-    const formattedTime = `<span className="text-gray-custom-1700 font-bold  text-base leading-[1.36rem]">${time}</span>`;
+    // HTML for the speaker's name
+    const formattedSpeaker = `<span className="font-bold text-black text-base leading-[1.36rem]">${speaker}:</span>`;
+    // HTML for the timestamp
+    const formattedTime = `<span className="text-gray-custom-1700 font-bold text-base leading-[1.36rem]">${time}</span>`;
 
-    return `<p className="inline-block mt-2" > ${formattedSpeaker} ${formattedTime} </p>`;
+    // Return the combined formatted HTML within a paragraph tag
+    return `<p className="inline-block mt-2">${formattedSpeaker} ${formattedTime}</p>`;
   });
 }
 

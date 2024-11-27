@@ -341,6 +341,8 @@ function organizeContent(
   fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
+const getLanCode = /[.]\w{2}$/gi // Removes the last two characters if there's a dot
+
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
   filePathPattern: `**/*.md`,
@@ -379,10 +381,10 @@ export const Transcript = defineDocumentType(() => ({
       type: "string",
       resolve: (doc) => {
         const transcript = doc._raw.flattenedPath.split("/").pop();
-        const lan = transcript?.match(/[.]\w+/gi);
-        const lanWithoutDot = (lan?.[lan.length - 1] || "").replace(".", "");
-        const finalLanguage = LanguageCodes.includes(lanWithoutDot)
-          ? lanWithoutDot
+        const lan = transcript?.match(getLanCode);
+        const languageCode = (lan?.[lan.length - 1] || "").replace(".", "");
+        const finalLanguage = LanguageCodes.includes(languageCode)
+          ? languageCode
           : "en";
         return finalLanguage;
       },
@@ -392,15 +394,15 @@ export const Transcript = defineDocumentType(() => ({
       resolve: (doc) => {
         const transcript = doc._raw.flattenedPath.split("/").pop();
         const fullPathWithoutDot = doc._raw.flattenedPath.replace(
-          /[.]\w{2}$/gi, // Removes the last two characters if there's a dot
+          getLanCode,
           ""
         );
 
-        const stringAfterDot = transcript?.match(/\.(\w{2})$/gi); // Removes the last two characters if there's a dot
-        const languageWithoutDot = (stringAfterDot?.[0] || "").replace(".", "")
+        const lan = transcript?.match(getLanCode);
+        const languageCode = (lan?.[0] || "").replace(".", "")
 
-        if (LanguageCodes.includes(languageWithoutDot)) {
-          return `/${languageWithoutDot}/${fullPathWithoutDot}`;
+        if (LanguageCodes.includes(languageCode)) {
+          return `/${languageCode}/${fullPathWithoutDot}`;
         }
 
         return `/${fullPathWithoutDot}`;
@@ -410,7 +412,7 @@ export const Transcript = defineDocumentType(() => ({
       type: "list",
       resolve: (doc) => {
         const pathWithoutDot = doc._raw.flattenedPath.replace(
-          /[.]\w{2}$/gi, // Removes the last two characters if there's a dot
+          getLanCode,
           ""
         );
         return pathWithoutDot.split("/");
