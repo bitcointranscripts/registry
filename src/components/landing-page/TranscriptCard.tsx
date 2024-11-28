@@ -1,33 +1,27 @@
 import React from "react";
-import Link from "next/link";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { Transcript } from "../../../.contentlayer/generated/types";
 import { createSlug } from "@/utils";
-import SourceCountData from "@/public/source-count-data.json";
 
 interface TranscriptCardProps {
   data: Transcript;
   daysOpened?: number;
   transcripts?: number;
+  source: string;
 }
 
-const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) => {
+const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCardProps) => {
   const remainingSpeakers = data?.speakers?.length && data?.speakers.length > 2 ? data?.speakers.length - 2 : 0;
 
-  const mappedKeyToName = SourceCountData.find((source) => source.slug === data.slugAsParams[0])?.name;
-
   return (
-    <Link
-      href={`${data.url}`}
+    <div
       className={`flex flex-col justify-between ${
         transcripts ? "min-w-[400px] max-md:min-w-[292px]" : "max-w-[580px] w-full"
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex flex-col'>
-        <p className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4 line-clamp-1'>
-          {mappedKeyToName ?? data.slugAsParams[0]}
-        </p>
-        <section className='flex justify-between items-center gap-4'>
+        <p className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4 line-clamp-1'>{source}</p>
+        <section className='flex justify-between items-start gap-4'>
           <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{data?.title}</p>
           {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800'>{daysOpened} days ago</p> : null}
         </section>
@@ -64,7 +58,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts }: TranscriptCardProps) 
           ) : null}
         </section>
       )}
-    </Link>
+    </div>
   );
 };
 
