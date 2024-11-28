@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Transcript } from "contentlayer/generated";
 import { DiceIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import SourceCountData from "@/public/source-count-data.json";
 import TranscriptCard from "../TranscriptCard";
 
 const FeaturedTranscriptClient = ({
@@ -18,6 +19,9 @@ const FeaturedTranscriptClient = ({
     setFeatured([...featuredTranscripts].sort(() => 0.5 - Math.random()));
   };
 
+  const getSourceFromTranscript = (data: Transcript) =>
+    SourceCountData.find((source) => source.slug === data.slugAsParams[0])?.name ?? (data.slugAsParams as Array<string>)[0];
+
   return (
     <div className='flex items-start flex-col gap-14 w-full z-10'>
       <section className='flex flex-col gap-6 w-full'>
@@ -32,7 +36,7 @@ const FeaturedTranscriptClient = ({
         </section>
         <div className='grid auto-rows-max gap-5 max-sm:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-2 grid-cols-3'>
           {featured.slice(0, 3).map((transcript, idx) => (
-            <TranscriptCard data={transcript} key={idx} />
+            <TranscriptCard data={transcript} key={idx} source={getSourceFromTranscript(transcript)} />
           ))}
         </div>
       </section>
@@ -41,7 +45,7 @@ const FeaturedTranscriptClient = ({
         <h3 className='text-2xl font-semibold max-md:text-xl'>Latest Transcripts</h3>
         <div className='grid auto-rows-max gap-5 max-sm:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-2 grid-cols-3'>
           {latestTranscripts.map((transcript, idx) => (
-            <TranscriptCard data={transcript} daysOpened={transcript.days_opened} key={idx} />
+            <TranscriptCard data={transcript} daysOpened={transcript.days_opened} key={idx} source={getSourceFromTranscript(transcript)} />
           ))}
         </div>
       </section>
