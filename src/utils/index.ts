@@ -19,7 +19,7 @@ export type SpeakerData = {
 export type ContentData = {
   name: string;
   slug: string;
-  count: number;
+  count?: number;
 };
 
 interface TagInfo {
@@ -89,12 +89,22 @@ export function createSlug(name: string): string {
   return name
     .toLowerCase()
     .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/[^\w\-]+/gi, "") // Remove all non-word chars
     .replace(/\-\-+/g, "-") // Replace multiple - with single -
     .replace(/^-+/, "") // Trim - from start of text
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
+// This is needed to handle different languages slug for individual content and not clear them out
+export function createContentSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\p{L}\p{N}\-_]+/giu, "") // Remove all non-alphanumeric characters except hyphen
+    .replace(/\-\-+/g, "-") // Replace multiple hyphens with a single hyphen
+    .replace(/^-+/, "") // Trim hyphens from the start
+    .replace(/-+$/, ""); // Trim hyphens from the end
+}
 export function groupDataByAlphabet(items: TopicsData[] | SpeakerData[]): Record<string, TopicsData[]> {
   return items
     .sort((a, b) => a.slug.localeCompare(b.slug))
@@ -257,7 +267,7 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
   if (!isRoot || paths.length === 0) return { transcripts: [] };
 
   const transcripts = allTranscripts.reduce((acc, curr) => {
-    const { url, title, speakers, date, tags, _raw, summary, body } = curr;
+    const { url, title, speakers, date, tags, _raw, summary, body, languageURL } = curr;
 
     if (paths.includes(url)) {
       acc.push({
@@ -265,6 +275,7 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
         speakers,
         date,
         tags,
+        languageURL,
         sourceFilePath: _raw.sourceFilePath,
         flattenedPath: _raw.flattenedPath,
         summary,
@@ -283,3 +294,16 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
     transcripts,
   };
 };
+
+export function extractHeadings(text: string): string[] {
+  const lines: string[] = text.split('\n');
+  const headings: string[] = [];
+
+  lines.forEach(line => {
+      if (/^#{1,2}\s/.test(line)) {
+          headings.push(line.trim());
+      }
+  });
+
+  return headings;
+}

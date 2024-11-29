@@ -1,0 +1,1 @@
+export const LanguageCodes = ["zh", "es", "pt"]

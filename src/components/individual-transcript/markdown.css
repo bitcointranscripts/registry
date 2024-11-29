@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+.wmde-markdown.wmde-markdown-color {
+    background-color: transparent;
+    font-family: "Manrope", sans-serif ;
+}
+
+.wmde-markdown h1, .wmde-markdown h2 {
+    padding-left: 10px;
+    scroll-margin-top: 100px;
+    border-left: 8px solid #F7931A;
+    color: #000;
+    border-bottom: none !important;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin: 8px 0px !important;
+    font-size: 1.125rem;
+
+}
+
+.wmde-markdown h3, .wmde-markdown h4, .wmde-markdown h5, .wmde-markdown h6 {
+    color: #000;
+    font-size: 1rem
+}
+
+span.code-line {
+    white-space: pre-wrap;
+}
+.wmde-markdown pre code, .wmde-markdown pre tt{
+    max-width: 100%;
+}
+.wmde-markdown pre > code {
+    max-width: 100%;
+}
+
+.wmde-markdown p {
+
+    margin-bottom: 8px;
+    color: #000;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 2.1875rem;
+}
+
+.wmde-markdown a.anchor {
+    display: none !important;
+}
+
+@media (min-width: 1024px) {
+
+    .wmde-markdown h1, .wmde-markdown h2 {
+        /* margin: 0px !important; */
+        scroll-margin-top: 100px;
+        color: #000;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin: 12px 0px !important;
+        font-size: 1.2rem;
+    }
+
+    .wmde-markdown h3, .wmde-markdown h4, .wmde-markdown h5, .wmde-markdown h6 {
+        color: #000;
+        font-size: 1rem;
+    }
+
+    .wmde-markdown p {
+        margin: 0px !important;
+        color: #000;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 2.1875rem;
+    }
+    .wmde-markdown ul,.wmde-markdown ol {
+        margin: 0px !important;
+        color: #000;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 2.1875rem;
+    }
+    .wmde-markdown ul, .wmde-markdown li {
+        list-style-type: circle;
+    }
+
+    .wmde-markdown a.anchor {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1536px) {
+
+    .wmde-markdown h1, .wmde-markdown h2 {
+        margin: 12px 0px !important;
+        font-size: 1.75rem;
+    }
+
+    .wmde-markdown h3,.wmde-markdown h4, .wmde-markdown h5, .wmde-markdown h6 {
+        color: #000;
+        font-size: 1rem;
+    }
+
+    .wmde-markdown p {
+        margin: 0px !important;
+        color: #000;
+        line-height: 2rem;
+    }
+
+    .wmde-markdown a.anchor {
+        display: none !important;
+    }
+}
