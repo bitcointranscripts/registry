@@ -1,8 +1,16 @@
 import path from "path";
 import * as fs from "fs";
-import { createSlug, createText, SpeakerData, TopicsData, unsluggify } from "./src/utils";
-import { defineDocumentType, defineNestedType, makeSource } from "contentlayer2/source-files";
-import { Transcript as ContentTranscriptType, Source as ContentSourceType } from "./.contentlayer/generated/types";
+import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import {
+  defineDocumentType,
+  defineNestedType,
+  makeSource,
+} from "contentlayer2/source-files";
+import {
+  Transcript as ContentTranscriptType,
+  Source as ContentSourceType,
+} from "./.contentlayer/generated/types";
+import { LanguageCodes } from "./src/config";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -94,7 +102,11 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
   });
 
   // Process all tags at once
-  const allTags = new Set(transcripts.flatMap((transcript) => transcript.tags?.map((tag) => tag) || []));
+  const allTags = new Set(
+    transcripts.flatMap(
+      (transcript) => transcript.tags?.map((tag) => tag) || []
+    )
+  );
 
   allTags.forEach((tag) => {
     const catInfo = categoryMap.get(tag);
@@ -116,11 +128,13 @@ function organizeTags(transcripts: ContentTranscriptType[]) {
 
   // Add "Miscellaneous" category with remaining uncategorized tags
   if (tagsWithoutCategory.size > 0) {
-    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map((tag) => ({
-      name: tag,
-      slug: tag,
-      count: tagCounts[tag] || 0,
-    }));
+    tagsByCategory["Miscellaneous"] = Array.from(tagsWithoutCategory).map(
+      (tag) => ({
+        name: tag,
+        slug: tag,
+        count: tagCounts[tag] || 0,
+      })
+    );
   }
 
   // Sort tags alphabetically within each category
@@ -190,7 +204,10 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
   fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
 }
 
-function generateSourcesCount(transcripts: ContentTranscriptType[], sources: ContentSourceType[]) {
+function generateSourcesCount(
+  transcripts: ContentTranscriptType[],
+  sources: ContentSourceType[]
+) {
   const sourcesArray: TagInfo[] = [];
   const slugSources: Record<string, number> = {};
 
@@ -204,7 +221,10 @@ function generateSourcesCount(transcripts: ContentTranscriptType[], sources: Con
       slugSources[slug] = sourcesLength;
 
       const getSourceName = (slug: string) =>
-        sources.find((source) => source.language === "en" && source.slugAsParams[0] === slug)?.title ?? unsluggify(slug);
+        sources.find(
+          (source) =>
+            source.language === "en" && source.slugAsParams[0] === slug
+        )?.title ?? unsluggify(slug);
 
       sourcesArray[sourcesLength] = {
         slug,
@@ -214,12 +234,21 @@ function generateSourcesCount(transcripts: ContentTranscriptType[], sources: Con
     }
   });
 
-  fs.writeFileSync("./public/source-count-data.json", JSON.stringify(sourcesArray));
+  fs.writeFileSync(
+    "./public/source-count-data.json",
+    JSON.stringify(sourcesArray)
+  );
   return { sourcesArray, slugSources };
 }
 
-const createTypesCount = (transcripts: ContentTranscriptType[], sources: ContentSourceType[]) => {
-  const { sourcesArray, slugSources } = generateSourcesCount(transcripts, sources);
+const createTypesCount = (
+  transcripts: ContentTranscriptType[],
+  sources: ContentSourceType[]
+) => {
+  const { sourcesArray, slugSources } = generateSourcesCount(
+    transcripts,
+    sources
+  );
   const nestedTypes: any = {};
 
   sources.forEach((transcript) => {
@@ -234,7 +263,8 @@ const createTypesCount = (transcripts: ContentTranscriptType[], sources: Content
         if (!nestedTypes[slugType]) {
           nestedTypes[slugType] = [];
         } else {
-          if (nestedTypes[slugType].includes(getSource) || getSource === null) return;
+          if (nestedTypes[slugType].includes(getSource) || getSource === null)
+            return;
           nestedTypes[slugType].push(getSource);
         }
       });
@@ -244,39 +274,74 @@ const createTypesCount = (transcripts: ContentTranscriptType[], sources: Content
   fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypes));
 };
 
-function organizeContent(transcripts: ContentTranscriptType[]) {
-  const tree: ContentTree = {};
+function organizeContent(
+  transcripts: ContentTranscriptType[],
+  sources: ContentSourceType[]
+) {
+  const tree: any = {};
 
-  transcripts.forEach((transcript) => {
-    const parts = transcript.slugAsParams;
-    let current = tree;
+  sources.forEach((source) => {
+    const {
+      _id,
+      slugAsParams,
+      language,
+      _raw,
+      weight,
+      body,
+      hosts,
+      transcription_coverage,
+      url,
+      type,
+      types,
+      ...metaData
+    } = source;
+    const params = source.slugAsParams;
+    const topParam = params[0] as string;
+    const nestedSource = params.length > 1;
 
-    const isNonEnglishDir = /\w+\.[a-z]{2}\b/.test(parts[parts.length - 1]);
-    if (isNonEnglishDir) return;
-
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (!current[parts[i]]) {
-        current[parts[i]] = i === parts.length - 2 ? [] : {};
-      }
-      current = current[parts[i]] as ContentTree;
+    if (!tree[topParam]) {
+      tree[topParam] = {};
     }
+    const allTranscriptsForSourceLanguage = transcripts.filter(
+      (transcript) =>
+        transcript._raw.sourceFileDir === source._raw.sourceFileDir &&
+        transcript.language === language
+    );
 
-    (current as unknown as any[]).push({
-      title: transcript.title,
-      speakers: transcript.speakers,
-      date: transcript.date,
-      tags: transcript.tags,
-      sourceFilePath: transcript._raw.sourceFilePath,
-      flattenedPath: transcript._raw.flattenedPath,
-      summary: transcript.summary,
-      body: createText(transcript.body),
-      source: transcript.source,
-    });
+    const allTranscriptsForSourceLanguageURLs =
+      allTranscriptsForSourceLanguage.map((transcript) => transcript.url);
+
+    if (!nestedSource) {
+      tree[topParam] = {
+        ...tree[topParam],
+        [language]: {
+          data: allTranscriptsForSourceLanguageURLs.length
+            ? allTranscriptsForSourceLanguageURLs
+            : {},
+          metadata: {
+            ...metaData,
+          },
+        },
+      };
+    } else {
+      tree[topParam][language].data = {
+        ...tree[topParam][language].data,
+        [params[1]]: {
+          data: allTranscriptsForSourceLanguageURLs.length
+            ? allTranscriptsForSourceLanguageURLs
+            : {},
+          metadata: {
+            ...metaData,
+          },
+        },
+      };
+    }
   });
 
-  // Save the result as JSON
   fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
+
+const getLanCode = /[.]\w{2}$/gi // Removes the last two characters if there's a dot
 
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
@@ -312,9 +377,46 @@ export const Transcript = defineDocumentType(() => ({
       type: "string",
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
     },
+    language: {
+      type: "string",
+      resolve: (doc) => {
+        const transcript = doc._raw.flattenedPath.split("/").pop();
+        const lan = transcript?.match(getLanCode);
+        const languageCode = (lan?.[lan.length - 1] || "").replace(".", "");
+        const finalLanguage = LanguageCodes.includes(languageCode)
+          ? languageCode
+          : "en";
+        return finalLanguage;
+      },
+    },
+    languageURL: {
+      type: "string",
+      resolve: (doc) => {
+        const transcript = doc._raw.flattenedPath.split("/").pop();
+        const fullPathWithoutDot = doc._raw.flattenedPath.replace(
+          getLanCode,
+          ""
+        );
+
+        const lan = transcript?.match(getLanCode);
+        const languageCode = (lan?.[0] || "").replace(".", "")
+
+        if (LanguageCodes.includes(languageCode)) {
+          return `/${languageCode}/${fullPathWithoutDot}`;
+        }
+
+        return `/${fullPathWithoutDot}`;
+      },
+    },
     slugAsParams: {
       type: "list",
-      resolve: (doc) => doc._raw.flattenedPath.split("/"),
+      resolve: (doc) => {
+        const pathWithoutDot = doc._raw.flattenedPath.replace(
+          getLanCode,
+          ""
+        );
+        return pathWithoutDot.split("/");
+      },
     },
   },
 }));
@@ -336,13 +438,15 @@ export const Source = defineDocumentType(() => ({
   computedFields: {
     url: {
       type: "string",
-      resolve: (doc) => `/${doc._raw.flattenedPath.split("/").slice(0, -1).join("/")}`,
+      resolve: (doc) =>
+        `/${doc._raw.flattenedPath.split("/").slice(0, -1).join("/")}`,
     },
     language: {
       type: "string",
       resolve: (doc) => {
         const index = doc._raw.flattenedPath.split("/").pop();
-        const lan = index?.split(".").length === 2 ? index?.split(".")[1] : "en";
+        const lan =
+          index?.split(".").length === 2 ? index?.split(".")[1] : "en";
         return lan;
       },
     },
@@ -374,6 +478,6 @@ export default makeSource({
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
-    organizeContent(allTranscripts);
+    organizeContent(allTranscripts, allSources);
   },
 });

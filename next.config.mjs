@@ -5,24 +5,36 @@ const nextConfig = {
     return {
       fallback: [
         {
-          source: "/:path*.:ext([^/]+)", // intercept all paths ending with a file extension
-          destination: "/gh-pages/:path*.:ext", // rewrite to gh-pages/[path_here].ext
+          source: "/:path*.:ext([a-zA-Z0-9_+]{1,4})", // Match extensions that are 1-4 AlphaNumeric characters long
+          destination: "/gh-pages/:path*.:ext", // Rewrite to gh-pages/[path_here].ext
         },
         {
-          source: "/transcripts",
-          destination: "/gh-pages/index.html",
+          source: "/tags/:path",
+          destination: "/gh-pages/tags/:path/index.html",
         },
         {
-          source: "/types",
-          destination: "/gh-pages/categories/index.html",
+          source: "/speakers/:path",
+          destination: "/gh-pages/speakers/:path/index.html",
+        },
+        {
+          source: "/es",
+          destination: "/gh-pages/es/index.html",
+        },
+        {
+          source: "/zh",
+          destination: "/gh-pages/zh/index.html",
+        },
+        {
+          source: "/pt",
+          destination: "/gh-pages/pt/index.html",
+        },
+        {
+          source: "/:path((?!.*\\.[a-zA-Z0-9]{1,4}$).*)", // Matches paths without a valid file extension
+          destination: "/transcript/:path*", // Rewrite to /transcripts/[path...]
         },
         {
           source: "/:path*",
           destination: "/gh-pages/:path*/index.html",
-        },
-        {
-          source: "/sources/:path((?!.*\\.[^/]+).*)", // Matches /source/[any path without a file extension]
-          destination: "/[...slug]/:path*", // Replace with your catch-all route
         },
       ],
     };

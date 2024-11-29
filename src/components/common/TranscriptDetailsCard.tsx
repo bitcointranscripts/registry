@@ -6,47 +6,29 @@ import DateIcon from "/public/svgs/date-icon.svg";
 import TagsIcon from "/public/svgs/tags-icon.svg";
 import { createSlug, formatDate, unsluggify } from "@/utils";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import Pill from "./Pill";
 
 const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: string[] }) => {
-  const { speakers, tags, summary, date, title, body, flattenedPath: url } = data;
+  const { speakers, tags, summary, date, title, body, languageURL } = data;
 
   const calculateRemaining = (data: string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
 
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
       <section className='flex justify-between'>
-        <div className='flex flex-col gap-2 w-full'>
-          <section className='flex flex-col md:flex-row gap-3 md:justify-between md:items-center w-full'>
-            <div className='flex gap-2 flex-wrap'>
-              {slug
-                .join(" / ")
-                .split(" ")
-                .map((slg, i) => (
-                  <p
-                    key={`${slg}-${i}`}
-                    className={`text-xs md:text-sm 2xl:text-base leading-[20.64px] ${
-                      slg === "/" ? "text-custom-black-custom-200" : "text-gray-custom-800"
-                    } font-medium capitalize`}
-                  >
-                    {unsluggify(slg)}
-                  </p>
-                ))}
-            </div>
-
-            {date && (
-              <div className='flex gap-2 items-center h-fit'>
-                <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
-                <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
-              </div>
-            )}
-          </section>
-
+        <div className='flex md:flex-row flex-col justify-between gap-2 w-full'>
           <Link
-            href={`/${url}`}
+            href={`${languageURL}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
           </Link>
+          {date && (
+            <div className='flex gap-2 items-center h-fit'>
+              <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
+              <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -60,13 +42,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {speakers.slice(0, 3).map((speaker, idx) => (
-                    <Link
-                      key={idx}
-                      href={`/speakers/${createSlug(speaker)}`}
-                      className='py-[2px] px-5 capitalize rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
-                    >
-                      {speaker}
-                    </Link>
+                    <Pill key={speaker} name={speaker} slug={`/speakers/${createSlug(speaker)}`}  />
                   ))}
 
                   {calculateRemaining(speakers) === 0 ? null : (
@@ -89,13 +65,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {tags.slice(0, 3).map((tag, idx) => (
-                    <Link
-                      key={idx}
-                      href={`/tags/${createSlug(tag)}`}
-                      className='py-[2px] px-5 capitalize rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
-                    >
-                      {unsluggify(tag)}
-                    </Link>
+                    <Pill key={idx} name={tag} slug={`/tags/${createSlug(tag)}`}  />
                   ))}
 
                   {calculateRemaining(tags) === 0 ? null : (

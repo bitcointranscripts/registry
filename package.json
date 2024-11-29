@@ -11,14 +11,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bitcoin-dev-project/bdp-ui": "^1.3.0",
+    "@bitcoin-dev-project/bdp-ui": "^1.5.1",
+    "@uiw/react-markdown-preview": "^5.1.3",
     "contentlayer2": "^0.4.6",
+    "date-fns": "^4.1.0",
     "next": "14.2.4",
     "next-contentlayer2": "^0.4.6",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-merge": "^2.5.2",
-    "react-intersection-observer": "^9.13.1"
+    "react-intersection-observer": "^9.13.1",
+    "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
