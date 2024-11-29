@@ -1,6 +1,5 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
 import { ContentTreeArray } from "./data";
-import SourceCountData from "../../public/source-count-data.json";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -49,10 +48,10 @@ export function shuffle(data: Transcript[]) {
   return data;
 }
 
-const getSourceFromTranscript = (data: Transcript) =>
+const getSourceFromTranscript = (data: Transcript, SourceCountData:ContentData[]) =>
   SourceCountData.find((source) => source.slug === data.slugAsParams[0])?.name ?? (data.slugAsParams as Array<string>)[0];
 
-export const extractTranscripts = (allTranscripts: Transcript[]) => {
+export const extractTranscripts = (allTranscripts: Transcript[],SourceCountData:ContentData[]) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
@@ -68,24 +67,24 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
     const transcriptDate = new Date(transcript.date as string).getTime();
     const daysOpened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
 
-    acc.push({ ...transcript, daysOpened, sourceName: getSourceFromTranscript(transcript) });
+    acc.push({ ...transcript, daysOpened, sourceName: getSourceFromTranscript(transcript, SourceCountData) });
     acc.sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
 
     if (acc.length > 3) acc.pop();
     return acc;
   }, [] as (Transcript & { daysOpened: number; sourceName: string })[]);
 
-  const featuredTranscripts = getFeaturedTranscripts(transcripts);
+  const featuredTranscripts = getFeaturedTranscripts(transcripts, SourceCountData);
 
   return { latestTranscripts, featuredTranscripts };
 };
 
-export const getFeaturedTranscripts = (allTranscripts: Transcript[]) => {
+export const getFeaturedTranscripts = (allTranscripts: Transcript[],SourceCountData:ContentData[]) => {
   let featuredTranscripts: (Transcript & { sourceName: string })[] = [];
 
   for (const transcript of allTranscripts) {
     if (transcript.speakers) {
-      featuredTranscripts.push({ ...transcript, sourceName: getSourceFromTranscript(transcript) });
+      featuredTranscripts.push({ ...transcript, sourceName: getSourceFromTranscript(transcript, SourceCountData) });
     }
   }
 
