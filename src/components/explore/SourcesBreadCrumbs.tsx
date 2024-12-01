@@ -23,7 +23,7 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
   });
 
   if (!isNotSourcesPage && pathnameArray[1] !== "sources") {
-    allRoutes.splice(1, 0, { name: "Sources", link: `${isEnglishSlug ? "/sources" : `/${language}`}` });
+    allRoutes.splice(1, 0, { name: "Sources", link: `${isEnglishSlug ? "/sources" : `/${language}/sources`}` });
   }
 
   const breadCrumbData = () => {

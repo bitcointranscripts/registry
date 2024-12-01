@@ -17,7 +17,7 @@ import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const languageSlugs = LANGUAGECODES.map((lang) => ({ slug: [lang] }));
+  const languageSlugs = LANGUAGECODES.map((lang) => ({ slug: [lang, "sources"] }));
 
   const allSlugs = allContentSources.map(({ language, slugAsParams }) => {
     const isEnglish = language === "en";
@@ -44,7 +44,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   let currentLanguageSource: any = allSources;
   let languageTreeArray: { slug: string; name: string; count: number }[] = [];
 
-  const isRouteForLanguage = slug.length === 1 && LANGUAGECODES.includes(slug[0]);
+  const isRouteForLanguage = slug.length === 2 && LANGUAGECODES.includes(slug[0]) && slug[1] === "sources";
 
   if (isRouteForLanguage) {
     const language = slug[0];

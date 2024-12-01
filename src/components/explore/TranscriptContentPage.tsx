@@ -14,6 +14,7 @@ import MobileAlphabetGrouping from "./MobileAlphabetGrouping";
 import ContentGrouping from "./ContentGrouping";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
+import { LANGUAGECODES } from '@/utils/data';
 
 interface ITranscriptContentPage {
   header: string;
@@ -43,7 +44,8 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
   const pathname = usePathname();
   const pathnameArray = pathname.split("/");
-  const allRoutes = pathnameArray.map((path, idx) => {
+
+  const routes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")
       .slice(0, idx + 1)
@@ -55,6 +57,9 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
       isActive: idx === pathnameArray.length - 1,
     };
   });
+
+  const allRoutes = routes.filter((route) => !LANGUAGECODES.includes(route.name))
+
   return (
     <div className="flex items-start relative lg:gap-[50px]">
       <div className="flex flex-col w-full gap-6 lg:gap-10 no-scrollbar">

@@ -33,8 +33,8 @@ const nextConfig = {
           destination: "/transcript/:path*", // Rewrite to /transcripts/[path...]
         },
         {
-          source: "/:path*/:lang([a-z]{2})",
-          destination: "/:path*/:lang", // No redirection, stays on the page
+          source: "/:path*",
+          destination: "/gh-pages/:path*/index.html",
         },
       ],
     };
