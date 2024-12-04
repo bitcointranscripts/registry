@@ -5,7 +5,7 @@ import Wrapper from "@/components/layout/Wrapper";
 import ExploreTranscriptClient from "./ExploreTranscriptClient";
 
 function getTags() {
-  const filePath = path.join(process.cwd(), "public", "tag-data.json");
+  const filePath = path.join(process.cwd(), "public", "topics-by-category-counts.json");
   const fileContents = fs.readFileSync(filePath, "utf8");
   return JSON.parse(fileContents);
 }

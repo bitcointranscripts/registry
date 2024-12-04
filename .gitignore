@@ -21,9 +21,9 @@
 /build
 /public/categories.json
 /public/types-data.json
-/public/tag-data.json
+/public/topics-by-category-counts.json
 /public/aliases.json
-/public/topics-data.json
+/public/topics-counts.json
 /public/speaker-data.json
 /public/source-count-data.json
 /public/sources-data.json
