@@ -117,141 +117,36 @@ export const processFlowData = [
     title: "Curator Adds Sources",
     content: "Curator adds sources and resources to the Transcription Backlog.",
     image: "/svgs/sources-icon.svg",
-    bgColor: "bg-pink-custom-100",
+    bgColor: "#FCEDF3",
   },
   {
     title: "AI Transcription",
     content: "Resources from the backlog are sent to the AI Transcription Service for processing.",
     image: "/svgs/ai-icon.svg",
-    bgColor: "bg-blue-custom-200",
+    bgColor: "#F0F1FA",
   },
   {
     title: "Initial Publication",
     content: "AI-generated transcripts are published on the Registry and also added to the Review Queue.",
     image: "/svgs/initial-publication-icon.svg",
-    bgColor: "bg-orange-custom-200",
+    bgColor: "#FFF5EB",
   },
   {
     title: "Human Review",
     content: "Reviewers claim and edit transcripts from the Review Queue and submit them for approval.",
     image: "/svgs/review-icon.svg",
-    bgColor: "bg-green-custom-100",
+    bgColor: "#ECF9F1",
   },
   {
     title: "Evaluation",
     content: "Editors review and approve finalized transcripts.",
     image: "/svgs/evaluation-icon.svg",
-    bgColor: "bg-orange-custom-1000",
+    bgColor: "#FCEDED",
   },
   {
     title: "Final Publication",
     content: "Editors review and approve finalized transcripts.",
     image: "/svgs/final-publication-icon.svg",
-    bgColor: "bg-pink-custom-100",
+    bgColor: "#FCEDF3",
   },
 ] satisfies Array<{ [key: string]: string }>;
-
-export const editors = [
-  {
-    title: "Lincoln Kenter",
-    image: "",
-  },
-  {
-    title: "Lydia Donin",
-    image: "",
-  },
-];
-
-export const reviewers = [
-  {
-    title: "Lydia Korsgaard",
-    image: "",
-  },
-  {
-    title: "Craig Dokidis",
-    image: "",
-  },
-  {
-    title: "Lincoln Curtis",
-    image: "",
-  },
-  {
-    title: "Randy Baptista",
-    image: "",
-  },
-  {
-    title: "Aspen Vaccaro",
-    image: "",
-  },
-  {
-    title: "Aspen Siphron",
-    image: "",
-  },
-  {
-    title: "Wilson Stanton",
-    image: "",
-  },
-  {
-    title: "Mira Ekstrom Bothman",
-    image: "",
-  },
-  {
-    title: "Chance Bergson",
-    image: "",
-  },
-  {
-    title: "Terry Vetrovs",
-    image: "",
-  },
-  {
-    title: "Maria Ekstrom Bothman",
-    image: "",
-  },
-  {
-    title: "Chance Westervelt",
-    image: "",
-  },
-  {
-    title: "Angel Kenter",
-    image: "",
-  },
-];
-
-export const curators = [
-  {
-    title: "Lydia Korsgaard",
-    image: "",
-  },
-  {
-    title: "Craig Dokidis",
-    image: "",
-  },
-  {
-    title: "Lincoln Curtis",
-    image: "",
-  },
-  {
-    title: "Randy Baptista",
-    image: "",
-  },
-  {
-    title: "Aspen Vaccaro",
-    image: "",
-  },
-  {
-    title: "Aspen Siphron",
-    image: "",
-  },
-  {
-    title: "Wilson Stanton",
-    image: "",
-  },
-  {
-    title: "Mira Ekstrom Bothman",
-    image: "",
-  },
-  {
-    title: "Chance Bergson",
-    image: "",
-  },
-];

@@ -1,10 +1,13 @@
 import React from "react";
 import Wrapper from "@/components/layout/Wrapper";
-import { editors, processFlowData, reviewers, curators } from "@/utils/data";
+import { processFlowData } from "@/utils/data";
 import Image from "next/image";
 import Link from "next/link";
 import FooterComponent from "@/components/layout/FooterComponent";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
+import reviewers from "@/public/reviewers-data.json";
+import upperLineIcon from "@/public/svgs/upper-line-icon.svg";
+import lowerLineIcon from "@/public/svgs/lower-line-icon.svg";
 
 const page = () => {
   return (
@@ -41,8 +44,12 @@ const page = () => {
         </Wrapper>
       </div>
 
-      <div>
-        <Wrapper className='flex flex-col gap-6 max-sm:px-3 py-10 md:py-[104px]'>
+      <div className='w-full relative'>
+        <div className='absolute top-0 right-0 left-0 w-full -z-10'>
+          <Image src={upperLineIcon} alt='upper line icon' className=' w-full' />
+        </div>
+
+        <Wrapper className='flex flex-col gap-6 max-sm:px-3 py-10 md:py-[104px] max-w-[1345px]'>
           <div className='text-center pb-10 md:pb-16'>
             <h1 className='text-[40px] leading-[48px] font-medium md:text-6xl 2xl:text-7xl'>How It Works</h1>
             <p className='text-base md:text-xl 2xl:text-2xl 2xl:leading-[33.84px] md:max-w-[1050px] max-w-[1195px] pt-10 md:pt-12 2xl:pt-14'>
@@ -54,7 +61,10 @@ const page = () => {
           <div className='flex flex-col gap-10 md:gap-20'>
             {processFlowData.map((item) => (
               <div key={item.title} className='flex flex-row items-center gap-4 sm:gap-[31px]'>
-                <section className={`${item.bgColor} flex items-center justify-center min-w-24 h-24 md:min-w-[184px] md:h-[184px] rounded-2xl`}>
+                <section
+                  className={`bg-[${item.bgColor}] flex items-center justify-center min-w-24 h-24 md:min-w-[184px] md:h-[184px] rounded-2xl`}
+                  style={{ backgroundColor: item.bgColor }}
+                >
                   <Image src={item.image} alt={item.title} width={64} height={64} className='w-7 md:w-16 h-7 md:h-16' />
                 </section>
 
@@ -75,15 +85,20 @@ const page = () => {
             ))}
           </div>
         </Wrapper>
+
+        <div className='absolute bottom-0 right-0 left-0 w-full -z-10'>
+          <Image src={lowerLineIcon} alt='lower line icon' className=' w-full' />
+        </div>
       </div>
 
       <div>
         <Wrapper className='flex flex-col gap-16 md:gap-[72px] max-sm:px-3 py-10 md:py-[104px]'>
-          <GroupedImageSection
+          {/* <GroupedImageSection
             title='Editors'
             subText='Editors evaluate and finalize Reviewers submissions, ensuring they’re consistently high quality.'
             data={editors}
-          />
+          /> */}
+
           <GroupedImageSection
             title='Reviewers'
             subText='Editors evaluate and finalize Reviewers submissions, ensuring they’re consistently high quality.'
@@ -91,13 +106,13 @@ const page = () => {
             buttonText='Become a Reviewer'
             href='https://review.btctranscripts.com'
           />
-          <GroupedImageSection
+          {/* <GroupedImageSection
             title='Curators'
             subText='Curators suggest source material for transcription, setting the foundation for all that follows.'
             data={curators}
             buttonText='Become a Curator'
             href='/'
-          />
+          /> */}
         </Wrapper>
       </div>
       <FooterComponent />
@@ -112,14 +127,12 @@ const GroupedImageSection = ({
   buttonText,
   href,
 }: {
-  data: Array<{ title: string; image: string }>;
+  data: Record<string, { title: string; image: string }>;
   title: string;
   subText: string;
   href?: string;
   buttonText?: string;
 }) => {
-  const trimText = (text: string) => (text.length > 15 ? text.substring(0, 15) + "..." : text);
-
   return (
     <div className='text-center'>
       <h1 className='text-[40px] leading-[48px] font-medium md:text-6xl 2xl:text-7xl'>{title}</h1>
@@ -127,17 +140,17 @@ const GroupedImageSection = ({
 
       <div className='flex items-center justify-center pt-8 md:pt-14'>
         <div className='flex gap-5 md:gap-5 max-w-[1060px] flex-wrap justify-center'>
-          {data.map(({ title, image }) => (
+          {Object.values(data).map(({ title, image }) => (
             <div key={title} className='flex flex-col items-center justify-center w-[150px] md:w-[160px] max-[340px]:w-[130px] gap-2 md:px-[14px]'>
               <Image
                 src={image}
                 alt={title}
                 width={132}
                 height={132}
-                className='w-[100px] md:w-[132px] h-[100px] md:h-[132px] bg-black rounded-full'
+                className='w-[100px] md:w-[132px] h-[100px] md:h-[132px] bg-black rounded-full border-[0.5px]'
               />
               <p className='text-custom-black-custom-400 text-sm leading-[22.12px] font-medium md:text-base md:font-semibold md:leading-[25.28px] whitespace-nowrap'>
-                {trimText(title)}
+                {title}
               </p>
             </div>
           ))}
@@ -148,6 +161,7 @@ const GroupedImageSection = ({
         <div className='pt-4 md:pt-6 flex justify-center'>
           <Link
             href={href}
+            target='_blank'
             className=' text-base font-semibold md:text-lg flex items-center justify-center gap-1 rounded-full bg-orange-custom-100 text-white py-[17px] px-[34px] md:py-6 md:px-16 max-w-[243px] md:max-w-[326px]'
           >
             {buttonText}
