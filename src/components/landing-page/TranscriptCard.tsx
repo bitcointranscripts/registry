@@ -2,6 +2,7 @@ import React from "react";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { Transcript } from "../../../.contentlayer/generated/types";
 import { createSlug } from "@/utils";
+import Link from "next/link";
 
 interface TranscriptCardProps {
   data: Transcript;
@@ -14,7 +15,8 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
   const remainingSpeakers = data?.speakers?.length && data?.speakers.length > 2 ? data?.speakers.length - 2 : 0;
 
   return (
-    <div
+    <Link
+      href={data.url}
       className={`flex flex-col justify-between ${
         transcripts ? "min-w-[400px] max-md:min-w-[292px]" : "max-w-[580px] w-full"
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
@@ -58,7 +60,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
           ) : null}
         </section>
       )}
-    </div>
+    </Link>
   );
 };
 
