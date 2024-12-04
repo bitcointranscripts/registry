@@ -14,7 +14,7 @@ import MobileAlphabetGrouping from "./MobileAlphabetGrouping";
 import ContentGrouping from "./ContentGrouping";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
-import { LANGUAGECODES } from '@/utils/data';
+import { LanguageCodes } from '@/config';
 
 interface ITranscriptContentPage {
   header: string;
@@ -58,7 +58,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
     };
   });
 
-  const allRoutes = routes.filter((route) => !LANGUAGECODES.includes(route.name))
+  const allRoutes = routes.filter((route) => !LanguageCodes.includes(route.name))
 
   return (
     <div className="flex items-start relative lg:gap-[50px]">

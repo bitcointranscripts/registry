@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ExploreNavigationItems, LANGUAGECODES } from "@/utils/data";
+import { ExploreNavigationItems } from "@/utils/data";
+import { LanguageCodes } from '@/config';
 
 export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]; current: any }) => {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
   const pathnameArray = pathname.replace(`/${language}`, "").split("/");
   const isNotSourcesPage = navListWithoutSources.includes(pathnameArray[1]);
 
-  const isEnglishSlug = language === "en" && language.length == 2 && !LANGUAGECODES.includes(language);
+  const isEnglishSlug = language === "en" && language.length == 2 && !LanguageCodes.includes(language);
   const allRoutes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")

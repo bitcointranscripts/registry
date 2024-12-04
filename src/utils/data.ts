@@ -111,5 +111,3 @@ export type ContentTreeArray = {
   summary?: string | undefined;
   body: string;
 };
-
-export const LANGUAGECODES = ["zh", "es", "pt"];

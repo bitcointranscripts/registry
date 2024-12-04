@@ -1,5 +1,6 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
-import { ContentTreeArray, LANGUAGECODES } from "./data";
+import { ContentTreeArray } from "./data";
+import { LanguageCodes } from "../config";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -52,8 +53,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
-  const languageCodes = ["zh", "es", "pt"];
-  const languageRegex = new RegExp(`\\.(${languageCodes.join("|")})(\\.md)?$`);
+  const languageRegex = new RegExp(`\\.(${LanguageCodes.join("|")})(\\.md)?$`);
 
   const transcripts = shuffle(allTranscripts).filter((transcript) => {
     return transcript.date && !languageRegex.test(transcript.url);
@@ -250,7 +250,7 @@ export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
 };
 
 export const constructSlugPaths = (slug: string[]) => {
-  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !LANGUAGECODES.includes(slug[0]);
+  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !LanguageCodes.includes(slug[0]);
   const englishSlug = ["en", ...slug];
   const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
   [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];

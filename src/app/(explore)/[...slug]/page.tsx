@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ContentTreeArray, LANGUAGECODES } from "@/utils/data";
+import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
@@ -12,12 +12,13 @@ import { allSources as allContentSources, allTranscripts } from "contentlayer/ge
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
+import { LanguageCodes } from "@/config";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const languageSlugs = LANGUAGECODES.map((lang) => ({ slug: [lang, "sources"] }));
+  const languageSlugs = LanguageCodes.map((lang) => ({ slug: [lang, "sources"] }));
 
   const allSlugs = allContentSources.map(({ language, slugAsParams }) => {
     const isEnglish = language === "en";
@@ -44,7 +45,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   let currentLanguageSource: any = allSources;
   let languageTreeArray: { slug: string; name: string; count: number }[] = [];
 
-  const isRouteForLanguage = slug.length === 2 && LANGUAGECODES.includes(slug[0]) && slug[1] === "sources";
+  const isRouteForLanguage = slug.length === 2 && LanguageCodes.includes(slug[0]) && slug[1] === "sources";
 
   if (isRouteForLanguage) {
     const language = slug[0];
