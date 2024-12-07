@@ -3,24 +3,20 @@
 import React, { useState } from "react";
 import { Transcript } from "contentlayer/generated";
 import { DiceIcon } from "@bitcoin-dev-project/bdp-ui/icons";
-import SourceCountData from "@/public/source-count-data.json";
 import TranscriptCard from "../TranscriptCard";
 
 const FeaturedTranscriptClient = ({
   featuredTranscripts,
   latestTranscripts,
 }: {
-  featuredTranscripts: Transcript[];
-  latestTranscripts: Array<Transcript & { days_opened: number }>;
+  featuredTranscripts: (Transcript & { sourceName: string })[];
+  latestTranscripts: Array<Transcript & { daysOpened: number; sourceName: string }>;
 }) => {
   const [featured, setFeatured] = useState(featuredTranscripts);
 
   const randomise = async () => {
     setFeatured([...featuredTranscripts].sort(() => 0.5 - Math.random()));
   };
-
-  const getSourceFromTranscript = (data: Transcript) =>
-    SourceCountData.find((source) => source.slug === data.slugAsParams[0])?.name ?? (data.slugAsParams as Array<string>)[0];
 
   return (
     <div className='flex items-start flex-col gap-14 w-full z-10'>
@@ -36,7 +32,7 @@ const FeaturedTranscriptClient = ({
         </section>
         <div className='grid auto-rows-max gap-5 max-sm:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-2 grid-cols-3'>
           {featured.slice(0, 3).map((transcript, idx) => (
-            <TranscriptCard data={transcript} key={idx} source={getSourceFromTranscript(transcript)} />
+            <TranscriptCard data={transcript} key={idx} sourceName={transcript.sourceName} />
           ))}
         </div>
       </section>
@@ -45,7 +41,7 @@ const FeaturedTranscriptClient = ({
         <h3 className='text-2xl font-semibold max-md:text-xl'>Latest Transcripts</h3>
         <div className='grid auto-rows-max gap-5 max-sm:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-2 grid-cols-3'>
           {latestTranscripts.map((transcript, idx) => (
-            <TranscriptCard data={transcript} daysOpened={transcript.days_opened} key={idx} source={getSourceFromTranscript(transcript)} />
+            <TranscriptCard data={transcript} daysOpened={transcript.daysOpened} sourceName={transcript.sourceName} key={idx} />
           ))}
         </div>
       </section>
