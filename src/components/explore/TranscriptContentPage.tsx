@@ -57,6 +57,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
     };
   });
 
+  // remove language codes from paths passed to breadcrumbs
   const allRoutes = routes.filter((route) => !LanguageCodes.includes(route.name))
 
   return (

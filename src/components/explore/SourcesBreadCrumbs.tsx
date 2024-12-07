@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExploreNavigationItems } from "@/utils/data";
-import { LanguageCodes } from '@/config';
 
 export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]; current: any }) => {
   const pathname = usePathname();
@@ -14,13 +13,15 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
   const pathnameArray = pathname.replace(`/${language}`, "").split("/");
   const isNotSourcesPage = navListWithoutSources.includes(pathnameArray[1]);
 
-  const isEnglishSlug = language === "en" && language.length == 2 && !LanguageCodes.includes(language);
+  const isEnglishSlug = language === "en";
   const allRoutes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")
+      // we use the isEnglishSlug to determine the number of slugs to be sliced to appropriately create the path route.
       .slice(0, idx + (isEnglishSlug ? 1 : 2))
       .join("/");
-    return { name: path || "home", link: route || "/" };
+
+    return { name: path || "home", link: idx === 0 ? "/" : route || "/" };
   });
 
   if (!isNotSourcesPage && pathnameArray[1] !== "sources") {

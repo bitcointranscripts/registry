@@ -6,7 +6,7 @@ import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
-import { constructSlugPaths, createLanguageTreeArray, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
+import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { allSources as allContentSources, allTranscripts } from "contentlayer/generated";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
@@ -59,7 +59,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
       }
     });
 
-    languageTreeArray = createLanguageTreeArray(languageTree);
+    languageTreeArray = deriveSourcesList(languageTree);
 
     return (
       <div className='flex flex-col text-black'>

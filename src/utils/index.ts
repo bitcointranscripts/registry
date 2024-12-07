@@ -294,7 +294,10 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
   };
 };
 
-export const createLanguageTreeArray = (languageTree: any) => {
+export const deriveSourcesList = (languageTree: any) => {
+  // This function derives a list of sources based on the provided input data which is nested tree o.
+  // It processes the input to return the slug, name and count of the source.
+
   const getValues = Object.entries(languageTree).map(([key, value]) => {
     const valDetails = (value as unknown as any).data;
 
@@ -317,13 +320,11 @@ export const createLanguageTreeArray = (languageTree: any) => {
       return count;
     };
 
-    const getSourceDetails = {
+    return {
       slug: key,
       name: (value as unknown as any)?.metadata.title,
       count: extractCount(valDetails),
     };
-
-    return getSourceDetails;
   });
 
   return getValues;
