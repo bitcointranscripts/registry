@@ -5,7 +5,6 @@ import GroupedTranscriptContent from "./GroupedTranscriptContent";
 import AlphabetGrouping from "./AlphabetGrouping";
 import {
   createSlug,
-  DepreciatedCategories,
   groupDataByAlphabet,
   GroupedData,
   sortKeysAlphabetically,
