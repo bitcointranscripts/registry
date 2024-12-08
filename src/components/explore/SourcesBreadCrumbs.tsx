@@ -13,16 +13,19 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
   const pathnameArray = pathname.replace(`/${language}`, "").split("/");
   const isNotSourcesPage = navListWithoutSources.includes(pathnameArray[1]);
 
+  const isEnglishSlug = language === "en";
   const allRoutes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")
-      .slice(0, idx + 1)
+      // we use the isEnglishSlug to determine the number of slugs to be sliced to appropriately create the path route.
+      .slice(0, idx + (isEnglishSlug ? 1 : 2))
       .join("/");
-    return { name: path || "home", link: route || "/" };
+
+    return { name: path || "home", link: idx === 0 ? "/" : route || "/" };
   });
 
   if (!isNotSourcesPage && pathnameArray[1] !== "sources") {
-    allRoutes.splice(1, 0, { name: "Sources", link: "/sources" });
+    allRoutes.splice(1, 0, { name: "Sources", link: `${isEnglishSlug ? "/sources" : `/${language}/sources`}` });
   }
 
   const breadCrumbData = () => {
