@@ -5,7 +5,6 @@ import GroupedTranscriptContent from "./GroupedTranscriptContent";
 import AlphabetGrouping from "./AlphabetGrouping";
 import {
   createSlug,
-  DepreciatedCategories,
   groupDataByAlphabet,
   GroupedData,
   sortKeysAlphabetically,
@@ -14,6 +13,7 @@ import MobileAlphabetGrouping from "./MobileAlphabetGrouping";
 import ContentGrouping from "./ContentGrouping";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
+import { LanguageCodes } from '@/config';
 
 interface ITranscriptContentPage {
   header: string;
@@ -21,7 +21,7 @@ interface ITranscriptContentPage {
   mobileDescription?: string;
   data: any /* A Json that changes could be topics, speakers, categories  */;
   type: "alphabet" | "words";
-  linkName: DepreciatedCategories;
+  linkName: string;
 }
 
 const TranscriptContentPage: FC<ITranscriptContentPage> = ({
@@ -43,7 +43,8 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
   const pathname = usePathname();
   const pathnameArray = pathname.split("/");
-  const allRoutes = pathnameArray.map((path, idx) => {
+
+  const routes = pathnameArray.map((path, idx) => {
     const route = pathname
       .split("/")
       .slice(0, idx + 1)
@@ -55,6 +56,10 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
       isActive: idx === pathnameArray.length - 1,
     };
   });
+
+  // remove language codes from paths passed to breadcrumbs
+  const allRoutes = routes.filter((route) => !LanguageCodes.includes(route.name))
+
   return (
     <div className="flex items-start relative lg:gap-[50px]">
       <div className="flex flex-col w-full gap-6 lg:gap-10 no-scrollbar">

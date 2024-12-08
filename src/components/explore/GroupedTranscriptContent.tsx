@@ -1,14 +1,13 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import SingleTranscriptContent from "./SingleTranscriptContent";
-import { createSlug, DepreciatedCategories, TopicsData } from "@/utils";
+import { createSlug, TopicsData } from "@/utils";
 import { useInView } from "react-intersection-observer";
-import { root } from "postcss";
 
 interface IGroupedTranscriptContent {
   topicsByAlphabet: [string, TopicsData[]];
   setCurrentGroup: React.Dispatch<React.SetStateAction<string>>;
-  linkName: DepreciatedCategories;
+  linkName: string;
   type: "alphabet" | "words";
 }
 
