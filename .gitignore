@@ -27,6 +27,7 @@
 /public/speaker-data.json
 /public/source-count-data.json
 /public/sources-data.json
+/public/reviewers-data.json
 
 # misc
 .DS_Store
@@ -39,7 +40,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
+.env
 # vercel
 .vercel
 

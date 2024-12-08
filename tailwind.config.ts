@@ -36,7 +36,8 @@ const config: Config = {
         },
         blue: {
           "custom-100": "#2A58FE",
-          "custom-200" :"#2A66FF"
+          "custom-200" :"#2A66FF",
+          "custom-300": "#F0F1FA"
         },
         orange: {
           "custom-100": "#F7931A",
@@ -48,6 +49,7 @@ const config: Config = {
           "custom-700": "#FFF0E0",
           "custom-800": "#FFF7F0",
           "custom-900": "#FFF1E3",
+          "custom-1000": "#FCEDED",
         },
         purple: {
           "custom-100": "#F2F0FF",
@@ -58,6 +60,13 @@ const config: Config = {
           "custom-200": "#202020",
           "custom-300": "#464646",
           "custom-400": "#525252",
+          "custom-500": "#0B0A0A"
+        },
+        pink: {
+          "custom-100": "#FCEDF3",
+        },
+        green: {
+          "custom-100": "#ECF9F1",
         },
         "custom-white": {
           "custom-100": "#F2F2F2",
