@@ -1,11 +1,5 @@
 import { StaticImageData } from "next/image";
-import chatbtc from "/public/images/chat-btc.jpg";
-import bitcoinSearch from "/public/images/bitcoin-search.jpg";
-import bitcointldr from "/public/images/bitcoin-tldr.jpg";
-import savingSatoshi from "/public/images/saving-satoshi.jpg";
-import transcriptsreview from "/public/images/bitcoin-transcripts-review.jpg";
-import bitcoindevs from "/public/images/bitcoin-devs.jpg";
-import { IsoDateTimeString, Markdown } from "contentlayer2/core";
+import { IsoDateTimeString } from "contentlayer2/core";
 
 export type MenuApp = {
   href: string;
@@ -17,37 +11,37 @@ export type MenuApp = {
 export const menuApps = [
   {
     href: "https://bitcoindevs.xyz/",
-    image: bitcoindevs,
+    image: "/images/bitcoin-devs.jpg",
     alt: "Bitcoin Devs",
     title: "Study & contribute to bitcoin and lightning open source",
   },
   {
     href: "https://chat.bitcoinsearch.xyz",
-    image: chatbtc,
+    image: "/images/chat-btc.jpg",
     alt: "ChatBTC image",
     title: "Interactive AI chat to learn about bitcoin technology and its history",
   },
   {
     href: "https://bitcoinsearch.xyz/",
-    image: bitcoinSearch,
+    image: "/images/bitcoin-search.jpg",
     alt: "Bitcoin search",
     title: "Technical bitcoin search engine",
   },
   {
     href: "https://tldr.bitcoinsearch.xyz/",
-    image: bitcointldr,
+    image: "/images/bitcoin-tldr.jpg",
     alt: "Bitcoin TLDR",
     title: "Daily summary of key bitcoin tech development discussions and updates",
   },
   {
     href: "https://savingsatoshi.com",
-    image: savingSatoshi,
+    image: "/images/saving-satoshi.jpg",
     alt: "Saving Satoshi",
     title: "Engaging bitcoin dev intro for coders using technical texts and code challenges",
   },
   {
     href: "https://review.btctranscripts.com/",
-    image: transcriptsreview,
+    image: "/images/bitcoin-transcripts-review.jpg",
     alt: "Bitcoin Transcripts Review",
     title: "Review technical bitcoin transcripts and earn sats",
   },
