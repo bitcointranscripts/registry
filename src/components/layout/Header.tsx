@@ -202,16 +202,17 @@ const Header = () => {
 
         <SearchComponent />
 
-        <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden'>
+        {/* add active states of navigation links */}
+        <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden h-full'>
           <div className='max-md:hidden hidden'>
             <LanguageSwitcher />
           </div>
           <div className='max-md:hidden hidden'>
             <ThemeSwitcher />
           </div>
-          <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
+          <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden h-full'>
             <Link href='/categories'>Transcripts</Link>
-            <Link href='/about' className='hidden'>
+            <Link href='/about' className=''>
               About
             </Link>
           </nav>
@@ -220,21 +221,21 @@ const Header = () => {
           </div>
         </section>
 
-      <div className='max-md:gap-4 items-center md:hidden max-md:flex'>
-        <button className='md:hidden max-md:flex hidden'>
-          <SearchIcon className='text-black w-6' />
-        </button>
-        <button className='md:hidden max-md:flex h-8 w-8 items-center justify-center' onClick={() => setOpen(!open)}>
-          {open ? <CloseIconOutlined className='w-5' /> : <Image src={MenuIcon} alt='menu icon' />}
-        </button>
-      </div>
-      {open ? (
-        <div className='w-full bg-white top-[86px] left-0 right-0 bottom-0 p-4 z-40 pt-3 pb-8 overflow-scroll md:hidden max-md:fixed'>
-          <MobileMenu setOpen={setOpen} />
+        <div className='max-md:gap-4 items-center md:hidden max-md:flex'>
+          <button className='md:hidden max-md:flex hidden'>
+            <SearchIcon className='text-black w-6' />
+          </button>
+          <button className='md:hidden max-md:flex h-8 w-8 items-center justify-center' onClick={() => setOpen(!open)}>
+            {open ? <CloseIconOutlined className='w-5' /> : <Image src={MenuIcon} alt='menu icon' />}
+          </button>
         </div>
-      ) : null}
-    </Wrapper>
-  </div>
+        {open ? (
+          <div className='w-full bg-white top-[86px] left-0 right-0 bottom-0 p-4 z-40 pt-3 pb-8 overflow-scroll md:hidden max-md:fixed'>
+            <MobileMenu setOpen={setOpen} />
+          </div>
+        ) : null}
+      </Wrapper>
+    </div>
   );
 };
 
