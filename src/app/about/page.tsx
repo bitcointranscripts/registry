@@ -13,9 +13,9 @@ const page = () => {
   return (
     <main className='flex flex-col items-center justify-center w-full'>
       <Wrapper className='text-black flex flex-col max-sm:px-3'>
-        <div className='text-center py-10 md:py-[104px] '>
+        <div className='text-center py-10 md:py-[104px] flex flex-col items-center justify-center'>
           <h1 className='text-[40px] leading-[48px] font-medium md:text-6xl 2xl:text-7xl'>What Is Bitcoin Transcripts?</h1>
-          <p className='text-base md:text-xl 2xl:text-2xl 2xl:leading-[33.84px] md:max-w-[1050px] max-w-[1195px] pt-10 md:pt-12 2xl:pt-14'>
+          <p className='text-base md:text-xl 2xl:text-2xl 2xl:leading-[33.84px] md:max-w-[1050px] max-w-[1195px] pt-10 md:pt-12 2xl:pt-14 text-center w-full'>
             Bitcoin Transcripts unlocks the wisdom, knowledge, and history from bitcoin tech podcasts, presentations, and other audio-visual media. We
             make technical bitcoin knowledge more accessible to learners, builders, and educators.
           </p>
@@ -50,7 +50,7 @@ const page = () => {
         </div>
 
         <Wrapper className='flex flex-col gap-6 max-sm:px-3 py-10 md:py-[104px] max-w-[1345px]'>
-          <div className='text-center pb-10 md:pb-16'>
+          <div className='text-center pb-10 md:pb-16 flex flex-col items-center justify-center'>
             <h1 className='text-[40px] leading-[48px] font-medium md:text-6xl 2xl:text-7xl'>How It Works</h1>
             <p className='text-base md:text-xl 2xl:text-2xl 2xl:leading-[33.84px] md:max-w-[1050px] max-w-[1195px] pt-10 md:pt-12 2xl:pt-14'>
               At Bitcoin Transcripts we are building a largely autonomous transcription workflow that streamlines the AI-generation, review by humans,
@@ -58,7 +58,7 @@ const page = () => {
             </p>
           </div>
 
-          <div className='flex flex-col gap-10 md:gap-20'>
+          <div className='flex flex-col gap-10 md:gap-20 relative'>
             {processFlowData.map((item) => (
               <div key={item.title} className='flex flex-row items-center gap-4 sm:gap-[31px]'>
                 <section
@@ -101,7 +101,7 @@ const page = () => {
 
           <GroupedImageSection
             title='Reviewers'
-            subText='Editors evaluate and finalize Reviewers submissions, ensuring they’re consistently high quality.'
+            subText='Reviewers edit AI-generated transcripts, improving accuracy and readability.'
             data={reviewers}
             buttonText='Become a Reviewer'
             href='https://review.btctranscripts.com'
@@ -141,7 +141,12 @@ const GroupedImageSection = ({
       <div className='flex items-center justify-center pt-8 md:pt-14'>
         <div className='flex gap-5 md:gap-5 max-w-[1060px] flex-wrap justify-center'>
           {Object.values(data).map(({ title, image }) => (
-            <div key={title} className='flex flex-col items-center justify-center w-[150px] md:w-[160px] max-[340px]:w-[130px] gap-2 md:px-[14px]'>
+            <Link
+              href={`https://github.com/${title}`}
+              key={title}
+              target='_blank'
+              className='flex flex-col items-center justify-center w-[150px] md:w-[160px] max-[340px]:w-[130px] gap-2 md:px-[14px]'
+            >
               <Image
                 src={image}
                 alt={title}
@@ -149,10 +154,10 @@ const GroupedImageSection = ({
                 height={132}
                 className='w-[100px] md:w-[132px] h-[100px] md:h-[132px] bg-black rounded-full border-[0.5px]'
               />
-              <p className='text-custom-black-custom-400 text-sm leading-[22.12px] font-medium md:text-base md:font-semibold md:leading-[25.28px] whitespace-nowrap'>
+              <p className='text-custom-black-custom-400 text-sm leading-[22.12px] font-medium md:text-base md:font-semibold md:leading-[25.28px] whitespace-nowrap max-w-full text-nowrap overflow-hidden text-ellipsis'>
                 {title}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

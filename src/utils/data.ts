@@ -145,7 +145,7 @@ export const processFlowData = [
   },
   {
     title: "Final Publication",
-    content: "Editors review and approve finalized transcripts.",
+    content: "Approved transcripts are updated on the Registry as final versions, and Reviewers receive a payout for their work",
     image: "/svgs/final-publication-icon.svg",
     bgColor: "#FCEDF3",
   },

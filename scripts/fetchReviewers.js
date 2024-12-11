@@ -7,8 +7,8 @@ dotenv.config();
 const url = `https://api.github.com/repos/bitcointranscripts/bitcointranscripts`;
 const token = process.env.GITHUB_ACCESS_TOKEN;
 
-if (!process.env.GITHUB_ACCESS_TOKEN) {
-  throw new Error("Environment variable MY_SECRET_KEY is not set");
+if (!token && process.env.NODE_ENV === "production") {
+  throw new Error("Environment variable GITHUB_ACCESS_TOKEN is not set");
 }
 
 async function fetchAllReviewers() {
