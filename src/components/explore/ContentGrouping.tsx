@@ -40,7 +40,7 @@ const ContentGrouping = ({
       {screen === "desktop" && (
         <div
           className={twMerge(
-            " flex-col p-5 hidden lg:flex gap-2.5 border max-h-[calc(95vh-var(--header-height))] overflow-auto scroller border-gray-custom-1200 rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
+            " flex-col p-5 hidden lg:flex gap-2.5 border max-h-[calc(90vh-var(--header-height))] overflow-auto scroller border-gray-custom-1200 rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
             className
           )}
         >

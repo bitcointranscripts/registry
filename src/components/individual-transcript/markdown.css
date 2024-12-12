@@ -33,12 +33,25 @@ span.code-line {
 }
 
 .wmde-markdown p {
-
     margin-bottom: 8px;
     color: #000;
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 2.1875rem;
+}
+
+.wmde-markdown ul li {
+    list-style-type: circle;
+    color: #000;
+}
+
+.wmde-markdown ul {
+    padding-left: 1em;
+}
+
+.wmde-markdown ol {
+    margin: 0px !important;
+    font-weight: 400;
 }
 
 .wmde-markdown a.anchor {
@@ -48,9 +61,6 @@ span.code-line {
 @media (min-width: 1024px) {
 
     .wmde-markdown h1, .wmde-markdown h2 {
-        /* margin: 0px !important; */
-        scroll-margin-top: 100px;
-        color: #000;
         padding-top: 10px;
         padding-bottom: 10px;
         margin: 12px 0px !important;
@@ -63,25 +73,15 @@ span.code-line {
     }
 
     .wmde-markdown p {
-        margin: 0px !important;
-        color: #000;
         font-weight: 400;
         font-size: 1rem;
         line-height: 2.1875rem;
     }
     .wmde-markdown ul,.wmde-markdown ol {
         margin: 0px !important;
-        color: #000;
         font-weight: 400;
         font-size: 1rem;
         line-height: 2.1875rem;
-    }
-    .wmde-markdown ul, .wmde-markdown li {
-        list-style-type: circle;
-    }
-
-    .wmde-markdown a.anchor {
-        display: none !important;
     }
 }
 
@@ -93,17 +93,10 @@ span.code-line {
     }
 
     .wmde-markdown h3,.wmde-markdown h4, .wmde-markdown h5, .wmde-markdown h6 {
-        color: #000;
         font-size: 1rem;
     }
 
     .wmde-markdown p {
-        margin: 0px !important;
-        color: #000;
         line-height: 2rem;
-    }
-
-    .wmde-markdown a.anchor {
-        display: none !important;
     }
 }

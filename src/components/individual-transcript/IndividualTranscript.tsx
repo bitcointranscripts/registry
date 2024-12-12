@@ -56,7 +56,7 @@ const IndividualTranscript = ({
           </div>
 
           <div>
-            <div className="pt-4 md:pt-5 2xl:pt-6 pb-[var(--header-height)] xl:pb-[calc(60vh-var(--header-height))]">
+            <div className="pt-4 md:pt-5 2xl:pt-6 pb-10">
               <Tabs
                 markdown={transcript.body.raw}
                 summary={transcript?.summary}
