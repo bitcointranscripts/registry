@@ -2,14 +2,13 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import allTopics from "@/public/topics-counts.json"
 import {
   BookmarkIcon,
   CalendarIcon,
   MicIcon,
 } from "@bitcoin-dev-project/bdp-ui/icons";
 import Link from "next/link";
-import { createSlug } from "@/utils";
+import { ContentData, createSlug } from "@/utils";
 import AiGeneratedIcon from "../svgs/AIGeneratedIcon";
 import { format, isDate } from "date-fns";
 import Pill from "./Pill";
@@ -17,7 +16,7 @@ import Pill from "./Pill";
 interface ITranscriptMetadataComponent {
   title: string;
   date: string | Date;
-  topics: string[];
+  topics: ContentData[];
   speakers: string[] | null;
   transcriptBy: string | string[];
 }
@@ -39,10 +38,6 @@ const TranscriptMetadataComponent = ({
  
   const formattedDate =   isDate(convertedDate) ? format(convertedDate, "d MMMM, yyyy") : "";
 
-  const topicsWithTitles =  topics.map(topic => {
-    const currentTopic =  allTopics.find( topicData => topicData.slug === topic );
-    return currentTopic;
-  } )
 
   return (
     <div className="border flex text-black flex-col rounded-2xl p-4 md:p-5 2xl:p-6 gap-4 w-full border-gray-custom-1200">
@@ -112,9 +107,9 @@ const TranscriptMetadataComponent = ({
             }
             footer={
               <div className="flex flex-wrap gap-2">
-                {(topicsWithTitles && topicsWithTitles.length > 0) ?
-                  topicsWithTitles.map((topic) => (
-                    <Pill key={topic?.slug} name={topic?.name || ""} slug={`/tags/${createSlug(topic?.slug || "")}`} />
+                {(topics && topics.length > 0) ?
+                  topics.map((topic) => (
+                    <Pill key={topic.slug} name={topic.name} slug={`/tags/${topic.slug}`} />
                   )):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
                 }

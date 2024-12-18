@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import { IsoDateTimeString } from "contentlayer2/core";
+import { ContentData } from ".";
 
 export type MenuApp = {
   href: string;
@@ -105,6 +106,7 @@ export type ContentTreeArray = {
   speakers?: string[] | undefined;
   date?: IsoDateTimeString | undefined;
   tags?: string[] | undefined;
+  tagsDetailed?: ContentData[];
   languageURL?: string;
   sourceFilePath: string;
   flattenedPath: string;
