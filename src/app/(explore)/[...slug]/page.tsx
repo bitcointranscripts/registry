@@ -126,7 +126,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
                         href={resource.url ?? ""}
                         key={`${resource.title}-${index}`}
                         target='_blank'
-                        className='py-[2px] px-4 rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
+                        className='py-[2px] px-4 rounded-[5px] bg-custom-white text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
                       >
                         {resource.title}
                       </Link>
