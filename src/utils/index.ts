@@ -266,14 +266,14 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
   if (!isRoot || paths.length === 0) return { transcripts: [] };
 
   const transcripts = allTranscripts.reduce((acc, curr) => {
-    const { url, title, speakers, date, tags, _raw, summary, body, languageURL } = curr;
+    const { url, title, speakers, date, tagsDetailed, _raw, summary, body, languageURL } = curr;
 
     if (paths.includes(url)) {
       acc.push({
         title,
         speakers,
         date,
-        tags,
+        tagsDetailed,
         languageURL,
         sourceFilePath: _raw.sourceFilePath,
         flattenedPath: _raw.flattenedPath,

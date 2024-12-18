@@ -91,7 +91,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
           </div>
         </div>
 
-        <div className="flex-col flex gap-10  pb-[calc(90vh-var(--header-height))]">
+        <div className="flex-col flex gap-10  pb-10">
           {groupedData &&
             type === "alphabet" &&
             Object.entries(groupedData).map((arg, i) => (
