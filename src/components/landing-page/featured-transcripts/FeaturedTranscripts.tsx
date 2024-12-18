@@ -3,9 +3,10 @@ import { extractTranscripts } from "@/utils";
 import { allTranscripts } from "contentlayer/generated";
 import Wrapper from "@/components/layout/Wrapper";
 import FeaturedTranscriptClient from "./FeaturedTranscriptClient";
+import SourceCountData from "@/public/source-count-data.json";
 
 const FeaturedTranscripts = () => {
-  const { latestTranscripts, featuredTranscripts } = extractTranscripts(allTranscripts);
+  const { latestTranscripts, featuredTranscripts } = extractTranscripts(allTranscripts, SourceCountData);
 
   return (
     <div className='flex items-center justify-center w-full bg-gray-custom-100'>

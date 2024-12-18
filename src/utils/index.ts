@@ -49,7 +49,10 @@ export function shuffle(data: Transcript[]) {
   return data;
 }
 
-export const extractTranscripts = (allTranscripts: Transcript[]) => {
+const getSourceFromTranscript = (data: Transcript, SourceCountData:ContentData[]) =>
+  SourceCountData.find((source) => source.slug === data.slugAsParams[0])?.name ?? (data.slugAsParams as Array<string>)[0];
+
+export const extractTranscripts = (allTranscripts: Transcript[],SourceCountData:ContentData[]) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
@@ -62,26 +65,30 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   // Sort and slice in one pass
   const latestTranscripts = transcripts.reduce((acc, transcript) => {
     const transcriptDate = new Date(transcript.date as string).getTime();
-    const days_opened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
+    const daysOpened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
 
-    acc.push({ ...transcript, days_opened });
+    acc.push({ ...transcript, daysOpened, sourceName: getSourceFromTranscript(transcript, SourceCountData) });
     acc.sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
 
     if (acc.length > 3) acc.pop();
     return acc;
-  }, [] as (Transcript & { days_opened: number })[]);
+  }, [] as (Transcript & { daysOpened: number; sourceName: string })[]);
 
-  const featuredTranscripts = getFeaturedTranscripts(transcripts);
+  const featuredTranscripts = getFeaturedTranscripts(transcripts, SourceCountData);
 
   return { latestTranscripts, featuredTranscripts };
 };
 
-export const getFeaturedTranscripts = (allTranscripts: Transcript[]) => {
-  const featuredTranscripts = allTranscripts
-    .filter((transcript) => transcript.speakers)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 60);
+export const getFeaturedTranscripts = (allTranscripts: Transcript[],SourceCountData:ContentData[]) => {
+  let featuredTranscripts: (Transcript & { sourceName: string })[] = [];
 
+  for (const transcript of allTranscripts) {
+    if (transcript.speakers) {
+      featuredTranscripts.push({ ...transcript, sourceName: getSourceFromTranscript(transcript, SourceCountData) });
+    }
+  }
+
+  featuredTranscripts = featuredTranscripts.sort(() => Math.random() - 0.5).slice(0, 60);
   return featuredTranscripts;
 };
 
