@@ -49,7 +49,7 @@ const IndividualTranscript = ({
             <TranscriptMetadataComponent
               title={transcript.title}
               date={transcript.date || ""}
-              topics={transcript.tags || []}
+              topics={transcript.tagsDetailed || []}
               speakers={transcript.speakers || []}
               transcriptBy={transcript.transcript_by || ""}
             />

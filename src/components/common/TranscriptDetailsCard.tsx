@@ -4,14 +4,13 @@ import Image from "next/image";
 import { ContentTreeArray } from "@/utils/data";
 import DateIcon from "/public/svgs/date-icon.svg";
 import TagsIcon from "/public/svgs/tags-icon.svg";
-import { createSlug, formatDate, unsluggify } from "@/utils";
+import { ContentData, createSlug, formatDate, unsluggify } from "@/utils";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
 
-const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: string[] }) => {
-  const { speakers, tags, summary, date, title, body, languageURL } = data;
-
-  const calculateRemaining = (data: string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
+const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[] }) => {
+  const { speakers, tagsDetailed,  summary, date, title, body, languageURL } = data;
+  const calculateRemaining = (data: ContentData[] | string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
 
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
@@ -57,20 +56,20 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
         ) : null}
 
         <section className='flex gap-2 items-center max-md:gap-1'>
-          {tags?.length ? (
+          {tagsDetailed?.length ? (
             <>
               <span>
                 <Image src={TagsIcon} alt='date icon' className='w-5 md:w-6' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
-                  {tags.slice(0, 3).map((tag, idx) => (
-                    <Pill key={idx} name={tag} slug={`/tags/${createSlug(tag)}`}  />
+                  {tagsDetailed.slice(0, 3).map((tag, idx) => (
+                    <Pill key={idx} name={tag.name} slug={`/tags/${tag.slug}`}  />
                   ))}
 
-                  {calculateRemaining(tags) === 0 ? null : (
+                  {calculateRemaining(tagsDetailed) === 0 ? null : (
                     <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
-                      + {calculateRemaining(tags)} more
+                      + {calculateRemaining(tagsDetailed)} more
                     </p>
                   )}
                 </div>
