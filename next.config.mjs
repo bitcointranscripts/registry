@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+import exp from "constants";
 import { withContentlayer } from "next-contentlayer2";
 const nextConfig = {
   rewrites: async () => {
@@ -48,6 +49,9 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
   },
 };
 
