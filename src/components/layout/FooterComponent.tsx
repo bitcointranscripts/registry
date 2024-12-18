@@ -20,10 +20,8 @@ const FooterComponent = () => {
             </p>
           </section>
           <section className='flex flex-col gap-12 text-black font-bold text-xl underline max-xl:text-base max-xl:gap-8 max-md:gap-4'>
-            <Link href='/categories'>
-              Transcripts
-            </Link>
-            <Link href='/about' className='hidden'>
+            <Link href='/categories'>Transcripts</Link>
+            <Link href='/about' className=''>
               About
             </Link>
           </section>
