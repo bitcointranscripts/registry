@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -9,6 +9,8 @@ import { MenuApp, menuApps } from "@/utils/data";
 import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Wrapper from "./Wrapper";
 import Logo from "./Logo";
+import SearchBox from "../search/SearchBox";
+import { useRouter } from "next/navigation";
 
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
@@ -163,23 +165,9 @@ export function ThemeSwitcher() {
   );
 }
 
-const SearchComponent = () => {
-  return (
-    <div className='hidden'>
-      {/* <div className='md:flex relative w-full max-w-[540px] max-md:hidden hidden'> */}
-      <input
-        placeholder='Search here'
-        className='max-w-[540px] w-full h-[66px] max-xl:h-12 text-gray-custom-300 outline-none rounded-[14px] border border-gray-custom-400 bg-gray-custom-100 px-6'
-      />
-      <button className='h-[66px] w-[72px] flex items-center justify-center bg-orange-custom-100 absolute right-[-1px] rounded-r-[14px]  max-xl:h-12 max-xl:w-12'>
-        <SearchIcon className='text-white w-[18px]' />
-      </button>
-    </div>
-  );
-};
-
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     document.body.classList.toggle("overflow-hidden", open);
@@ -200,7 +188,7 @@ const Header = () => {
           </nav>
         </section>
 
-        <SearchComponent />
+        <SearchBox />
 
         {/* add active states of navigation links */}
         <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden h-full'>
