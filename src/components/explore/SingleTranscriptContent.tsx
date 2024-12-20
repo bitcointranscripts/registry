@@ -6,7 +6,25 @@ type SingleContent = {
   linkName: string;
 } & TopicsData;
 const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent) => {
-  const url = linkName === "sources" ? `/${slug}` : `/${linkName}/${slug}`;
+  let url = ""
+
+  switch (linkName) {
+    case "sources":
+      url = `/${slug}`;
+      break;
+    case "tags":
+      url = `/search?filter_tags=${slug}`;
+      break;
+    case "categories":
+      url = `/search?filter_tags=${slug}`;
+      break;
+    case "speakers":
+      url = `/search?filter_authors=${name}`;
+      break;
+    default:
+      url = `/${linkName}/${slug}`;
+      break;
+  }
 
   return (
     <Link

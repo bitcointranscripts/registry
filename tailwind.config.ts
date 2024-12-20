@@ -68,8 +68,10 @@ const config: Config = {
         green: {
           "custom-100": "#ECF9F1",
         },
-        "custom-white": {
-          "custom-100": "#F2F2F2",
+        custom: {
+          "primary-text": "#292929",
+          "accent": "var(--accent)",
+          "white": "#F2F2F2",
         },
       },
       fontFamily: {
