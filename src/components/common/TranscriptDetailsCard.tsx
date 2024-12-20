@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,11 +8,27 @@ import TagsIcon from "/public/svgs/tags-icon.svg";
 import { createSlug, formatDate, unsluggify } from "@/utils";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
+import { usePathname } from "next/navigation";
+import useURLManager from "@/service/URLManager/useURLManager";
 
 const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: string[] }) => {
+  const pathname = usePathname();
+  const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
+
+  const selectedSpeakers = getFilter("authors");
+  const selectedTags = getFilter("tags");
+
+  const isSearchPage = pathname.includes("search");
+  const basePath = isSearchPage ? "" : "/search";
+
   const { speakers, tags, summary, date, title, body, languageURL } = data;
 
   const calculateRemaining = (data: string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
+  const getSpeakerLink = (speaker: string) => {
+    const baseFilterParam = toggleFilterFromParams({ filterType: "authors", filterValue: speaker });
+    console.log({baseFilterParam});
+    return `${basePath}?${baseFilterParam}`;
+  }
 
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
@@ -42,7 +59,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {speakers.slice(0, 3).map((speaker, idx) => (
-                    <Pill key={speaker} name={speaker} slug={`/speakers/${createSlug(speaker)}`}  />
+                    <Pill key={speaker} kind="link" name={speaker} slug={getSpeakerLink(speaker)} isSelected={selectedSpeakers.includes(speaker)}/>
                   ))}
 
                   {calculateRemaining(speakers) === 0 ? null : (
@@ -65,7 +82,7 @@ const TranscriptDetailsCard = ({ data, slug }: { data: ContentTreeArray; slug: s
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {tags.slice(0, 3).map((tag, idx) => (
-                    <Pill key={idx} name={tag} slug={`/tags/${createSlug(tag)}`}  />
+                    <Pill key={idx} kind="button" name={tag} type={"tags"} toggleFilter={toggleFilter} isSelected={selectedTags.includes(tag)}/>
                   ))}
 
                   {calculateRemaining(tags) === 0 ? null : (
