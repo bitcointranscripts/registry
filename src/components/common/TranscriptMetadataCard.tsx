@@ -109,7 +109,7 @@ const TranscriptMetadataComponent = ({
               <div className="flex flex-wrap gap-2">
                 {(topics && topics.length > 0) ?
                   topics.map((topic) => (
-                    <Pill key={topic.slug} name={topic.name} slug={`/tags/${topic.slug}`} />
+                    <Pill key={topic.slug} kind="link" name={topic.name} slug={`/tags/${topic.slug}`} />
                   )):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
                 }
@@ -128,7 +128,7 @@ const TranscriptMetadataComponent = ({
               <div className="flex flex-wrap gap-2">
                 {speakers && speakers.length > 0 ?
                   speakers.map((speaker) => (
-                    <Pill key={speaker} name={speaker} slug={`/speakers/${createSlug(speaker)}`} />
+                    <Pill key={speaker} kind="link" name={speaker} slug={`/speakers/${createSlug(speaker)}`} />
                   )):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
                 }
