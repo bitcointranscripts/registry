@@ -80,7 +80,7 @@ export const ExploreTranscriptCard = ({
   let linkUrl = "";
   switch (type) {
     case "CATEGORY":
-      linkUrl = `/tags/#${parseUrl}`;
+      linkUrl = `/categories#${parseUrl}`;
       break;
     case "TYPE":
       linkUrl = `/types#${parseUrl}`;

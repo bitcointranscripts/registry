@@ -1,6 +1,12 @@
 import path from "path";
 import * as fs from "fs";
-import { createSlug, SpeakerData, TopicsData, unsluggify } from "./src/utils";
+import {
+  ContentData,
+  createSlug,
+  SpeakerData,
+  TopicsData,
+  unsluggify,
+} from "./src/utils";
 import {
   defineDocumentType,
   defineNestedType,
@@ -30,10 +36,10 @@ export interface Topic {
 
 // The full processed topic we use internally
 interface ProcessedTopic {
-  name: string;            // Display name (from topic.title or original tag)
-  slug: string;           // Slugified identifier
-  count: number;          // Number of occurrences
-  categories: string[];   // List of categories it belongs to
+  name: string; // Display name (from topic.title or original tag)
+  slug: string; // Slugified identifier
+  count: number; // Number of occurrences
+  categories: string[]; // List of categories it belongs to
 }
 
 interface TagInfo {
@@ -45,7 +51,6 @@ interface TagInfo {
 interface ContentTree {
   [key: string]: ContentTree | ContentTranscriptType[];
 }
-
 
 const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
   const aliases: Record<string, string> = {};
@@ -69,20 +74,24 @@ const getTopics = () => {
   return JSON.parse(fileContents);
 };
 
-function buildTopicsMap(transcripts: ContentTranscriptType[], topics: Topic[]): Map<string, ProcessedTopic> {
+
+function buildTopicsMap(
+  transcripts: ContentTranscriptType[],
+  topics: Topic[]
+): Map<string, ProcessedTopic> {
   // Create topics lookup map (includes aliases)
   const topicsLookup = new Map<string, Topic>();
-  topics.forEach(topic => {
+  topics.forEach((topic) => {
     topicsLookup.set(topic.slug, topic);
-    topic.aliases?.forEach(alias => topicsLookup.set(alias, topic));
+    topic.aliases?.forEach((alias) => topicsLookup.set(alias, topic));
   });
 
   // Build the main topics map
   const processedTopics = new Map<string, ProcessedTopic>();
 
   // Process all transcripts
-  transcripts.forEach(transcript => {
-    transcript.tags?.forEach(tag => {
+  transcripts.forEach((transcript) => {
+    transcript.tags?.forEach((tag) => {
       const slug = createSlug(tag);
       const topic = topicsLookup.get(slug);
 
@@ -99,11 +108,12 @@ function buildTopicsMap(transcripts: ContentTranscriptType[], topics: Topic[]): 
       }
     });
   });
-
   return processedTopics;
 }
 
-function generateAlphabeticalList(processedTopics: Map<string, ProcessedTopic>): TopicsData[] {
+function generateAlphabeticalList(
+  processedTopics: Map<string, ProcessedTopic>
+): TopicsData[] {
   const result: TopicsData[] = [];
   // The categories property is not needed for this list, so we drop it
   for (const { name, slug, count } of processedTopics.values()) {
@@ -112,30 +122,35 @@ function generateAlphabeticalList(processedTopics: Map<string, ProcessedTopic>):
   return result.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-function generateCategorizedList(processedTopics: Map<string, ProcessedTopic>): Record<string, TopicsData[]> {
+function generateCategorizedList(
+  processedTopics: Map<string, ProcessedTopic>
+): Record<string, TopicsData[]> {
   const categorizedTopics: Record<string, TopicsData[]> = {};
 
-  Array.from(processedTopics.values()).forEach(({ name, slug, count, categories }) => {
-    categories.forEach(category => {
-      if (!categorizedTopics[category]) {
-        categorizedTopics[category] = [];
-      }
-      
-      // Check if topic name contains category name and ends with "(Miscellaneous)"
-      const modifiedName = name.includes(category) && name.endsWith("(Miscellaneous)") 
-        ? "Miscellaneous"
-        : name;
-      
-      categorizedTopics[category].push({ name: modifiedName, slug, count });
-    });
-  });
+  Array.from(processedTopics.values()).forEach(
+    ({ name, slug, count, categories }) => {
+      categories.forEach((category) => {
+        if (!categorizedTopics[category]) {
+          categorizedTopics[category] = [];
+        }
+
+        // Check if topic name contains category name and ends with "(Miscellaneous)"
+        const modifiedName =
+          name.includes(category) && name.endsWith("(Miscellaneous)")
+            ? "Miscellaneous"
+            : name;
+
+        categorizedTopics[category].push({ name: modifiedName, slug, count });
+      });
+    }
+  );
 
   // Sort topics within each category
-  Object.values(categorizedTopics).forEach(topics => {
+  Object.values(categorizedTopics).forEach((topics) => {
     topics.sort((a, b) => {
       if (a.name == "Miscellaneous") return 1;
       if (b.name == "Miscellaneous") return -1;
-      return a.name.localeCompare(b.name)
+      return a.name.localeCompare(b.name);
     });
   });
 
@@ -331,7 +346,7 @@ function organizeContent(
   fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
 }
 
-const getLanCode = /[.]\w{2}$/gi // Removes the last two characters if there's a dot
+const getLanCode = /[.]\w{2}$/gi; // Removes the last two characters if there's a dot
 
 export const Transcript = defineDocumentType(() => ({
   name: "Transcript",
@@ -363,6 +378,32 @@ export const Transcript = defineDocumentType(() => ({
     source_file: { type: "string" },
   },
   computedFields: {
+    tagsDetailed: {
+      type: "list",
+      resolve: (doc) => {
+         // doc?.tags doesn't give an array in contentLayer so we do  _array to get it
+        const topicsStore = doc?.tags as any || []; 
+        const topics = (topicsStore?._array as string[]) ?? [];
+
+        const topicsWithTitles = topics.map((topic) => {
+          const currentTopic = getTopics().find(
+            (topicData: ContentData) => topicData.slug === topic
+          );
+
+          if(currentTopic?.title && currentTopic?.title.includes("(Miscellaneous)")) {
+            return { 
+              name: currentTopic?.title.replace("(Miscellaneous)",""),
+              slug: currentTopic.slug,
+            }
+          }
+          return { 
+              name: currentTopic?.title || topic,
+              slug: currentTopic?.slug || topic,
+          };
+        });
+        return topicsWithTitles;
+      },
+    },
     url: {
       type: "string",
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
@@ -389,7 +430,7 @@ export const Transcript = defineDocumentType(() => ({
         );
 
         const lan = transcript?.match(getLanCode);
-        const languageCode = (lan?.[0] || "").replace(".", "")
+        const languageCode = (lan?.[0] || "").replace(".", "");
 
         if (LanguageCodes.includes(languageCode)) {
           return `/${languageCode}/${fullPathWithoutDot}`;
@@ -401,10 +442,7 @@ export const Transcript = defineDocumentType(() => ({
     slugAsParams: {
       type: "list",
       resolve: (doc) => {
-        const pathWithoutDot = doc._raw.flattenedPath.replace(
-          getLanCode,
-          ""
-        );
+        const pathWithoutDot = doc._raw.flattenedPath.replace(getLanCode, "");
         return pathWithoutDot.split("/");
       },
     },
