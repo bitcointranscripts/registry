@@ -1,6 +1,7 @@
+import { ArbitraryCallback } from "@/app/search/types";
 import { useSearch } from "@/app/search/useSearch";
 
-const ShowFilterResultsMobile = ({callback} :{callback: () => void}) => {
+const ShowFilterResultsMobile = ({callback} :{callback: ArbitraryCallback}) => {
   const { totalResults } = useSearch().pagingInfo;
   return (
     <div

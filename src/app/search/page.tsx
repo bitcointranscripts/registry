@@ -7,6 +7,7 @@ import { useSearch } from "./useSearch";
 import NotFound from "../not-found";
 import { FilterIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { useUIContext } from "@/context/UIContext";
+import { SkeletonResults } from "@/components/search/Loader";
 
 
 const SearchPage = () => {
@@ -24,7 +25,7 @@ const SearchPage = () => {
   const noResults = totalResults === 0;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <SkeletonResults count={4} />;
   }
 
   if (isError) {

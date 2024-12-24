@@ -1,15 +1,11 @@
 "use client";
-import ExploreNavigation from "@/components/explore/ExploreNavigation";
 import FooterComponent from "@/components/layout/FooterComponent";
 import Wrapper from "@/components/layout/Wrapper";
 import FilterMenu from "@/components/search/FilterMenu";
 import ResultSize from "@/components/search/ResultsSize";
-import SidebarSection from "@/components/search/SidebarSection";
 import { Sort } from "@/components/search/Sort";
 import { setup } from "@/config";
 import { useUIContext } from "@/context/UIContext";
-import { MultiSelect } from "@bitcoin-dev-project/bdp-ui";
-import { FacetKeys } from "./types";
 import Facet from "@/components/search/Facet";
 import ShowFilterResultsMobile from "@/components/search/ShowFilterResultsMobile";
 
@@ -54,10 +50,10 @@ const SearchSidebar = () => {
   return (
     <div className="w-full md:w-[300px] shrink-0 bg-custom-background sticky top-[calc(8px+var(--header-height))] md:top-[calc(24px+var(--header-height))]">
       <ResultSize />
-      <FilterMenu />
-      <Sort />
+      <FilterMenu callback={callback} />
+      <Sort callback={callback} />
       {setup.facetFields.map((field) => (
-        <Facet key={field} facet={field} />
+        <Facet key={field} facet={field} callback={callback} />
       ))}
       <ShowFilterResultsMobile callback={callback} />
     </div>
