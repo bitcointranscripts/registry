@@ -3,8 +3,9 @@ import { SingleSelect } from "@bitcoin-dev-project/bdp-ui";
 import SidebarSection from "./SidebarSection";
 import { SortIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { setup } from "@/config";
+import { ArbitraryCallback } from "@/app/search/types";
 
-export const Sort = () => {
+export const Sort = ({callback} : {callback: ArbitraryCallback}) => {
   const options = [
     { label: "Relevance", value: "" },
     { label: "Newest First", value: "desc" },
@@ -17,6 +18,7 @@ export const Sort = () => {
   const handleSortBy = (option: any) => {
     if (option.value === "") {
       removeSort(sortField);
+      callback();
       return;
     }
     addSort(sortField, option.value);

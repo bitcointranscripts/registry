@@ -1,15 +1,15 @@
 import React from "react";
 
 import { setup } from "@/config";
-// import { getFilterValueDisplay } from "@/utils/search";
 import useURLManager from "@/service/URLManager/useURLManager";
 import { FilterIcon, CloseIconOutlined } from "@bitcoin-dev-project/bdp-ui/icons";
 import { useSearch } from "@/app/search/useSearch";
 import SidebarSection from "./SidebarSection";
-import { Facet } from "@/app/search/types";
+import { ArbitraryCallback, Facet } from "@/app/search/types";
 import { useUIContext } from "@/context/UIContext";
+import { ca } from "date-fns/locale";
 
-const FilterMenu = () => {
+const FilterMenu = ({callback} : {callback: ArbitraryCallback}) => {
   const { filterFields } = useSearch();
   const { sidebarToggleManager } = useUIContext();
 
@@ -24,12 +24,12 @@ const FilterMenu = () => {
           <FilterIcon className="w-5 h-5 mr-2 active:scale-95" />
         </button>
       </SidebarSection>
-      <AppliedFilters filters={filterFields} />
+      <AppliedFilters filters={filterFields} callback={callback} />
     </>
   );
 };
 
-const AppliedFilters = ({ filters }: { filters: Facet[] }) => {
+const AppliedFilters = ({ filters, callback }: { filters: Facet[], callback: ArbitraryCallback }) => {
   const { removeFilterTypes, removeFilter } = useURLManager();
   if (!filters?.length) return null;
   const clearAllFilters = () => {
@@ -37,6 +37,7 @@ const AppliedFilters = ({ filters }: { filters: Facet[] }) => {
       filterTypes: setup.facetFields,
       sortField: setup.sortFields[0],
     });
+    callback();
   };
   return (
     <SidebarSection className="text-custom-primary-text">
@@ -64,15 +65,16 @@ const AppliedFilters = ({ filters }: { filters: Facet[] }) => {
                 key={filter.field}
                 className="flex gap-3 w-fit py-[10px] px-3 2xl:py-3 2xl:px-4 bg-custom-accent text-custom-white dark:text-custom-background rounded-lg transform hover:scale-95 transition-all active:scale-90"
                 role="button"
-                onClick={() =>
+                onClick={() => {
                   removeFilter({
                     filterType: filter.field,
                     filterValue: filter.value,
                   })
+                  callback();
+                }
                 }
               >
                 <span className="capitalize text-sm font-semibold 2xl:text-sm">
-                  {/* {getFilterValueDisplay(filter.value, filter.field)} */}
                   {filter.value}
                 </span>
                 <CloseIconOutlined />

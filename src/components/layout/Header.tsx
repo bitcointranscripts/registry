@@ -10,7 +10,6 @@ import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon
 import Wrapper from "./Wrapper";
 import Logo from "./Logo";
 import SearchBox from "../search/SearchBox";
-import { useRouter } from "next/navigation";
 
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
@@ -167,11 +166,6 @@ export function ThemeSwitcher() {
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-
-  // React.useEffect(() => {
-  //   document.body.classList.toggle("overflow-hidden", open);
-  // }, [open]);
 
   return (
     <div className='flex items-center justify-center border-b-[0.5px] border-b-gray-custom-200 max-md:border-b-0 w-full sticky top-0 z-20'>

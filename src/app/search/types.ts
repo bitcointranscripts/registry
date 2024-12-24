@@ -89,3 +89,5 @@ export interface Source {
 }
 
 export type EsSourcesResponse = Source[];
+
+export type ArbitraryCallback = () => void;

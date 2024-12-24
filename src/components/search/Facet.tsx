@@ -2,13 +2,13 @@ import React from "react";
 import SidebarSection from "./SidebarSection";
 import { MultiSelect } from "@bitcoin-dev-project/bdp-ui";
 import { FacelLabelMapping } from "@/config";
-import { FacetKeys } from "@/app/search/types";
+import { ArbitraryCallback, FacetKeys } from "@/app/search/types";
 import { useSearch } from "@/app/search/useSearch";
 import { unsluggify } from "@/utils";
 import useURLManager from "@/service/URLManager/useURLManager";
 import { AuthorIcon, SourceIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 
-const Facet = ({ facet }: { facet: FacetKeys }) => {
+const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallback }) => {
   const label = FacelLabelMapping[facet];
 
   const iconMapping = {
@@ -43,8 +43,8 @@ const Facet = ({ facet }: { facet: FacetKeys }) => {
             options={options ?? []}
             label="Select options"
             onOptionSelect={({ action, value, event }) => {
-              console.log("Clicked toggle filter: ", value);
               toggleFilter({ filterType: facet, filterValue: value });
+              callback();
             }}
             styles={{
               noResults: "text-red-500",

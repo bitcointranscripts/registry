@@ -12,7 +12,7 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [searchInput, setSearchInput] = useState<string>(searchQuery);
+  const [searchInput, setSearchInput] = useState<string>(searchQuery || "");
 
   const [onFocus, setFocus] = useState(false);
   const searchBoxRef = useRef<HTMLDivElement | null>(null);
@@ -96,8 +96,8 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
                 : "rounded-l-xl md:rounded-l-[14px] group-data-[input-focus='true']/search:rounded-r-lg group-data-[input-focus='true']/search:md:rounded-r-none"
             } ${
               onFocus
-                ? "max-sm:border max-sm:border-r-[1px] max-sm:bg-custom-white max-sm:shadow-lg"
-                : ""
+                ? "border bg-custom-white md:bg-inherit shadow-lg md:shadow-none"
+                : "border"
             }
                   border-r-0 h-[48px] w-full bg-custom-background border-gray-custom-300 flex`}
           >
@@ -105,12 +105,13 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
               id="header-search-input"
               ref={inputRef}
               onChange={handleChange}
+              value={searchInput}
               inputMode="search"
               placeholder="Search here"
               className="text-custom-primary-text font-medium placeholder:text-gray-custom-300 py-1.5 md:py-3 px-3 md:px-6 md:text-base placeholder:text-[14px] md:placeholder:text-base h-full w-full border-none outline-none bg-transparent"
               onClick={handleOnFocus}
             />
-            {onFocus && !!searchInput.trim() && (
+            {onFocus && !!(searchInput.trim()) && (
               <button
                 type="button"
                 onClick={onClearInput}
@@ -128,7 +129,7 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
           <SearchIcon className="text-custom-white w-[14px] md:w-[18px] h-auto" />
         </button>
         {/* Mobile search button */}
-        <button type="button" className="flex self-center md:hidden group-data-[input-focus='true']/search:hidden group-data-[input-focus='true']/search:md:flex items-center bg-gradient h-full">
+        <button type="button" className="flex self-center md:hidden items-center bg-gradient h-full">
           <SearchIcon className="text-custom-black-custom-200 w-6 h-auto" onClick={triggerInputFocus} />
         </button>
       </div>
