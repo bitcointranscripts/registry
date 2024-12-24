@@ -7,17 +7,22 @@ import { FilterIcon, CloseIconOutlined } from "@bitcoin-dev-project/bdp-ui/icons
 import { useSearch } from "@/app/search/useSearch";
 import SidebarSection from "./SidebarSection";
 import { Facet } from "@/app/search/types";
+import { useUIContext } from "@/context/UIContext";
 
 const FilterMenu = () => {
   const { filterFields } = useSearch();
+  const { sidebarToggleManager } = useUIContext();
 
   return (
     <>
       <SidebarSection className="text-custom-primary-text flex justify-between">
         <div className="flex items-center gap-2">
-          <FilterIcon className="w-[20px]"/>
+          <FilterIcon className="w-[20px] hidden md:flex"/>
           <p className="text-base 2xl:text-lg font-bold leading-none">Filters</p>
         </div>
+        <button className="md:hidden" onClick={() => sidebarToggleManager.updater()}>
+          <FilterIcon className="w-5 h-5 mr-2 active:scale-95" />
+        </button>
       </SidebarSection>
       <AppliedFilters filters={filterFields} />
     </>

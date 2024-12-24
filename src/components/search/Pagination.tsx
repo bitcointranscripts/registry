@@ -26,8 +26,12 @@ const Pagination = () => {
 export default Pagination;
 
 const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 600px)").matches;
+
   const getPageNumbers = () => {
-    const delta = 2;
+    const delta = isMobile ? 1 : 2;
     const range = [];
     for (
       let i = Math.max(2, current - delta);
@@ -37,9 +41,6 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       range.push(i);
     }
 
-    if (current - delta > 2) {
-      range.unshift("...");
-    }
     if (current + delta < totalPages - 1) {
       range.push("...");
     }
@@ -53,11 +54,11 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 text-sm md:text-base">
       <button
         onClick={() => onChange(1)}
         disabled={current === 1}
-        className="p-2 disabled:hidden"
+        className="md:p-1 disabled:hidden"
         aria-label="First page"
       >
         <svg
@@ -78,7 +79,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(Math.max(1, current - 1))}
         disabled={current === 1}
-        className="p-2 disabled:opacity-50"
+        className="md:p-1 disabled:opacity-50"
         aria-label="Previous page"
       >
         <svg
@@ -101,7 +102,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
           return (
             <div
               key={index}
-              className="p-2 h-10 w-10 flex items-center justify-center"
+              className="w-auto flex items-center justify-center"
             >
               {pageNumber}
             </div>
@@ -128,7 +129,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(Math.min(totalPages, current + 1))}
         disabled={current === totalPages}
-        className="p-2 disabled:opacity-50"
+        className="md:p-1 disabled:opacity-50"
         aria-label="Next page"
       >
         <svg
@@ -149,7 +150,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(totalPages)}
         disabled={current === totalPages}
-        className="p-2 disabled:hidden"
+        className="md:p-1 disabled:hidden"
         aria-label="Last page"
       >
         <svg
