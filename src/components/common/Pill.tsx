@@ -39,7 +39,6 @@ const PillActionContainer = (props: React.PropsWithChildren<PillProps>) => {
 
   if (props.kind === "button") {
     const handleClick = () => {
-      console.log("got clicked")
       props.toggleFilter({ filterType: props.type, filterValue: props.name });
     }
     return (

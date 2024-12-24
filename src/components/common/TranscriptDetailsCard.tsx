@@ -25,7 +25,6 @@ const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[
   const calculateRemaining = (data: ContentData[] | string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
   const getSpeakerLink = (speaker: string) => {
     const baseFilterParam = toggleFilterFromParams({ filterType: "authors", filterValue: speaker });
-    console.log({baseFilterParam});
     return `${basePath}?${baseFilterParam}`;
   }
 
