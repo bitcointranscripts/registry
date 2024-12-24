@@ -45,6 +45,8 @@ export const useSearch = () => {
     [router, urlParams]
   );
 
+  console.log({sortFields})
+
   const queryResult = useQuery({
     queryKey: ["query", searchQuery, sizeQuery, filterFields, page, sortFields],
     queryFn: () =>

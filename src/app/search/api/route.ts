@@ -30,6 +30,8 @@ function buildQuery({
   sortFields,
 }: SearchQuery) {
 
+  console.log({sortFields})
+
   const baseQuery = {
     query: {
       bool: {

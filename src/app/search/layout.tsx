@@ -11,20 +11,27 @@ import { useUIContext } from "@/context/UIContext";
 import { MultiSelect } from "@bitcoin-dev-project/bdp-ui";
 import { FacetKeys } from "./types";
 import Facet from "@/components/search/Facet";
+import ShowFilterResultsMobile from "@/components/search/ShowFilterResultsMobile";
 
 export default function BaseLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
 }) {
+  const { sidebarToggleManager } = useUIContext();
   return (
     <>
-      <section className="mt-2 md:mt-6">
+      <section
+        data-sb-open={sidebarToggleManager.state}
+        className="group mt-2 md:mt-6"
+      >
         <Wrapper className="flex gap-[50px] md:pb-[100px] items-start">
-          <SearchSidebar />
-          <div className="w-full scroll-smooth">{children}</div>
-
-          {/* Include shared UI here e.g. a header or sidebar */}
+          <div className='hidden -translate-x-full w-full md:w-auto md:h-auto md:relative md:block md:translate-x-0 group-data-[sb-open="true"]:block group-data-[sb-open="true"]:translate-x-0'>
+            <SearchSidebar />
+          </div>
+          <div className="w-full scroll-smooth group-data-[sb-open='true']:hidden group-data-[sb-open='true']:md:block">
+            {children}
+          </div>
         </Wrapper>
         <FooterComponent />
       </section>
@@ -34,7 +41,9 @@ export default function BaseLayout({
 
 const SearchSidebar = () => {
   const { sidebarToggleManager } = useUIContext();
-  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches;
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 600px)").matches;
 
   const callback = () => {
     if (isMobile) {
@@ -43,31 +52,14 @@ const SearchSidebar = () => {
   };
 
   return (
-    <div className="w-full shrink-0 md:w-[300px] bg-custom-background sticky top-[calc(8px+var(--header-height))] md:top-[calc(24px+var(--header-height))]">
+    <div className="w-full md:w-[300px] shrink-0 bg-custom-background sticky top-[calc(8px+var(--header-height))] md:top-[calc(24px+var(--header-height))]">
       <ResultSize />
       <FilterMenu />
       <Sort />
-      {/* <SortingFacet
-        field="sort_by"
-        label="Sort by"
-        view={SortingView}
-        sortOptions={[
-          { label: "Relevance", value: " " },
-          {
-            label: "Newest First",
-            value: "created_at:desc",
-          },
-          {
-            label: "Oldest First",
-            value: "created_at:asc",
-          },
-        ]}
-        callback={sortCallback}
-      /> */}
       {setup.facetFields.map((field) => (
         <Facet key={field} facet={field} />
       ))}
-      {/* <ShowFilterResultsMobile /> */}
+      <ShowFilterResultsMobile callback={callback} />
     </div>
   );
-}
+};

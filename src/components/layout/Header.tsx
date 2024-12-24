@@ -169,20 +169,20 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  React.useEffect(() => {
-    document.body.classList.toggle("overflow-hidden", open);
-  }, [open]);
+  // React.useEffect(() => {
+  //   document.body.classList.toggle("overflow-hidden", open);
+  // }, [open]);
 
   return (
     <div className='flex items-center justify-center border-b-[0.5px] border-b-gray-custom-200 max-md:border-b-0 w-full sticky top-0 z-20'>
       <Wrapper className='h-[var(--header-height)] flex items-center w-full justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
-        <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
+        <section className='flex items-center gap-4 md:gap-16 2xl:gap-24'>
           <Link href="/">
-            <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
+            <Logo iconStyles='w-[30px] xl:w-9' textStyles='text-black text-base leading-[36.77px] lg:text-[24px]' />
           </Link>
-          <nav className='md:hidden items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
+          <nav className='flex items-center text-sm md:text-base gap-4 md:gap-8 2xl:gap-16 text-custom-black-custom-200'>
             <Link href='/categories'>Transcripts</Link>
-            <Link href='/about' className='hidden'>
+            <Link href='/about' className=''>
               About
             </Link>
           </nav>
@@ -192,27 +192,21 @@ const Header = () => {
 
         {/* add active states of navigation links */}
         <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden h-full'>
-          <div className='max-md:hidden hidden'>
+          <div className='hidden'>
             <LanguageSwitcher />
           </div>
-          <div className='max-md:hidden hidden'>
+          <div className='hidden'>
             <ThemeSwitcher />
           </div>
-          <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden h-full'>
-            <Link href='/categories'>Transcripts</Link>
-            <Link href='/about' className=''>
-              About
-            </Link>
-          </nav>
           <div className='md:flex max-md:hidden'>
             <MenuSwitcher />
           </div>
         </section>
 
-        <div className='max-md:gap-4 items-center md:hidden max-md:flex'>
-          <button className='md:hidden max-md:flex hidden'>
-            <SearchIcon className='text-black w-6' />
-          </button>
+        <div className='flex gap-4 items-center md:hidden'>
+          {/* <button className='flex md:hidden'>
+            <SearchIcon  className='text-black w-6' />
+          </button> */}
           <button className='md:hidden max-md:flex h-8 w-8 items-center justify-center' onClick={() => setOpen(!open)}>
             {open ? <CloseIconOutlined className='w-5' /> : <Image src={MenuIcon} alt='menu icon' />}
           </button>
