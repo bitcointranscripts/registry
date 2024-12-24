@@ -30,8 +30,6 @@ function buildQuery({
   sortFields,
 }: SearchQuery) {
 
-  console.log({sortFields})
-
   const baseQuery = {
     query: {
       bool: {
@@ -82,7 +80,7 @@ function buildQuery({
   });
 
   sortFields.forEach((sort) => {
-    baseQuery.sort.push({ [`${[sort.field]}.keyword`]: sort.value });
+    baseQuery.sort.push({ [sort.field]: sort.value });
   });
 
   return baseQuery;

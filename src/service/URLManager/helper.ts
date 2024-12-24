@@ -28,8 +28,7 @@ export function generateSortFields(searchParams: string) {
   setup.sortFields.map((field) => {
     const name = appendSortName(field);
     urlParams.getAll(name).forEach((value) => {
-      const pair = getSortPairFromValue(value);
-      pair && sortList.push(pair);
+      sortList.push({ field, value});
     });
   });
   return sortList;
