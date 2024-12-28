@@ -8,12 +8,13 @@ import {
   groupDataByAlphabet,
   GroupedData,
   sortKeysAlphabetically,
+  TopicsData,
 } from "@/utils";
 import MobileAlphabetGrouping from "./MobileAlphabetGrouping";
 import ContentGrouping from "./ContentGrouping";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
-import { LanguageCodes } from '@/config';
+import { LanguageCodes } from "@/config";
 
 interface ITranscriptContentPage {
   header: string;
@@ -34,11 +35,11 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 }) => {
   const groupedData =
     type === "alphabet"
-      ? groupDataByAlphabet(data) as GroupedData
-      : sortKeysAlphabetically(data) as GroupedData;
+      ? (groupDataByAlphabet(data) as Omit<GroupedData, "nested">)
+      : (sortKeysAlphabetically(data) as Omit<GroupedData, "nested">);
 
   const [currentGroup, setCurrentGroup] = useState<string>(
-    type === "alphabet" ? "A" : createSlug(Object.keys(groupedData)[0])
+    type === "alphabet" ? "A" : createSlug(Object.keys(groupedData)[0]),
   );
 
   const pathname = usePathname();
@@ -58,7 +59,9 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
   });
 
   // remove language codes from paths passed to breadcrumbs
-  const allRoutes = routes.filter((route) => !LanguageCodes.includes(route.name))
+  const allRoutes = routes.filter(
+    (route) => !LanguageCodes.includes(route.name),
+  );
 
   return (
     <div className="flex items-start relative lg:gap-[50px]">
@@ -98,7 +101,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
               <GroupedTranscriptContent
                 setCurrentGroup={setCurrentGroup}
                 key={`${arg[0]}${i}`}
-                topicsByAlphabet={arg}
+                topicsByAlphabet={arg as [string, TopicsData[]]} // Topics type has "count" compulsory
                 linkName={linkName}
                 type={type}
               />
@@ -110,7 +113,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
               <GroupedTranscriptContent
                 setCurrentGroup={setCurrentGroup}
                 key={`${arg[0]}${i}`}
-                topicsByAlphabet={arg}
+                topicsByAlphabet={arg as [string, TopicsData[]]}
                 linkName={linkName}
                 type={type}
               />

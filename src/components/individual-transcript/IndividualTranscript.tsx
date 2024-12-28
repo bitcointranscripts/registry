@@ -3,15 +3,17 @@ import React, { useState } from "react";
 import { Transcript } from "contentlayer/generated";
 import TranscriptMetadataComponent from "../common/TranscriptMetadataCard";
 import ContentGrouping from "../explore/ContentGrouping";
-import { ContentData, createContentSlug, extractHeadings, GroupedData } from "@/utils";
+import {
+  ContentData,
+  createContentSlug,
+  extractHeadings,
+  GroupedData,
+} from "@/utils";
 import Wrapper from "../layout/Wrapper";
 import { twMerge } from "tailwind-merge";
 import FooterComponent from "../layout/FooterComponent";
 import BaseCrumbLists, { BaseCrumbType } from "../common/BaseCrumbLists";
 import Tabs from "../common/Tabs";
-
-
-type HeadingObject = Record<string, ContentData[]>;;
 
 const IndividualTranscript = ({
   breadCrumbs,
@@ -22,16 +24,8 @@ const IndividualTranscript = ({
 }) => {
   const [currentHeading, setCurrentHeading] = useState("");
 
-  const allHeadings =  extractHeadings(transcript.body.raw).reduce<HeadingObject>((acc, key, index)=>{
-    //  removing the # from the string
-    let keyWithoutHash  = key.replace(/[#]+\s+/gi, "")
-    acc[keyWithoutHash] = [{
-      name: keyWithoutHash,
-      slug: createContentSlug(key),
-    }]
-     return acc;
-  }, {})
-
+  const allHeadings = extractHeadings(transcript.body.raw);
+  
   const staticRoutes = [
     { name: "Home", link: "/", isActive: false },
     { name: "Sources", link: "/sources", isActive: false },
@@ -72,10 +66,11 @@ const IndividualTranscript = ({
         <div className="hidden lg:flex w-full sticky lg:flex-auto top-6 max-w-[300px] 2xl:max-w-[465px] self-start">
           <ContentGrouping
             currentGroup={currentHeading}
+            isTranscript
             groupedData={allHeadings as unknown as GroupedData}
             className={twMerge(
               `!w-full rounded-xl max-h-[calc(90vh-var(--header-height))]`,
-              Object.keys(allHeadings).length < 1 && "!invisible"
+              Object.keys(allHeadings).length < 1 && "!invisible",
             )}
             screen="desktop"
           />

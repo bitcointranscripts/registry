@@ -19,9 +19,8 @@ const GroupedTranscriptContent = ({
 }: IGroupedTranscriptContent) => {
   const handleAxisChange = (
     inView: boolean,
-    entry: IntersectionObserverEntry
+    entry: IntersectionObserverEntry,
   ) => {
-  
     if (inView) {
       setCurrentGroup(topicsByAlphabet[0]);
     }
@@ -57,7 +56,7 @@ const GroupedTranscriptContent = ({
       <h4 className="font-bold text-2xl capitalize">{topicsByAlphabet[0]}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {topicsByAlphabet[1] &&
-        topicsByAlphabet[1].map((data, i) => (
+          topicsByAlphabet[1].map((data, i) => (
             <SingleTranscriptContent
               key={`${data.slug}${i}`}
               {...data}

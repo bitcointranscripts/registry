@@ -21,6 +21,7 @@ export type ContentData = {
   name: string;
   slug: string;
   count?: number;
+  nested?: boolean; // For nested headings in Transcripts Optional
 };
 
 interface TagInfo {
@@ -33,9 +34,14 @@ type ContentKeys = {
   [key: string]: ContentData[];
 };
 
-export type DepreciatedCategories = "tags" | "speakers" | "categories" | "sources" | "types";
+export type DepreciatedCategories =
+  | "tags"
+  | "speakers"
+  | "categories"
+  | "sources"
+  | "types";
 
-export type GroupedData = Record<string, TopicsData[] | SpeakerData[]>;
+export type GroupedData = Record<string, ContentData[]>;
 
 export function shuffle(data: Transcript[]) {
   let currIndex = data.length;
@@ -65,16 +71,23 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   });
 
   // Sort and slice in one pass
-  const latestTranscripts = transcripts.reduce((acc, transcript) => {
-    const transcriptDate = new Date(transcript.date as string).getTime();
-    const days_opened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
+  const latestTranscripts = transcripts.reduce(
+    (acc, transcript) => {
+      const transcriptDate = new Date(transcript.date as string).getTime();
+      const days_opened = Math.floor((CURRENT_DAY - transcriptDate) / ONE_DAY);
 
-    acc.push({ ...transcript, days_opened });
-    acc.sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
+      acc.push({ ...transcript, days_opened });
+      acc.sort(
+        (a, b) =>
+          new Date(b.date as string).getTime() -
+          new Date(a.date as string).getTime(),
+      );
 
-    if (acc.length > 3) acc.pop();
-    return acc;
-  }, [] as (Transcript & { days_opened: number })[]);
+      if (acc.length > 3) acc.pop();
+      return acc;
+    },
+    [] as (Transcript & { days_opened: number })[],
+  );
 
   const featuredTranscripts = getFeaturedTranscripts(transcripts);
 
@@ -110,29 +123,34 @@ export function createContentSlug(name: string): string {
     .replace(/^-+/, "") // Trim hyphens from the start
     .replace(/-+$/, ""); // Trim hyphens from the end
 }
-export function groupDataByAlphabet(items: TopicsData[] | SpeakerData[]): Record<string, TopicsData[]> {
+export function groupDataByAlphabet(
+  items: TopicsData[] | SpeakerData[],
+): Record<string, TopicsData[]> {
   return items
     .sort((a, b) => a.slug.localeCompare(b.slug))
-    .reduce((acc, item) => {
-      const firstLetter = item.slug.charAt(0).toUpperCase();
+    .reduce(
+      (acc, item) => {
+        const firstLetter = item.slug.charAt(0).toUpperCase();
 
-      // Check if the first character is a digit
-      if (!isNaN(Number(firstLetter))) {
-        if (!acc["#"]) {
-          acc["#"] = [];
+        // Check if the first character is a digit
+        if (!isNaN(Number(firstLetter))) {
+          if (!acc["#"]) {
+            acc["#"] = [];
+          }
+          // Add the current item to the '#' group
+          acc["#"].push(item);
+        } else {
+          if (!acc[firstLetter]) {
+            acc[firstLetter] = [];
+          }
+          // Add the current item to the correct group
+          acc[firstLetter].push(item);
         }
-        // Add the current item to the '#' group
-        acc["#"].push(item);
-      } else {
-        if (!acc[firstLetter]) {
-          acc[firstLetter] = [];
-        }
-        // Add the current item to the correct group
-        acc[firstLetter].push(item);
-      }
 
-      return acc;
-    }, {} as Record<string, TopicsData[]>);
+        return acc;
+      },
+      {} as Record<string, TopicsData[]>,
+    );
 }
 
 export function getDoubleDigits(count: number) {
@@ -143,9 +161,14 @@ export function getDoubleDigits(count: number) {
   return `${count}`;
 }
 
-export const getAllCharactersProperty = (arrayOfAlphabets: string[], groupedTopics: GroupedData | never[]) => {
+export const getAllCharactersProperty = (
+  arrayOfAlphabets: string[],
+  groupedTopics: GroupedData | never[],
+) => {
   const newData = arrayOfAlphabets.map((alp) => {
-    const ifFound = Object.entries(groupedTopics).find((topic) => topic[0] === alp);
+    const ifFound = Object.entries(groupedTopics).find(
+      (topic) => topic[0] === alp,
+    );
     if (ifFound) {
       return {
         alp,
@@ -226,15 +249,22 @@ export const extractDirectoryData = (data: any[]) => {
 };
 
 export const createText = (args: Markdown) => {
-  const text = args.raw.replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "").trim();
+  const text = args.raw
+    .replace(/<http[^>]+>|https?:\/\/[^\s]+|##+/g, "")
+    .trim();
   return text.length > 300 ? text.slice(0, 300) + "..." : text;
 };
 
-export const sortObjectAndArrays = (args: { [category: string]: TagInfo[] }) => {
+export const sortObjectAndArrays = (args: {
+  [category: string]: TagInfo[];
+}) => {
   return Object.fromEntries(
     Object.entries(args)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([key, value]) => [key, value.sort((a, b) => a.name.localeCompare(b.name))])
+      .map(([key, value]) => [
+        key,
+        value.sort((a, b) => a.name.localeCompare(b.name)),
+      ]),
   );
 };
 
@@ -247,31 +277,53 @@ export const countItemsAndSort = (args: { [category: string]: TagInfo[] }) => {
 
   const sortObject: { [key: string]: number } = Object.keys(countObject)
     .sort()
-    .reduce((acc, curr) => {
-      acc[curr] = countObject[curr];
-      return acc;
-    }, {} as typeof countObject);
+    .reduce(
+      (acc, curr) => {
+        acc[curr] = countObject[curr];
+        return acc;
+      },
+      {} as typeof countObject,
+    );
   return sortObject;
 };
 
 export const constructSlugPaths = (slug: string[]) => {
-  const isEnglishSlug = slug[0] !== "en" && slug[0].length > 2 && !LanguageCodes.includes(slug[0]);
+  const isEnglishSlug =
+    slug[0] !== "en" && slug[0].length > 2 && !LanguageCodes.includes(slug[0]);
   const englishSlug = ["en", ...slug];
   const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
   [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];
 
   let slugPaths = newSlug;
-  const addDataKeyToSlug = [...slugPaths.slice(0, 2), "data", ...slugPaths.slice(2)];
+  const addDataKeyToSlug = [
+    ...slugPaths.slice(0, 2),
+    "data",
+    ...slugPaths.slice(2),
+  ];
   slugPaths = slugPaths.length >= 3 ? addDataKeyToSlug : slugPaths;
 
   return { slugPaths };
 };
 
-export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: string[], isRoot: boolean) => {
+export const fetchTranscriptDetails = (
+  allTranscripts: Transcript[],
+  paths: string[],
+  isRoot: boolean,
+) => {
   if (!isRoot || paths.length === 0) return { transcripts: [] };
 
   const transcripts = allTranscripts.reduce((acc, curr) => {
-    const { url, title, speakers, date, tagsDetailed, _raw, summary, body, languageURL } = curr;
+    const {
+      url,
+      title,
+      speakers,
+      date,
+      tagsDetailed,
+      _raw,
+      summary,
+      body,
+      languageURL,
+    } = curr;
 
     if (paths.includes(url)) {
       acc.push({
@@ -287,7 +339,8 @@ export const fetchTranscriptDetails = (allTranscripts: Transcript[], paths: stri
       });
     }
     return acc.sort((a, b) => {
-      const sortByTime = new Date(b.date!).getTime() - new Date(a.date!).getTime();
+      const sortByTime =
+        new Date(b.date!).getTime() - new Date(a.date!).getTime();
       const sortByTitle = a.title.localeCompare(b.title);
 
       return sortByTime || sortByTitle;
@@ -335,15 +388,32 @@ export const deriveSourcesList = (languageTree: any) => {
   return getValues;
 };
 
-export function extractHeadings(text: string): string[] {
-  const lines: string[] = text.split('\n');
-  const headings: string[] = [];
-
-  lines.forEach(line => {
-      if (/^#{1,2}\s/.test(line)) {
-          headings.push(line.trim());
-      }
+export function extractHeadings(text: string): Record<string, ContentData[]> {
+  const lines: string[] = text.split("\n");
+  const headings: { name: string; nested?: boolean }[] = [];
+  let refinedHeadings = {};
+  lines.forEach((line) => {
+    if (/^#{1,2}\s/.test(line)) {
+      headings.push({ name: line.trim() });
+    } else if (/^#{3}\s/.test(line)) {
+      headings.push({ name: line.trim(), nested: true });
+    }
   });
-
-  return headings;
+  // turn to record objects
+  refinedHeadings = headings.reduce<Record<string, ContentData[]>>(
+    (acc, key, index) => {
+      //  removing the # from the string
+      let keyWithoutHash = key.name.replace(/[#]+\s+/gi, "");
+      acc[keyWithoutHash] = [
+        {
+          name: keyWithoutHash,
+          slug: createContentSlug(key.name),
+          nested: key.nested ? true : false,
+        },
+      ];
+      return acc;
+    },
+    {},
+  );
+  return refinedHeadings;
 }

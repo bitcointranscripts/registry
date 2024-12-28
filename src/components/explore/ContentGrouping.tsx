@@ -9,11 +9,13 @@ export interface IContentGrouping {
   currentGroup: string;
   groupedData: GroupedData | never[];
   screen?: "mobile" | "desktop";
+  isTranscript?: boolean;
   className?: string;
 }
 const ContentGrouping = ({
   currentGroup,
   groupedData,
+  isTranscript,
   screen,
   className,
 }: IContentGrouping) => {
@@ -41,22 +43,44 @@ const ContentGrouping = ({
         <div
           className={twMerge(
             " flex-col p-5 hidden lg:flex gap-2.5 border max-h-[calc(95vh-var(--header-height))] overflow-auto scroller border-gray-custom-1200 rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
-            className
+            className,
           )}
         >
-          {Object.keys(groupedData).map((char) => (
-            <Link
-              key={char}
-              href={`#${createContentSlug(char)}`}
-              className={`flex text-sm  2xl:text-lg leading-5   ${
-                createContentSlug(currentGroup) == createContentSlug(char)
-                  ? "text-orange-custom-100 rounded-[4px] font-semibold"
-                  : ""
-              } `}
-            >
-              {char}
-            </Link>
-          ))}
+          {isTranscript &&
+            Object.values(groupedData)
+              .sort()
+              .map((char, index) => (
+                <Link
+                  key={char[0]?.slug}
+                  href={`#${createSlug(char[0]?.slug)}`}
+                  className={twMerge(
+                    "flex text-sm 2xl:text-lg leading-5 ",
+                    createContentSlug(currentGroup) == createSlug(char[0]?.slug)
+                      ? "text-orange-custom-100 rounded-[4px] font-semibold"
+                      : "",
+                    char[0]?.nested ? "pl-4" : "",
+                  )}
+                >
+                  {char[0]?.name}
+                </Link>
+              ))}
+          {!isTranscript &&
+            Object.keys(groupedData)
+              .sort()
+              .map((char) => (
+                <Link
+                  key={createSlug(char)}
+                  href={`#${createSlug(char)}`}
+                  className={twMerge(
+                    "flex text-sm 2xl:text-lg leading-5 ",
+                    createContentSlug(currentGroup) == createSlug(char)
+                      ? "text-orange-custom-100 rounded-[4px] font-semibold"
+                      : "",
+                  )}
+                >
+                  {char}
+                </Link>
+              ))}
         </div>
       )}
       {screen === "mobile" && (
