@@ -32,7 +32,9 @@ const config: Config = {
           "custom-1400": "#ACACAC",
           "custom-1500": "#DBDBDB",
           "custom-1600": "#BEBEBE",
-          "custom-1700": "#737373"
+          "custom-1700": "#737373",
+          "custom-1800": "#616161",
+          "custom-2000":"#B2AFAC" ,
         },
         blue: {
           "custom-100": "#2A58FE",
@@ -73,6 +75,14 @@ const config: Config = {
           "accent": "var(--accent)",
           "white": "#F2F2F2",
         },
+        dark:{
+          "custom-100":"#141414",
+          "custom-500":"#2C2C2E",
+          "custom-600":"#1C1C1E",
+        },
+        brown:{
+          "custom-100":"#483929",
+        }
       },
       fontFamily: {
         brawler: ["var(--brawler-font)"],

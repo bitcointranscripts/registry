@@ -25,10 +25,10 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex flex-col'>
-        <p className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4 line-clamp-1'>{source}</p>
+        <p className='text-gray-custom-600 max-xl:text-[13px] max-md:text-sm leading-[100%] pb-[10px] md:pb-4 line-clamp-1  dark:text-gray-custom-600'>{source}</p>
         <section className='flex justify-between items-start gap-4'>
-          <p className='text-xl font-medium max-xl:text-lg max-md:text-base'>{data?.title}</p>
-          {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800'>{daysOpened} days ago</p> : null}
+          <p className='text-xl font-medium max-xl:text-lg max-md:text-base dark:text-gray-custom-100'>{data?.title}</p>
+          {daysOpened ? <p className='text-sm text-nowrap whitespace-normal text-gray-custom-800  dark:text-gray-custom-100'>{daysOpened} days ago</p> : null}
         </section>
       </section>
 
@@ -39,7 +39,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
           {data?.speakers?.length ? (
             <>
               <span>
-                <MicIcon className='w-5' />
+                <MicIcon className='w-5 dark:text-gray-custom-100' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
@@ -90,7 +90,9 @@ export const ExploreTranscriptCard = ({
   return (
     <a
       href={linkUrl}
-      className={`flex flex-col min-w-[400px] max-md:min-w-[292px] p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
+      className={`flex flex-col min-w-[400px] max-md:min-w-[292px] p-6 gap-4 text-black dark:text-gray-custom-100
+        border border-gray-custom-600  dark:border-gray-custom-1800
+        rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
       <section className='flex justify-between items-center gap-4'>
         <p className='text-xl font-medium max-xl:text-lg max-md:text-base capitalize'>{title}</p>
