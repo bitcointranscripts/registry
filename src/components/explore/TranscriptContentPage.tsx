@@ -77,11 +77,11 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
             />
           )}
         </div>
-        <div className="flex flex-col border-b border-b-[#9B9B9B] pb-6 lg:pb-10  gap-6 ">
+        <div className="flex flex-col border-b border-b-gray-custom-1900  dark:border-b-gray-custom-1800 pb-6 lg:pb-10  gap-6 ">
           <BaseCrumbLists crumbsArray={allRoutes} />
           <div className="flex flex-col gap-1  lg:gap-4">
-            <h3 className="text-xl  2xl:text-2xl font-medium">{header}</h3>
-            <p className="hidden lg:inline-block text-sm  lg:text-base 2xl:text-lg text-custom-black-custom-300">
+            <h3 className="text-xl  2xl:text-2xl font-medium dark:text-gray-custom-100">{header}</h3>
+            <p className="hidden lg:inline-block text-sm  lg:text-base 2xl:text-lg text-custom-black-custom-300 dark:text-gray-custom-100">
               {description}
             </p>
             <p className="inline-block lg:hidden text-sm lg:text-lg text-custom-black-custom-300">

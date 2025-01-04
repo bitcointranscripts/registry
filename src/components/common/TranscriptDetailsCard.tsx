@@ -39,7 +39,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
           {breadCrumbsComponent}
           <a
             href={`${languageURL}`}
-            className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
+            className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black dark:text-gray-custom-100'
           >
             {title}
           </a>
@@ -57,7 +57,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
           <section className='flex gap-2'>
             <>
               <span>
-                <MicIcon className='w-5 md:w-6' />
+                <MicIcon className='w-5 md:w-6 dark:text-gray-custom-100' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] text-xs md:text-sm 2xl:text-base'>

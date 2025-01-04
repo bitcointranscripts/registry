@@ -90,7 +90,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
       <div className='flex items-start lg:gap-[50px]'>
         <div className='flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar'>
           <div
-            className={`flex flex-col ${
+            className={`flex flex-col dark:border-b-gray-custom-1800 ${
               isRoot ? "border-b border-b-[#9B9B9B] pb-6 md:border-b-0 md:pb-0" : "border-b border-b-[#9B9B9B] pb-6 lg:pb-10"
             } gap-5 2xl:gap-6`}
           >
@@ -153,7 +153,9 @@ const page = ({ params }: { params: { slug: string[] } }) => {
                   <Link
                     key={`${value.route}-${i}}`}
                     href={`/${[...slug, value.route].join("/")}`}
-                    className='flex capitalize cursor-pointer border max-w-[100%] border-gray-custom-1200 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100'
+                    className='flex capitalize cursor-pointer border max-w-[100%]
+                    border-gray-custom-1200 dark:border-gray-custom-1800 rounded-[5px] justify-between items-center
+                    text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100  dark:text-gray-custom-100'
                   >
                     <span className='text-wrap break-words max-w-[80%]'>{value.title}</span>
                     <span>{value.count}</span>

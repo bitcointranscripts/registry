@@ -12,7 +12,8 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
         gray: {
@@ -34,12 +35,14 @@ const config: Config = {
           "custom-1600": "#BEBEBE",
           "custom-1700": "#737373",
           "custom-1800": "#616161",
-          "custom-2000":"#B2AFAC" ,
+          "custom-1900": "#9B9B9B",
+          "custom-2000": "#B2AFAC",
+          "custom-2100": "#3D3D3D",
         },
         blue: {
           "custom-100": "#2A58FE",
-          "custom-200" :"#2A66FF",
-          "custom-300": "#F0F1FA"
+          "custom-200": "#2A66FF",
+          "custom-300": "#F0F1FA",
         },
         orange: {
           "custom-100": "#F7931A",
@@ -62,7 +65,7 @@ const config: Config = {
           "custom-200": "#202020",
           "custom-300": "#464646",
           "custom-400": "#525252",
-          "custom-500": "#0B0A0A"
+          "custom-500": "#0B0A0A",
         },
         pink: {
           "custom-100": "#FCEDF3",
@@ -75,14 +78,15 @@ const config: Config = {
           "accent": "var(--accent)",
           "white": "#F2F2F2",
         },
-        dark:{
-          "custom-100":"#141414",
-          "custom-500":"#2C2C2E",
-          "custom-600":"#1C1C1E",
+        dark: {
+          "custom-100": "#141414",
+          "custom-200": "#1A1A18",
+          "custom-500": "#2C2C2E",
+          "custom-600": "#1C1C1E",
         },
-        brown:{
-          "custom-100":"#483929",
-        }
+        brown: {
+          "custom-100": "#483929",
+        },
       },
       fontFamily: {
         brawler: ["var(--brawler-font)"],

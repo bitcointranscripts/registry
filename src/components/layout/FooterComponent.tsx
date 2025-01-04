@@ -56,28 +56,29 @@ const FooterComponent = () => {
                 entity: "github",
                 entityLink: "https://github.com/bitcointranscripts/registry",
                 iconProps: {
-                  className: "hover:text-orange-400",
+                  className: "hover:text-orange-400 dark:border-none",
                 },
               },
               {
                 entity: "discord",
                 entityLink: "https://discord.gg/EAy9XMufbY",
                 iconProps: {
-                  className: "hover:text-orange-400",
+                  className: "hover:text-orange-400 dark:border-none",
                 },
               },
               {
                 entity: "twitter",
                 entityLink: "https://x.com/Bitcoin_Devs",
                 iconProps: {
-                  className: "hover:text-orange-400",
+                  className: "hover:text-orange-400 dark:border-none",
                 },
               },
               {
                 entity: "nostr",
                 entityLink: "https://njump.me/npub10p33xu03t8q7d9nxtks63dq4gmt4v4d3ppd5lcdp4rg9hxsd0f8q7mn2l2",
                 iconProps: {
-                  className: "hover:text-orange-400",
+                  className: "hover:text-orange-400 dark:border-none",
+                  stroke:"dark:green-custom-100"
                 },
               },
             ]}
