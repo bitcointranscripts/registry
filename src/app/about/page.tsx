@@ -8,6 +8,7 @@ import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import reviewers from "@/public/reviewers-data.json";
 import upperLineIcon from "@/public/svgs/upper-line-icon.svg";
 import lowerLineIcon from "@/public/svgs/lower-line-icon.svg";
+import CustomBorder from "@/components/svgs/CustomBorder";
 
 const page = () => {
   return (
@@ -59,6 +60,11 @@ const page = () => {
           </div>
 
           <div className='flex flex-col gap-10 md:gap-20 relative'>
+            <div
+            className="flex w-full max-w-24 md:max-w-[184px] z-[-1] h-full justify-center absolute">
+              <CustomBorder className='h-full' />
+            </div>
+
             {processFlowData.map((item) => (
               <div key={item.title} className='flex flex-row items-center gap-4 sm:gap-[31px]'>
                 <section

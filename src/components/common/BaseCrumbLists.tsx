@@ -15,14 +15,14 @@ const BaseCrumbLists = ({crumbsArray}:{crumbsArray:BaseCrumbType[]}) => {
             className={`capitalize hover:underline font-medium text-sm 2xl:text-base ${
               link.isActive
                 ? "text-orange-custom-100"
-                : "text-black md:text-gray-custom-800"
+                : "text-black md:text-gray-custom-800 dark:text-gray-custom-800"
             }`}
             href={link.link}
           >
             {link.name}
           </Link>
           {i !== crumbsArray.length - 1 && (
-            <p className="text-custom-black-custom-200">/</p>
+            <p className="text-custom-black-custom-200 dark:text-gray-custom-800">/</p>
           )}
         </div>
       ))}

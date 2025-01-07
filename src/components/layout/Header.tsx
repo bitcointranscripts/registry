@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "../landing-page/MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
 import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon } from "@bitcoin-dev-project/bdp-ui/icons";
@@ -72,16 +71,18 @@ export const LanguageSwitcher = () => {
 };
 
 export const AppItem = ({ href, image, alt, title }: MenuApp) => (
+  <div className="py-1 first-of-type:pt-4  md:py-2 px-4 md:px-5 first-of-type:md:pt-6 last-of-type:pb-4 last-of-type:md:pb-6">
   <Link
     href={href}
-    className="py-2 md:py-3 px-5 md:px-8 gap-3 md:gap-6 flex items-center hover:bg-orange-custom-600 first-of-type:pt-4 first-of-type:md:pt-6 last-of-type:pb-4 last-of-type:md:pb-6"
+    className=" py-2  hover:px-2 hover:md:px-3 gap-3 md:gap-6 flex items-center rounded-xl
+    hover:bg-orange-custom-600 dark:hover:bg-brown-custom-100 transition-all duration-200"
     target="_blank"
     rel="noopener noreferrer"
   >
     <Image
       className={`rounded-xl w-11 h-11 lg:w-16 lg:h-16 ${
         alt === "Bitcoin search" || alt === "Bitcoin TLDR"
-          ? "border-[1.5px] border-gray-custom-600"
+          ? "border-[1.5px] border-gray-custom-600 dark:border-gray-custom-1800"
           : ""
       }`}
       src={image}
@@ -89,10 +90,11 @@ export const AppItem = ({ href, image, alt, title }: MenuApp) => (
       width={88}
       height={88}
     />
-    <p className="text-xs md:text-sm xl:text-base 2xl:text-lg text-left ">
+    <p className="text-xs md:text-sm xl:text-base 2xl:text-lg text-left dark:text-gray-custom-100">
       {title}
     </p>
   </Link>
+  </div>
 );
 
 export function AppMenu() {
@@ -155,10 +157,10 @@ const MenuSwitcher = () => {
           className="hidden data-[is-open=true]:block absolute top-0 right-0 mt-3 md:mt-4"
         >
           <div
-            className={`bg-white rounded-2xl border border-gray-custom-600 w-[min(90vw,300px)] md:w-[402px] max-h-[calc(100vh-70px)] md:max-h-[calc(100vh-100px)] overflow-auto`}
+            className={`bg-white dark:bg-dark-custom-100 rounded-2xl border border-gray-custom-600 w-[min(90vw,300px)] md:w-[402px] max-h-[calc(100vh-70px)] md:max-h-[calc(100vh-100px)] overflow-auto`}
           >
             <AppItem {...menuApps[0]} />
-            <div className="mx-5 md:mx-7 my-3 md:my-3 border border-gray-custom-300"></div>
+            <div className="mx-5 md:mx-7 my-3 md:my-3 border border-gray-custom-300 dark:border-b-gray-custom-1800"></div>
             {menuApps.slice(1).map((item) => (
               <AppItem key={item.title} {...item} />
             ))}

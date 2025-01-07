@@ -17,13 +17,14 @@
     font-size: 1.125rem;
 }
 
-.wmde-markdown h3,
-.wmde-markdown h4,
-.wmde-markdown h5,
-.wmde-markdown h6 {
+.wmde-markdown h3, .wmde-markdown h4, .wmde-markdown h5, .wmde-markdown h6 {
     color: #000;
     scroll-margin-top: 100px;
     font-size: 1rem;
+}
+html.dark  .wmde-markdown h1, .wmde-markdown h2, .wmde-markdown h3, .wmde-markdown h4,
+.wmde-markdown h5, .wmde-markdown h6 {
+     color: #fafafa;
 }
 
 span.code-line {
@@ -45,11 +46,21 @@ span.code-line {
     line-height: 2.1875rem;
 }
 
+html.dark .wmde-markdown p {
+    color: #fafafa;
+}
 .wmde-markdown ul li {
     list-style-type: circle;
     color: #000;
 }
 
+html.dark .wmde-markdown ul li {
+    color: #fafafa;
+}
+
+html.dark .wmde-markdown ol li {
+    color: #fafafa;
+}
 .wmde-markdown ul {
     padding-left: 1em;
 }

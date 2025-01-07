@@ -4,7 +4,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
-import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
 import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
@@ -13,6 +12,7 @@ import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
 import { LanguageCodes } from "@/config";
+import WorldIcon from "@/components/svgs/WorldIcon";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -106,11 +106,11 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>{metadata?.title ?? slug[slug.length - 1]}</h3>
               {isRoot && metadata?.website ? (
                 <div className='flex gap-1 items-center pt-3 md:pt-6'>
-                  <Image src={WorldIcon} alt='world icon' className='w-[18px] md:w-[20px]' />
+                  <WorldIcon className='w-[18px] md:w-[20px] dark:text-gray-custom-100' />
                   <Link
                     href={metadata?.website ?? ""}
                     target='_blank'
-                    className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline text-wrap break-words line-clamp-1'
+                    className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black dark:text-gray-custom-100 underline text-wrap break-words line-clamp-1'
                   >
                     {metadata.website ?? ""}
                   </Link>

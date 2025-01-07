@@ -27,7 +27,8 @@ const Tabs = ({
 
   return (
     <div className="flex flex-col relative">
-      <div className="sticky bg-white z-10 top-0 lg:top-0  md:pt-6 h-full flex gap-4 md:gap-10 xl:gap-16 justify-start items-center border-b border-b-gray-custom-1200">
+      <div className="sticky bg-white dark:bg-dark-custom-100 z-10 top-0 lg:top-0  md:pt-6 h-full flex gap-4
+        md:gap-10 xl:gap-16 justify-start items-center border-b border-b-gray-custom-1200 dark:border-b-gray-custom-1800">
         <Tab
           title="Transcript"
           isOpen={openTabs === "transcript"}
@@ -116,7 +117,7 @@ const Tab = ({
       <section className="flex flex-col h-full items-center justify-between relative w-full">
         <p
           className={`text-sm md:text-base xl:text-lg 2xl:text-xl font-normal ${
-            isOpen ? "text-orange-custom-100" : "text-custom-black-custom-400"
+            isOpen ? "text-orange-custom-100" : "text-custom-black-custom-400 dark:text-gray-custom-100"
           }`}
         >
           {title}

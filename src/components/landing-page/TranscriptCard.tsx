@@ -48,7 +48,8 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
                   ))}
 
                   {remainingSpeakers === 0 ? null : (
-                    <p className='py-[4.11px] px-[16.43px] rounded-[5.13px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 max-md:py-[2px] max-xl:text-[13px] max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[4.11px] px-[16.43px] rounded-[5.13px] bg-gray-custom-700 dark:bg-gray-custom-1800  dark:text-gray-custom-100
+                      whitespace-nowrap text-nowrap max-md:px-3 max-md:py-[2px] max-xl:text-[13px] max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
                       + {remainingSpeakers} more
                     </p>
                   )}
