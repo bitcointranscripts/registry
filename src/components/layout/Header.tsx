@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "../landing-page/MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
-import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Wrapper from "./Wrapper";
 import Logo from "./Logo";
 import SearchBox from "../search/SearchBox";
@@ -181,8 +181,10 @@ const Header = () => {
             </Link>
           </nav>
         </section>
-
-        <SearchBox />
+        {/* without suspense, all pages deopts into CSR due to useSearchParams hook in component */}
+        <Suspense fallback={<></>}>
+          <SearchBox />
+        </Suspense>
 
         {/* add active states of navigation links */}
         <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden h-full'>
