@@ -1,9 +1,11 @@
 import { FacetKeys } from "@/app/search/types";
+import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
 type ButtonPillProp = {
   kind: "button"
   name: string;
+  value: string;
   isSelected?: boolean;
   type: FacetKeys;
   toggleFilter: ({ filterType, filterValue }: { filterType: FacetKeys; filterValue: string }) => void;
@@ -40,7 +42,7 @@ const PillActionContainer = (props: React.PropsWithChildren<PillProps>) => {
     const handleClick = (e: React.MouseEvent) => {
       props.onClick 
       ? props.onClick(e)
-      : props.toggleFilter({ filterType: props.type, filterValue: props.name });
+      : props.toggleFilter({ filterType: props.type, filterValue: props.value });
     }
     return (
       <div {...prop} onClick={handleClick}>
@@ -51,9 +53,9 @@ const PillActionContainer = (props: React.PropsWithChildren<PillProps>) => {
   
   const defaultOnClick = (e: React.MouseEvent) => {e.stopPropagation()}
   return (
-    <a href={props.slug || ""} {...prop} onClick={defaultOnClick}>
+    <Link href={props.slug || ""} {...prop} onClick={defaultOnClick} prefetch={false}>
       {props.children}
-    </a>
+    </Link>
   );
 };
 

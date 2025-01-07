@@ -87,7 +87,6 @@ export const SearchContextProvider = ({
     queryKey: ["query", searchQuery, sizeQuery, filterFields, page, sortFields],
     queryFn: () =>
       buildQueryCall({ queryString: searchQuery, size: sizeQuery, page, filterFields, sortFields }),
-    // cacheTime: Infinity,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     placeholderData: (prev) => prev,

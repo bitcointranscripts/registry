@@ -87,7 +87,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTree
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {tagsToDisplay?.map((tag, idx) => (
-                    <Pill key={idx} kind="button" name={tag.name} type={"tags"} toggleFilter={toggleFilter} isSelected={selectedTags.includes(tag.slug)}/>
+                    <Pill key={idx} kind="button" name={tag.name} value={tag.slug} type={"tags"} toggleFilter={toggleFilter} isSelected={selectedTags.includes(tag.slug)}/>
                   ))}
 
                   {calculateRemaining(tagsDetailed) === 0 ? null : (
