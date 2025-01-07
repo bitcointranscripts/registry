@@ -10,6 +10,11 @@ export const appendSortName = (sortField: string) => {
   return `${URLSearchParamsKeyword.SORT}_${sortField}`;
 };
 
+export const getIsolatedFacetLink = ({filter_field, filter_value}: {filter_field: FacetKeys, filter_value: string}) => {
+  const filterLink = `/search?${appendFilterName(filter_field)}=${filter_value}`;
+  return filterLink;
+}
+
 export function generateFilterQuery(searchParams: string) {
   const filterList: Facet[] = [];
   const urlParams = new URLSearchParams(searchParams);

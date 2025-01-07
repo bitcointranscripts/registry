@@ -1,28 +1,35 @@
 "use client";
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { ContentTreeArray } from "@/utils/data";
 import DateIcon from "/public/svgs/date-icon.svg";
 import TagsIcon from "/public/svgs/tags-icon.svg";
-import { ContentData, createSlug, formatDate, unsluggify } from "@/utils";
+import { ContentData, formatDate } from "@/utils";
 import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
-import { usePathname } from "next/navigation";
 import useURLManager from "@/service/URLManager/useURLManager";
 
-const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[] }) => {
-  const pathname = usePathname();
+const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number }) => {
   const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
 
   const selectedSpeakers = getFilter("authors");
   const selectedTags = getFilter("tags");
 
-  const isSearchPage = pathname.includes("search");
-  const basePath = isSearchPage ? "" : "/search";
+  const basePath = "/search";
 
   const { speakers, tagsDetailed,  summary, date, title, body, languageURL } = data;
-  const calculateRemaining = (data: ContentData[] | string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
+  const speakersToDisplay = pillCountLimit ? speakers?.slice(0, pillCountLimit) : speakers;
+  const tagsToDisplay = pillCountLimit ? tagsDetailed?.slice(0, pillCountLimit) : tagsDetailed;
+
+  const calculateRemaining = (data: ContentData[] | string[]) => {
+    if (!pillCountLimit) return 0;
+    // only truncate if data exceeds limit
+    if (data?.length && data.length > pillCountLimit) {
+      return data.length - pillCountLimit
+    }
+    return 0
+  }
+
   const getSpeakerLink = (speaker: string) => {
     const baseFilterParam = toggleFilterFromParams({ filterType: "authors", filterValue: speaker });
     return `${basePath}?${baseFilterParam}`;
@@ -32,12 +39,12 @@ const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
       <section className='flex justify-between'>
         <div className='flex md:flex-row flex-col justify-between gap-2 w-full'>
-          <Link
+          <a
             href={`${languageURL}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
-          </Link>
+          </a>
           {date && (
             <div className='flex gap-2 items-center h-fit'>
               <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
@@ -56,7 +63,7 @@ const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[
               </span>
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
-                  {speakers.slice(0, 3).map((speaker, idx) => (
+                  {speakersToDisplay?.map((speaker, idx) => (
                     <Pill key={speaker} kind="link" name={speaker} slug={getSpeakerLink(speaker)} isSelected={selectedSpeakers.includes(speaker)}/>
                   ))}
 
@@ -79,7 +86,7 @@ const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[
               </span>
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
-                  {tagsDetailed.slice(0, 3).map((tag, idx) => (
+                  {tagsToDisplay?.map((tag, idx) => (
                     <Pill key={idx} kind="button" name={tag.name} type={"tags"} toggleFilter={toggleFilter} isSelected={selectedTags.includes(tag.slug)}/>
                   ))}
 
