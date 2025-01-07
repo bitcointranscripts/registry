@@ -9,9 +9,8 @@ import { FilterIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { useUIContext } from "@/context/UIContext";
 import { SkeletonResults } from "@/components/search/Loader";
 
-
 const SearchPage = () => {
-  const { queryResult } = useSearch()
+  const { queryResult } = useSearch();
 
   const { sidebarToggleManager } = useUIContext();
 
@@ -33,17 +32,22 @@ const SearchPage = () => {
   }
 
   if (noResults) {
-    return <NotFound />
+    return <NotFound />;
   }
 
   return (
     <>
       <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[84px] bg-white">
         <p className="text-[14px] font-bold">Filters</p>
-        <FilterIcon className="w-5 h-5 mr-2 active:scale-95" onClick={() => sidebarToggleManager.updater()} />
+        <FilterIcon
+          className="w-5 h-5 mr-2 active:scale-95"
+          onClick={() => sidebarToggleManager.updater()}
+        />
       </div>
       <div className="flex flex-col gap-2">
-        {searchResults?.map((result) => <SearchResultCard key={result._id} result={result._source} />)}
+        {searchResults?.map((result) => (
+          <SearchResultCard result={result._source} />
+        ))}
       </div>
       <div className="flex justify-center pt-8">
         <Pagination />
@@ -52,4 +56,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage; 
+export default SearchPage;
