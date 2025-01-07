@@ -1,4 +1,4 @@
-function SkeletonLoader() {
+export function SkeletonLoader() {
   return (
     <div className="border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4">
       <div className="space-y-2 animate-pulse">
