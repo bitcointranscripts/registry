@@ -1,9 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+"use client";
+
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { buildQueryCall } from "./searchCall";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { defaultParam, URLSearchParamsKeyword } from "@/config";
-import { useCallback, useMemo } from "react";
-import { generateFilterQuery, generateSortFields } from "@/service/URLManager/helper";
+import React, { createContext, useCallback, useContext, useMemo } from "react";
+import {
+  generateFilterQuery,
+  generateSortFields,
+} from "@/service/URLManager/helper";
+import { EsSearchResponse, Facet } from "./types";
 
 /**
  * Custom React hook for performing search queries against an Elasticsearch backend via a proxy endpoint.
@@ -12,26 +18,58 @@ import { generateFilterQuery, generateSortFields } from "@/service/URLManager/he
 
 export type QueryObject = Record<string, string>;
 
+export type PagingInfoType = {
+  resultsPerPage: number;
+  current: number;
+  totalResults: number | null;
+};
+
+export type SearchContextType = {
+  searchQuery: string;
+  queryResult: UseQueryResult<EsSearchResponse, Error>;
+  makeQuery: (queryString: string) => void;
+  handlePageChange: (page: number) => void;
+  pagingInfo: PagingInfoType;
+  filterFields: Facet[];
+  sortFields: { field: string, value: string }[];
+  setSearchParams: (queryObject: QueryObject) => void;
+  page: number;
+};
+
+export const SearchContext = React.createContext<SearchContextType | null>(
+  null
+);
+
 export const useSearch = () => {
+  const context = useContext(SearchContext);
+  if (!context) {
+    throw new Error(
+      "useSearchContext must be used within a SearchContextProvider"
+    );
+  }
+  return context;
+};
+
+export const SearchContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const router = useRouter();
-  // const searchParams = router.query;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const rawSearchQuery = searchParams.get(URLSearchParamsKeyword.SEARCH) || "";
   const page = parseInt(searchParams.get(URLSearchParamsKeyword.PAGE) || "1") - 1;
   const sizeQuery = Number(searchParams.get(URLSearchParamsKeyword.SIZE) || defaultParam[URLSearchParamsKeyword.SIZE]);
-
+  
+  // Memoize derived state from URL search parameters
+  const searchQuery = useMemo(() => searchParams.get(URLSearchParamsKeyword.SEARCH) || "", [searchParams]);
   const filterFields = useMemo(() => generateFilterQuery(searchParams.toString()), [searchParams]);
   const sortFields = useMemo(() => generateSortFields(searchParams.toString()), [searchParams]);
 
   const urlParams = new URLSearchParams(searchParams.toString());
 
-  // Memoize derived state from URL search parameters
-  const searchQuery = useMemo(() => {
-    return rawSearchQuery ?? "";
-  }, [rawSearchQuery]);
 
   const resultsPerPage = sizeQuery ?? defaultParam[URLSearchParamsKeyword.SIZE]
 
@@ -82,5 +120,21 @@ export const useSearch = () => {
       (queryResult.data?.hits?.total["value"] as unknown as number) ?? null,
   };
 
-  return {queryResult, searchQuery, page, setSearchParams, pagingInfo, handlePageChange, makeQuery, filterFields, sortFields};
+  return (
+    <SearchContext.Provider
+      value={{
+        queryResult,
+        searchQuery,
+        page,
+        setSearchParams,
+        pagingInfo,
+        handlePageChange,
+        makeQuery,
+        filterFields,
+        sortFields,
+      }}
+    >
+      {children}
+    </SearchContext.Provider>
+  );
 };

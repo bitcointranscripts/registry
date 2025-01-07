@@ -8,6 +8,7 @@ import { setup } from "@/config";
 import { useUIContext } from "@/context/UIContext";
 import Facet from "@/components/search/Facet";
 import ShowFilterResultsMobile from "@/components/search/ShowFilterResultsMobile";
+import { SearchContextProvider } from "./useSearch";
 
 export default function BaseLayout({
   children, // will be a page or nested layout
@@ -17,20 +18,22 @@ export default function BaseLayout({
   const { sidebarToggleManager } = useUIContext();
   return (
     <>
-      <section
-        data-sb-open={sidebarToggleManager.state}
-        className="group mt-2 md:mt-6"
-      >
-        <Wrapper className="flex gap-[50px] md:pb-[100px] items-start">
-          <div className='hidden -translate-x-full w-full md:w-auto md:h-auto md:relative md:block md:translate-x-0 group-data-[sb-open="true"]:block group-data-[sb-open="true"]:translate-x-0'>
-            <SearchSidebar />
-          </div>
-          <div className="w-full scroll-smooth group-data-[sb-open='true']:hidden group-data-[sb-open='true']:md:block">
-            {children}
-          </div>
-        </Wrapper>
-        <FooterComponent />
-      </section>
+      <SearchContextProvider>
+        <section
+          data-sb-open={sidebarToggleManager.state}
+          className="group mt-2 md:mt-6"
+        >
+          <Wrapper className="flex gap-[50px] md:pb-[100px] items-start">
+            <div className='hidden -translate-x-full w-full md:w-auto md:h-auto md:relative md:block md:translate-x-0 group-data-[sb-open="true"]:block group-data-[sb-open="true"]:translate-x-0'>
+              <SearchSidebar />
+            </div>
+            <div className="w-full scroll-smooth group-data-[sb-open='true']:hidden group-data-[sb-open='true']:md:block">
+              {children}
+            </div>
+          </Wrapper>
+          <FooterComponent />
+        </section>
+      </SearchContextProvider>
     </>
   );
 }
