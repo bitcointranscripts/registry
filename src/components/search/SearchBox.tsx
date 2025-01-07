@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useSearch } from "@/app/search/useSearch";
 import {
   CloseIconOutlined,
   SearchIcon,
 } from "@bitcoin-dev-project/bdp-ui/icons";
+import { useSearchParams, useRouter } from "next/navigation";
+import { URLSearchParamsKeyword } from "@/config";
 
 const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) => {
-  const { searchQuery, makeQuery } = useSearch();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const searchQuery = searchParams.get(URLSearchParamsKeyword.SEARCH) || "";
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,7 +37,8 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
     if (!searchInput?.trim()) {
       return;
     };
-    makeQuery(searchInput);
+    // makeQuery(searchInput);
+    router.push(`/search?${URLSearchParamsKeyword.SEARCH}=${searchInput}`);
     setFocus(false);
     inputRef?.current?.blur();
     if (onSubmit) {

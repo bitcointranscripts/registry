@@ -1,8 +1,7 @@
 import { FacetKeys } from "@/app/search/types";
-// import { useRouter } from "next/router";
 import { appendFilterName, appendSortName } from "./helper";
 import { URLSearchParamsKeyword } from "@/config";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type FilterProp = {
   filterType: FacetKeys;
@@ -13,15 +12,13 @@ type FilterProp = {
 const useURLManager = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
 
-  const isSearchPage = pathname.includes("search");
-  const basePath = isSearchPage ? "" : "/search";
+  const basePath = "/search";
 
   const urlParams = new URLSearchParams(searchParams.toString());
 
   const getSearchTerm = () => {
-    return urlParams.get("search");
+    return urlParams.get(URLSearchParamsKeyword["SEARCH"]);
   };
 
   const getFilter = (filterType: FacetKeys) => {
@@ -160,6 +157,7 @@ const useURLManager = () => {
   };
 
   const clearAllFilters = () => {
+    const urlParams = new URLSearchParams(searchParams.toString());
     const paramKeys = Array.from(urlParams.keys());
     for (const key of paramKeys) {
       if (key.startsWith("filter")) {
@@ -175,7 +173,7 @@ const useURLManager = () => {
     filterTypes: FacetKeys[];
     sortField: string;
   }) => {
-    const urlParams = new URLSearchParams(searchParams);
+    const urlParams = new URLSearchParams(searchParams.toString());
     filterTypes.forEach((filterType) => {
       const appendedFilterName = appendFilterName(filterType);
       const currentFilterForType = urlParams.getAll(appendedFilterName);
