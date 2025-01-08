@@ -27,7 +27,7 @@ const IndividualTranscript = ({
     let keyWithoutHash  = key.replace(/[#]+\s+/gi, "")
     acc[keyWithoutHash] = [{
       name: keyWithoutHash,
-      slug: createContentSlug(key), 
+      slug: createContentSlug(key),
     }]
      return acc;
   }, {})
@@ -38,7 +38,7 @@ const IndividualTranscript = ({
   ];
   const finalRoutes = [...staticRoutes, ...breadCrumbs];
   return (
-    <Wrapper className="relative flex flex-col !px-0 gap-6 lg:gap-7 2xl:gap-10 mx-auto h-[calc(100vh-var(--header-height))] w-full overflow-y-auto scroll-smooth">
+    <Wrapper className="relative flex flex-col !px-0 gap-6 lg:gap-7 2xl:gap-10 mx-auto h-[calc(100svh-var(--header-height)-10px)] w-full overflow-y-auto scroll-smooth">
       <div className="py-4 lg:pt-7 2xl:pt-10 px-4 lg:px-10 2xl:px-[60px]">
         <BaseCrumbLists crumbsArray={finalRoutes} />
       </div>

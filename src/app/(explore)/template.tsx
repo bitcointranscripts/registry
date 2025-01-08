@@ -9,7 +9,7 @@ export default function ExploreLayout({
 }) {
   return (
     <>
-      <section className="mt-2 md:mt-6 h-[calc(100vh-var(--header-height)-26px)] overflow-y-auto">
+      <section className="mt-2 md:mt-6 h-[calc(100svh-var(--header-height)-26px)] overflow-y-auto">
         <Wrapper className="flex gap-[50px] md:pb-[100px]">
           <ExploreNavigation />
           <div className="w-full scroll-smooth">{children}</div>
