@@ -26,11 +26,11 @@ const ContentGrouping = ({
       linkRef.current.click();
     }
   };
-  
+
   useEffect(() => {
     if (currentGroup) {
       if (selectRef.current) {
-        selectRef.current.value = `${currentGroup}`;
+        selectRef.current.value = `${createSlug(currentGroup)}`;
       }
     }
   }, [currentGroup]);
@@ -68,7 +68,6 @@ const ContentGrouping = ({
           <div className="selection-box pr-2 bg-orange-custom-800 py-2.5 px-4 rounded-md ">
             <select
               onChange={onOptionsChange}
-              value={currentGroup}
               ref={selectRef}
               className="pr-3  bg-orange-custom-800   w-full outline-none font-medium"
             >
