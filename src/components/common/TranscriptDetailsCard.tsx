@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { ContentTreeArray } from "@/utils/data";
-import { ContentData, formatDate } from "@/utils";
+import { FieldCountItem, formatDate, TagsDetailed } from "@/utils";
 import { MicIcon, BookmarkIcon, CalendarIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
 import useURLManager from "@/service/URLManager/useURLManager";
@@ -18,7 +18,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
   const speakersToDisplay = pillCountLimit ? speakers?.slice(0, pillCountLimit) : speakers;
   const tagsToDisplay = pillCountLimit ? tagsDetailed?.slice(0, pillCountLimit) : tagsDetailed;
 
-  const calculateRemaining = (data: ContentData[] | string[]) => {
+  const calculateRemaining = (data: FieldCountItem[] | string[] | TagsDetailed[]) => {
     if (!pillCountLimit) return 0;
     // only truncate if data exceeds limit
     if (data?.length && data.length > pillCountLimit) {

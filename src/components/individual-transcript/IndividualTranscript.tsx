@@ -2,13 +2,8 @@
 import React, { useState } from "react";
 import { Transcript } from "contentlayer/generated";
 import TranscriptMetadataComponent from "../common/TranscriptMetadataCard";
-import ContentGrouping from "../explore/ContentGrouping";
-import {
-  ContentData,
-  createContentSlug,
-  extractHeadings,
-  GroupedData,
-} from "@/utils";
+import NavigationByWords from "../explore/NavigationByWords";
+import { extractHeadings } from "@/utils";
 import Wrapper from "../layout/Wrapper";
 import { twMerge } from "tailwind-merge";
 import FooterComponent from "../layout/FooterComponent";
@@ -25,7 +20,6 @@ const IndividualTranscript = ({
   const [currentHeading, setCurrentHeading] = useState("");
 
   const allHeadings = extractHeadings(transcript.body.raw);
-  
   const staticRoutes = [
     { name: "Home", link: "/", isActive: false },
     { name: "Sources", link: "/sources", isActive: false },
@@ -64,13 +58,12 @@ const IndividualTranscript = ({
         </div>
 
         <div className="hidden lg:flex w-full sticky lg:flex-auto top-6 max-w-[300px] 2xl:max-w-[465px] self-start">
-          <ContentGrouping
+          <NavigationByWords
             currentGroup={currentHeading}
-            isTranscript
-            groupedData={allHeadings as unknown as GroupedData}
+            navigationList={allHeadings}
             className={twMerge(
               `!w-full rounded-xl max-h-[calc(90vh-var(--header-height))]`,
-              Object.keys(allHeadings).length < 1 && "!invisible",
+              allHeadings.length < 1 && "!invisible",
             )}
             screen="desktop"
           />
