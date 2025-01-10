@@ -2,34 +2,61 @@ import React from "react";
 
 import { setup } from "@/config";
 import useURLManager from "@/service/URLManager/useURLManager";
-import { FilterIcon, CloseIconOutlined } from "@bitcoin-dev-project/bdp-ui/icons";
+import {
+  FilterIcon,
+  CloseIconOutlined,
+} from "@bitcoin-dev-project/bdp-ui/icons";
 import { useSearch } from "@/app/search/useSearch";
 import SidebarSection from "./SidebarSection";
 import { ArbitraryCallback, Facet } from "@/app/search/types";
 import { useUIContext } from "@/context/UIContext";
-import { ca } from "date-fns/locale";
 
-const FilterMenu = ({callback} : {callback: ArbitraryCallback}) => {
-  const { filterFields } = useSearch();
+export const FilterMenuMobile = () => {
   const { sidebarToggleManager } = useUIContext();
+  return (
+    <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[0px] bg-white">
+      <p className="text-[14px] font-bold">Filters</p>
+      <button
+        className="mr-2 active:scale-90 p-1"
+        onClick={() => sidebarToggleManager.updater()}
+      >
+        <FilterIcon
+          className="w-5 h-5"
+        />
+      </button>
+    </div>
+  );
+};
+
+const FilterMenu = ({ callback }: { callback: ArbitraryCallback }) => {
+  const { filterFields } = useSearch();
 
   return (
     <>
-      <SidebarSection className="text-custom-primary-text flex justify-between">
+      {/* Mobile filter menu */}
+      <div className="md:hidden w-full">
+        <FilterMenuMobile />
+      </div>
+      <SidebarSection className="hidden md:flex w-full text-custom-primary-text justify-between">
         <div className="flex items-center gap-2">
-          <FilterIcon className="w-[20px] hidden md:flex"/>
-          <p className="text-base 2xl:text-lg font-bold leading-none">Filters</p>
+          <FilterIcon className="w-[20px] hidden md:flex" />
+          <p className="text-base 2xl:text-lg font-bold leading-none">
+            Filters
+          </p>
         </div>
-        <button className="md:hidden" onClick={() => sidebarToggleManager.updater()}>
-          <FilterIcon className="w-5 h-5 mr-2 active:scale-95" />
-        </button>
       </SidebarSection>
       <AppliedFilters filters={filterFields} callback={callback} />
     </>
   );
 };
 
-const AppliedFilters = ({ filters, callback }: { filters: Facet[], callback: ArbitraryCallback }) => {
+const AppliedFilters = ({
+  filters,
+  callback,
+}: {
+  filters: Facet[];
+  callback: ArbitraryCallback;
+}) => {
   const { removeFilterTypes, removeFilter } = useURLManager();
   if (!filters?.length) return null;
   const clearAllFilters = () => {
@@ -63,16 +90,15 @@ const AppliedFilters = ({ filters, callback }: { filters: Facet[], callback: Arb
             .map((filter) => (
               <div
                 key={filter.field}
-                className="flex gap-3 w-fit py-[10px] px-3 2xl:py-3 2xl:px-4 bg-custom-accent text-custom-white dark:text-custom-background rounded-lg transform hover:scale-95 transition-all active:scale-90"
+                className="flex gap-3 w-fit py-[10px] px-3 2xl:py-3 2xl:px-4 bg-custom-accent text-custom-white dark:text-custom-background rounded-lg transform transition-all hover:scale-95 active:scale-90"
                 role="button"
                 onClick={() => {
                   removeFilter({
                     filterType: filter.field,
                     filterValue: filter.value,
-                  })
+                  });
                   callback();
-                }
-                }
+                }}
               >
                 <span className="capitalize text-sm font-semibold 2xl:text-sm">
                   {filter.value}

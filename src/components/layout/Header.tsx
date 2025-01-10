@@ -10,6 +10,7 @@ import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon } from "@bi
 import Wrapper from "./Wrapper";
 import Logo from "./Logo";
 import SearchBox from "../search/SearchBox";
+import MobileSearchBox from "../search/MobileSearchBox";
 
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
@@ -169,18 +170,19 @@ const Header = () => {
 
   return (
     <div className='flex items-center justify-center border-b-[0.5px] border-b-gray-custom-200 max-md:border-b-0 w-full sticky top-0 z-20'>
-      <Wrapper className='h-[var(--header-height)] flex items-center w-full justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
+      <Wrapper className='h-[var(--header-height)] flex items-center w-full md:justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
         <section className='flex items-center gap-4 md:gap-16 2xl:gap-24'>
           <Link href="/">
             <Logo iconStyles='w-[30px] xl:w-9' textStyles='text-black text-base leading-[36.77px] lg:text-[24px]' />
           </Link>
-          <nav className='flex items-center text-sm md:text-base gap-4 md:gap-8 2xl:gap-16 text-custom-black-custom-200'>
+          <nav className='hidden md:flex items-center text-sm md:text-base gap-4 md:gap-8 2xl:gap-16 text-custom-black-custom-200'>
             <Link href='/categories'>Transcripts</Link>
             <Link href='/about' className=''>
               About
             </Link>
           </nav>
         </section>
+
         {/* without suspense, all pages deopts into CSR due to useSearchParams hook in component */}
         <Suspense fallback={<></>}>
           <SearchBox />
@@ -199,10 +201,10 @@ const Header = () => {
           </div>
         </section>
 
-        <div className='flex gap-4 items-center md:hidden'>
-          {/* <button className='flex md:hidden'>
-            <SearchIcon  className='text-black w-6' />
-          </button> */}
+        <div className='flex ml-auto gap-4 items-center md:hidden'>
+          <Suspense fallback={<></>}>
+            <MobileSearchBox />
+          </Suspense>
           <button className='md:hidden max-md:flex h-8 w-8 items-center justify-center' onClick={() => setOpen(!open)}>
             {open ? <CloseIconOutlined className='w-5' /> : <Image src={MenuIcon} alt='menu icon' />}
           </button>
