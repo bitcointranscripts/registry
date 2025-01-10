@@ -97,16 +97,12 @@ const useURLManager = () => {
 
   const addSort = (sortField: string, value: string) => {
     const params = addSortParams(sortField, value);
-    router.push(basePath + `${params ? "?" + params : params}`, {
-      scroll: true,
-    });
+    router.push(basePath + `${params ? "?" + params : params}`);
   };
 
   const removeSort = (sortField: string) => {
     const params = removeSortParams(sortField);
-    router.push(basePath + `${params ? "?" + params : params}`, {
-      scroll: true,
-    });
+    router.push(basePath + `${params ? "?" + params : params}`);
   };
 
   const addFilter = ({
@@ -120,9 +116,7 @@ const useURLManager = () => {
       multiSelect,
     });
     if (params !== null) {
-      router.push(basePath + `${params ? "?" + params : params}`, {
-        scroll: true,
-      });
+      router.push(basePath + `${params ? "?" + params : params}`);
     }
   };
 
@@ -137,9 +131,7 @@ const useURLManager = () => {
       multiSelect,
     });
     if (params !== null) {
-      router.push(basePath + `${params ? "?" + params : params}`, {
-        scroll: true,
-      });
+      router.push(basePath + `${params ? "?" + params : params}`);
     }
   };
 
@@ -184,16 +176,12 @@ const useURLManager = () => {
     removeSortParams(sortField);
     removePageQueryParams(urlParams);
     const params = urlParams.toString();
-    router.push(basePath + `${params ? "?" + params : params}`, {
-      scroll: true,
-    });
+    router.push(basePath + `${params ? "?" + params : params}`);
   };
 
   const setResultsSize = (size: number) => {
     urlParams.set(URLSearchParamsKeyword.SIZE, size.toString());
-    router.push(basePath + "?" + urlParams.toString(), {
-      scroll: true,
-    });
+    router.push(basePath + "?" + urlParams.toString());
   };
 
   return {

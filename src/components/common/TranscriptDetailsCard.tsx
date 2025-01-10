@@ -1,15 +1,14 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { ContentTreeArray } from "@/utils/data";
-import DateIcon from "/public/svgs/date-icon.svg";
-import TagsIcon from "/public/svgs/tags-icon.svg";
 import { ContentData, formatDate } from "@/utils";
-import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { MicIcon, BookmarkIcon, CalendarIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
 import useURLManager from "@/service/URLManager/useURLManager";
+import { getBreadcrumbsFromSlug } from "@/utils/search";
+import BaseCrumbLists from "./BaseCrumbLists";
 
-const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number }) => {
+const TranscriptDetailsCard = ({ data, pillCountLimit = 3, showSource = false }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, showSource?: boolean }) => {
   const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
 
   const selectedSpeakers = getFilter("authors");
@@ -35,8 +34,11 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTree
     return `${basePath}?${baseFilterParam}`;
   }
 
+  const breadcrumbs = getBreadcrumbsFromSlug(data.sourceFilePath);
+
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
+      {showSource && <BaseCrumbLists crumbsArray={breadcrumbs} />}
       <section className='flex justify-between'>
         <div className='flex md:flex-row flex-col justify-between gap-2 w-full'>
           <a
@@ -46,8 +48,8 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTree
             {title}
           </a>
           {date && (
-            <div className='flex gap-2 items-center h-fit'>
-              <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
+            <div className='flex gap-2 items-center h-fit shrink-0'>
+              <CalendarIcon className='w-[18px] md:w-[20px]' />
               <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
             </div>
           )}
@@ -56,19 +58,19 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTree
 
       <section className='flex flex-col gap-4'>
         {speakers?.length ? (
-          <section className='flex gap-2 items-center max-md:gap-1'>
+          <section className='flex gap-2'>
             <>
               <span>
                 <MicIcon className='w-5 md:w-6' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
-                <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
+                <div className='flex flex-wrap gap-[9px] text-xs md:text-sm 2xl:text-base'>
                   {speakersToDisplay?.map((speaker, idx) => (
                     <Pill key={speaker} kind="link" name={speaker} slug={getSpeakerLink(speaker)} isSelected={selectedSpeakers.includes(speaker)}/>
                   ))}
 
                   {calculateRemaining(speakers) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-md:leading-[100%]'>
                       + {calculateRemaining(speakers)} more
                     </p>
                   )}
@@ -78,20 +80,20 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3 }: { data: ContentTree
           </section>
         ) : null}
 
-        <section className='flex gap-2 items-center max-md:gap-1'>
+        <section className='flex gap-2'>
           {tagsDetailed?.length ? (
             <>
               <span>
-                <Image src={TagsIcon} alt='date icon' className='w-5 md:w-6' />
+                <BookmarkIcon className='w-5 md:w-6' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
-                <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
+                <div className='flex flex-wrap gap-[9px] text-xs md:text-sm 2xl:text-base'>
                   {tagsToDisplay?.map((tag, idx) => (
                     <Pill key={idx} kind="button" name={tag.name} value={tag.slug} type={"tags"} toggleFilter={toggleFilter} isSelected={selectedTags.includes(tag.slug)}/>
                   ))}
 
                   {calculateRemaining(tagsDetailed) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-md:leading-[100%]'>
                       + {calculateRemaining(tagsDetailed)} more
                     </p>
                   )}

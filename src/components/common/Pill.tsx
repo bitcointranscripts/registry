@@ -35,7 +35,7 @@ const PillActionContainer = (props: React.PropsWithChildren<PillProps>) => {
   const animationClass = `transition-all duration-300 active:scale-90`
   const prop = {
     "data-selected": Boolean(props.isSelected),
-    className: twMerge(selectedPillClass, animationClass, "max-content py-1 px-4 rounded-[5px] bg-gray-custom-700 hover:bg-gray-custom-600 hover:text-gray-custom-100 max-md:px-3 max-md:py-[2px] text-xs md:text-sm 2xl:text-base max-md:border max-md:border-gray-custom-300 max-md:leading-[100%] cursor-pointer"),
+    className: twMerge(selectedPillClass, animationClass, "max-content py-[4px] px-[6px] md:px-4 rounded-[5px] bg-gray-custom-700 hover:bg-gray-custom-600 hover:text-gray-custom-100 max-md:leading-[100%] cursor-pointer"),
   };
 
   if (props.kind === "button") {

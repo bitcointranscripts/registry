@@ -156,9 +156,9 @@ body:has([data-freeze-body="true"]) {
     width: 100vw;
     top: 0;
     left: 0;
-    padding: 4px;
+    padding: 16px 4px 0px;
     z-index: 99;
-    animation: glow-in 200ms ease-in-out forwards;
+    animation: glow-in 300ms ease-in-out forwards;
   }
 
   .popout .fallback-height {
@@ -166,6 +166,13 @@ body:has([data-freeze-body="true"]) {
   }
 }
 
-
-/* Pagination styling */
-
+@keyframes glow-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

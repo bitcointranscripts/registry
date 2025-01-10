@@ -1,5 +1,3 @@
-// import { getDomainName } from "@/config/mapping-helper";
-
 type FilterValue =
   | {
       name: string;
@@ -30,3 +28,16 @@ export function matchCharactersWithRegex(word: string, searchTerm: string) {
 
   return regex.test(word);
 }
+
+export const getBreadcrumbsFromSlug = (source: string) => {
+  const sourceArray = source.split("/");
+  const breadcrumbs = sourceArray.map((name, idx) => {
+    const link = sourceArray.slice(0, idx + 1).join("/");
+    return {
+      name,
+      link,
+      isActive: false,
+    };
+  });
+  return breadcrumbs;
+};

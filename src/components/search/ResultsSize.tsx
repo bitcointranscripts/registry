@@ -15,7 +15,7 @@ const ResultSize = () => {
   };
   return (
     <>
-      <SidebarSection className="py-[0px_!important] hidden lg:block border-none">
+      <SidebarSection className=" hidden lg:block border-none">
         <div className="flex flex-wrap items-center gap-2 pb-2 md:pb-4 text-custom-primary-text text-sm lg:text-base">
           <span>Showing</span>
           <span className="font-bold">

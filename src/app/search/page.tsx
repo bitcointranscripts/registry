@@ -5,14 +5,10 @@ import Pagination from "@/components/search/Pagination";
 import SearchResultCard from "@/components/search/SearchResultCard";
 import { useSearch } from "./useSearch";
 import NotFound from "../not-found";
-import { FilterIcon } from "@bitcoin-dev-project/bdp-ui/icons";
-import { useUIContext } from "@/context/UIContext";
 import { SkeletonResults } from "@/components/search/Loader";
 
 const SearchPage = () => {
   const { queryResult } = useSearch();
-
-  const { sidebarToggleManager } = useUIContext();
 
   const isLoading = queryResult.isLoading;
   const isError = queryResult.isError;
@@ -24,7 +20,11 @@ const SearchPage = () => {
   const noResults = totalResults === 0;
 
   if (isLoading) {
-    return <SkeletonResults count={4} />;
+    return (
+      <div className="mt-4">
+        <SkeletonResults count={4} />;
+      </div>
+    );
   }
 
   if (isError) {
@@ -37,16 +37,12 @@ const SearchPage = () => {
 
   return (
     <>
-      <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[84px] bg-white">
-        <p className="text-[14px] font-bold">Filters</p>
-        <FilterIcon
-          className="w-5 h-5 mr-2 active:scale-95"
-          onClick={() => sidebarToggleManager.updater()}
-        />
-      </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 2xl:max-w-[1024px]">
         {searchResults?.map((result) => (
-          <SearchResultCard result={result._source} />
+          <SearchResultCard
+            result={result._source}
+            className={queryResult.isFetching ? "animate-pulse" : ""}
+          />
         ))}
       </div>
       <div className="flex justify-center pt-8">

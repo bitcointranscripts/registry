@@ -78,7 +78,7 @@ export const SearchContextProvider = ({
       Object.keys(queryObject).map((objectKey) => {
         urlParams.set(objectKey, queryObject[objectKey]);
       });
-      router.push(pathname + "?" + urlParams.toString(), {scroll: true});
+      router.push(pathname + "?" + urlParams.toString());
     },
     [router, urlParams]
   );
@@ -99,9 +99,7 @@ export const SearchContextProvider = ({
     urlParams.delete(URLSearchParamsKeyword.PAGE); // new search query resets the user back to the first page of results
     urlParams.set(URLSearchParamsKeyword.SEARCH, queryString.trim()); // new search query
     if (pathname.includes("search")) {
-      router.push(`${pathname}?${urlParams.toString()}`,{
-        scroll: true,
-      });
+      router.push(`${pathname}?${urlParams.toString()}`);
     } else {
       router.push(`/search?${urlParams.toString()}`)
     }
