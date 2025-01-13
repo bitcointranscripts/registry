@@ -3,8 +3,8 @@ import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { Transcript } from "../../../.contentlayer/generated/types";
 import { createSlug } from "@/utils";
 import Link from "next/link";
-import { getIsolatedFacetLink } from "@/service/URLManager/helper";
 import Pill from "@/components/common/Pill";
+import useURLManager from "@/service/URLManager/useURLManager";
 
 interface TranscriptCardProps {
   data: Transcript;
@@ -15,6 +15,7 @@ interface TranscriptCardProps {
 
 const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCardProps) => {
   const remainingSpeakers = data?.speakers?.length && data?.speakers.length > 2 ? data?.speakers.length - 2 : 0;
+  const {toggleFilter} = useURLManager();
 
   return (
     <Link
@@ -43,7 +44,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {data?.speakers.slice(0, 2).map((speaker, idx) => (
-                    <Pill key={speaker + idx} kind="link" name={speaker} slug={getIsolatedFacetLink({filter_field: "authors", filter_value: speaker})} />
+                    <Pill key={speaker + idx} kind="button" name={speaker} toggleFilter={toggleFilter} type="authors" value={speaker} />
                   ))}
 
                   {remainingSpeakers === 0 ? null : (

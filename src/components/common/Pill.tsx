@@ -32,26 +32,28 @@ const Pill = (props: PillProps) => {
 
 const PillActionContainer = (props: React.PropsWithChildren<PillProps>) => {
   const selectedPillClass = `data-[selected=true]:bg-orange-custom-100 data-[selected=true]:text-gray-custom-100`
-  const animationClass = `transition-all duration-300 active:scale-90`
+  const animationClass = `transition-all duration-300 `
   const prop = {
     "data-selected": Boolean(props.isSelected),
     className: twMerge(selectedPillClass, animationClass, "max-content py-[4px] px-[6px] md:px-4 rounded-[5px] bg-gray-custom-700 hover:bg-gray-custom-600 hover:text-gray-custom-100 max-md:leading-[100%] cursor-pointer"),
   };
 
+  const defaultOnClick = (e: React.MouseEvent) => {e.stopPropagation()}
   if (props.kind === "button") {
     const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      defaultOnClick(e);
       props.onClick 
       ? props.onClick(e)
       : props.toggleFilter({ filterType: props.type, filterValue: props.value });
     }
     return (
-      <div {...prop} onClick={handleClick}>
+      <button {...prop} onClick={handleClick}>
         {props.children}
-      </div>
+      </button>
     )
   }
   
-  const defaultOnClick = (e: React.MouseEvent) => {e.stopPropagation()}
   return (
     <Link href={props.slug || ""} {...prop} onClick={defaultOnClick} prefetch={false}>
       {props.children}
