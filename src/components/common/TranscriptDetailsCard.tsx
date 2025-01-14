@@ -5,10 +5,8 @@ import { ContentData, formatDate } from "@/utils";
 import { MicIcon, BookmarkIcon, CalendarIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
 import useURLManager from "@/service/URLManager/useURLManager";
-import { getBreadcrumbsFromSlug } from "@/utils/search";
-import BaseCrumbLists from "./BaseCrumbLists";
 
-const TranscriptDetailsCard = ({ data, pillCountLimit = 3, showSource = false }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, showSource?: boolean }) => {
+const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, breadCrumbsComponent?: React.ReactNode }) => {
   const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
 
   const selectedSpeakers = getFilter("authors");
@@ -34,26 +32,24 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, showSource = false }:
     return `${basePath}?${baseFilterParam}`;
   }
 
-  const breadcrumbs = getBreadcrumbsFromSlug(data.sourceFilePath);
-
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
-      {showSource && <BaseCrumbLists crumbsArray={breadcrumbs} />}
-      <section className='flex justify-between'>
-        <div className='flex md:flex-row flex-col justify-between gap-2 w-full'>
+      <section className='flex md:flex-row flex-col justify-between gap-2 w-full'>
+        <div className='flex flex-col gap-2 w-full'>
+          {breadCrumbsComponent}
           <a
             href={`${languageURL}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
           </a>
-          {date && (
-            <div className='flex gap-2 items-center h-fit shrink-0'>
-              <CalendarIcon className='w-[18px] md:w-[20px]' />
-              <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
-            </div>
-          )}
         </div>
+        {date && (
+          <div className='md:self-start flex gap-2 items-center shrink-0'>
+            <CalendarIcon className='w-[18px] md:w-[20px]' />
+            <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+          </div>
+        )}
       </section>
 
       <section className='flex flex-col gap-4'>

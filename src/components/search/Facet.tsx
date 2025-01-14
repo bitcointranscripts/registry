@@ -30,6 +30,8 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
     selected: Boolean(selectedOptions.find((option) => option.value === item.key)),
   }));
 
+  const isLoading = queryResult.isLoading;
+
   return (
     <>
       <SidebarSection>
@@ -47,7 +49,7 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
               callback();
             }}
             styles={{
-              noResults: "text-red-500",
+              noResults: `${isLoading ? "hidden" : "text-gray-custom-200"}`,
               optionWrapper: "gap-4",
               container: "max-h-[120px] bg-gray-custom-100"
             }}

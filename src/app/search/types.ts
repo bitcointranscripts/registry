@@ -47,9 +47,10 @@ export type EsSearchResult = {
     needs_review: boolean;
     transcript_by?: string;
     transcript_source: string;
-    // summary?: string;
+    summary?: string;
     // thread_url?: string;
     // type?: "question" | "reply" | "original_post" | "newsletter";
+    language: string;
   }
 };
 

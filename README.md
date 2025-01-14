@@ -2,7 +2,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Get keys for ElasticSearch and add them to `.env.` file.
+namely: `API_KEY`, `CLOUD_ID`, and `INDEX`.
+
+Then, run the development server:
 
 ```bash
 npm run dev

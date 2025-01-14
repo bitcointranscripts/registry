@@ -1,6 +1,8 @@
 import { FacetKeys } from "@/app/search/types";
 
-export const LanguageCodes = ["zh", "es", "pt"]
+export const LanguageCodes = ["zh", "es", "pt"];
+
+export type LanguageCode = typeof LanguageCodes[number];
 
 export const URLSearchParamsKeyword = {
   SEARCH: "search",
@@ -21,7 +23,7 @@ export const aggregatorSize = 100;
 
 export const setup = {
   facetFields: ["authors", "transcript_source", "tags"] as FacetKeys[],
-  sortFields: ["indexed_at"]
+  sortFields: ["created_at"]
 }
 
 export const FacelLabelMapping: Record<FacetKeys, string> = {
@@ -36,10 +38,9 @@ export const FIELDS_TO_SEARCH = [
   "body",
   "authors",
   "tags",
-  "summary",
   "transcript_source",
 ];
 
 export const FIELDS_TO_EXCLUDE = [
- "summary", "summary_vector_embeddings", "body_formatted"
+ "summary_vector_embeddings", "body_formatted"
 ]

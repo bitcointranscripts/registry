@@ -44,9 +44,9 @@ const SearchPage = () => {
             className={queryResult.isFetching ? "animate-pulse" : ""}
           />
         ))}
-      </div>
-      <div className="flex justify-center pt-8">
-        <Pagination />
+        <div className="flex justify-center pt-8">
+          <Pagination />
+        </div>
       </div>
     </>
   );

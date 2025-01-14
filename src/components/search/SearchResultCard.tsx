@@ -7,6 +7,9 @@ import { EsSearchResult } from "@/app/search/types";
 import { unsluggify } from "@/utils";
 import topics from "@/public/topics.json"
 import { twMerge } from "tailwind-merge";
+import allSources from "@/public/sources-data.json";
+import BaseCrumbLists from "../common/BaseCrumbLists";
+import { getSourceBreadcrumbsFromSlug } from "@/utils/sources";
 
 type Result = EsSearchResult["_source"];
 
@@ -18,13 +21,13 @@ const getTopicTitle = (slug: string) => {
 }
 
 export const SearchResultCard = ({ result, className }: { result: Result, className?: string }) => {
-  const { transcript_source, title, body, authors, tags, id, indexed_at: date, url } = result;
+  const { transcript_source, title, body, authors, tags, id, created_at: date, url, language, summary } = result;
   
   const flattenedPath = new URL(url).pathname.split("/").slice(1).join("/");
   
   const transcriptData: ContentTreeArray = {
     title,
-    body,
+    body: summary || body,
     speakers: authors,
     sourceFilePath: transcript_source,
     flattenedPath,
@@ -33,9 +36,15 @@ export const SearchResultCard = ({ result, className }: { result: Result, classN
     tagsDetailed: tags?.map((tag) => ({ name: getTopicTitle(tag), slug: tag })),
   }
 
+  const breadCrumbs = getSourceBreadcrumbsFromSlug({
+    slug: transcript_source.split("/"),
+    current: allSources,
+    language,
+  })
+
   return (
     <div className={twMerge("mt-4", className || "")}>
-      <TranscriptDetailsCard key={id} slug={flattenedPath.split("/")} data={transcriptData} pillCountLimit={5} showSource={true} />
+      <TranscriptDetailsCard key={id} slug={flattenedPath.split("/")} data={transcriptData} pillCountLimit={5} breadCrumbsComponent={<BaseCrumbLists crumbsArray={breadCrumbs} />} />
     </div>
   );
 }; 

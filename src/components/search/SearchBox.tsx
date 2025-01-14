@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef } from "react";
 import {
   CloseIconOutlined,
   SearchIcon,
@@ -72,7 +72,7 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
               type="button"
               data-is-visible={onFocus && !!(searchInput.trim())}
               onClick={onClearInput}
-              className="m-3 hidden data-[is-visible='true']:grid place-items-center text-red-500"
+              className="m-3 hidden data-[is-visible='true']:grid place-items-center text-gray-custom-200"
             >
               <CloseIconOutlined
                 className="pointer-events-none w-[12px] md:w-[14px] transition-all duration-300 active:scale-95"
