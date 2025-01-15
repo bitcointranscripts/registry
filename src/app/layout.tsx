@@ -4,6 +4,7 @@ import "@bitcoin-dev-project/bdp-ui/styles.css";
 import "./globals.css";
 import Script from "next/script";
 import Header from "@/components/layout/Header";
+import QueryProvider from "./providers";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
@@ -23,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={manrope.className}>
-        <Header />
-        {children}
+        <QueryProvider>
+          <Header />
+            {children}
+        </QueryProvider>
       </body>
       <Script
         async

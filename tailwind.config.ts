@@ -68,14 +68,25 @@ const config: Config = {
         green: {
           "custom-100": "#ECF9F1",
         },
-        "custom-white": {
-          "custom-100": "#F2F2F2",
+        custom: {
+          "primary-text": "#292929",
+          "accent": "var(--accent)",
+          "white": "#F2F2F2",
         },
       },
       fontFamily: {
         brawler: ["var(--brawler-font)"],
         inter: ["var(--inter-font)"],
         "basis-mono": ["Basis Grotesque Mono Pro"],
+      },
+      keyframes: {
+        pulse: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '.5' },
+        },
+      },
+      animation: {
+        pulse: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
     },
   },

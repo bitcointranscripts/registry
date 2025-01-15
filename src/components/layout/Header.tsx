@@ -1,14 +1,16 @@
-"use client";
+"use client"
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "../landing-page/MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
-import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon, SearchIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Wrapper from "./Wrapper";
 import Logo from "./Logo";
+import SearchBox from "../search/SearchBox";
+import MobileSearchBox from "../search/MobileSearchBox";
 
 export const LanguageSwitcher = () => {
   const [isOpen, setOpen] = useState(false);
@@ -163,68 +165,46 @@ export function ThemeSwitcher() {
   );
 }
 
-const SearchComponent = () => {
-  return (
-    <div className='hidden'>
-      {/* <div className='md:flex relative w-full max-w-[540px] max-md:hidden hidden'> */}
-      <input
-        placeholder='Search here'
-        className='max-w-[540px] w-full h-[66px] max-xl:h-12 text-gray-custom-300 outline-none rounded-[14px] border border-gray-custom-400 bg-gray-custom-100 px-6'
-      />
-      <button className='h-[66px] w-[72px] flex items-center justify-center bg-orange-custom-100 absolute right-[-1px] rounded-r-[14px]  max-xl:h-12 max-xl:w-12'>
-        <SearchIcon className='text-white w-[18px]' />
-      </button>
-    </div>
-  );
-};
-
 const Header = () => {
   const [open, setOpen] = useState(false);
 
-  React.useEffect(() => {
-    document.body.classList.toggle("overflow-hidden", open);
-  }, [open]);
-
   return (
     <div className='flex items-center justify-center border-b-[0.5px] border-b-gray-custom-200 max-md:border-b-0 w-full sticky top-0 z-20'>
-      <Wrapper className='h-[var(--header-height)] flex items-center w-full justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
-        <section className='flex items-center gap-16 max-xl:gap-8 max-lg:gap-4'>
+      <Wrapper className='h-[var(--header-height)] flex items-center w-full md:justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
+        <section className='flex items-center gap-4 md:gap-16 2xl:gap-24'>
           <Link href="/">
-            <Logo iconStyles='w-9 max-xl:w-[30px]' textStyles='text-black text-[24px] leading-[36.77px] max-lg:text-base' />
+            <Logo iconStyles='w-[30px] xl:w-9' textStyles='text-black text-base leading-[36.77px] lg:text-[24px]' />
           </Link>
-          <nav className='md:hidden items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden'>
-            <Link href='/categories'>Transcripts</Link>
-            <Link href='/about' className='hidden'>
-              About
-            </Link>
-          </nav>
-        </section>
-
-        <SearchComponent />
-
-        {/* add active states of navigation links */}
-        <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden h-full'>
-          <div className='max-md:hidden hidden'>
-            <LanguageSwitcher />
-          </div>
-          <div className='max-md:hidden hidden'>
-            <ThemeSwitcher />
-          </div>
-          <nav className='md:flex items-center gap-16 text-black max-xl:gap-4 max-lg:text-sm max-md:hidden h-full'>
+          <nav className='hidden md:flex items-center text-sm md:text-base gap-4 md:gap-8 2xl:gap-16 text-custom-black-custom-200'>
             <Link href='/categories'>Transcripts</Link>
             <Link href='/about' className=''>
               About
             </Link>
           </nav>
+        </section>
+
+        {/* without suspense, all pages deopts into CSR due to useSearchParams hook in component */}
+        <Suspense fallback={<></>}>
+          <SearchBox />
+        </Suspense>
+
+        {/* add active states of navigation links */}
+        <section className='flex gap-16 text-black max-xl:gap-4 max-lg:gap-2 items-center max-md:hidden h-full'>
+          <div className='hidden'>
+            <LanguageSwitcher />
+          </div>
+          <div className='hidden'>
+            <ThemeSwitcher />
+          </div>
           <div className='md:flex max-md:hidden'>
             <MenuSwitcher />
           </div>
         </section>
 
-        <div className='max-md:gap-4 items-center md:hidden max-md:flex'>
-          <button className='md:hidden max-md:flex hidden'>
-            <SearchIcon className='text-black w-6' />
-          </button>
+        <div className='flex ml-auto gap-4 items-center md:hidden'>
+          <Suspense fallback={<></>}>
+            <MobileSearchBox />
+          </Suspense>
           <button className='md:hidden max-md:flex h-8 w-8 items-center justify-center' onClick={() => setOpen(!open)}>
             {open ? <CloseIconOutlined className='w-5' /> : <Image src={MenuIcon} alt='menu icon' />}
           </button>

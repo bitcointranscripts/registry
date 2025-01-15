@@ -3,7 +3,7 @@ import { allTranscripts } from "contentlayer/generated";
 import allSources from "@/public/sources-data.json";
 import { notFound } from "next/navigation";
 import IndividualTranscript from "@/components/individual-transcript/IndividualTranscript";
-import { createSlug } from "@/utils";
+
 import { BaseCrumbType } from "@/components/common/BaseCrumbLists";
 
 // forces 404 for paths not generated from `generateStaticParams` function.

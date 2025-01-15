@@ -55,7 +55,12 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
 
   const languageRegex = new RegExp(`\\.(${LanguageCodes.join("|")})(\\.md)?$`);
 
-  const transcripts = shuffle(allTranscripts).filter((transcript) => {
+  // Optimization for landingpage — obscene amount of data passed to the client (reduced from 6.6s to 795ms)
+  const lightWeightTranscripts = allTranscripts.map(({ body, summary, ...fieldsToUse }) => {
+    return {...fieldsToUse}
+  })
+
+  const transcripts = shuffle(lightWeightTranscripts as Transcript[]).filter((transcript) => {
     return transcript.date && !languageRegex.test(transcript.url);
   });
 

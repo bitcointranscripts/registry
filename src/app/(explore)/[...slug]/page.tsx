@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -126,7 +126,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
                         href={resource.url ?? ""}
                         key={`${resource.title}-${index}`}
                         target='_blank'
-                        className='py-[2px] px-4 rounded-[5px] bg-custom-white-custom-100 text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
+                        className='py-[2px] px-4 rounded-[5px] bg-custom-white text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
                       >
                         {resource.title}
                       </Link>
@@ -140,7 +140,10 @@ const page = ({ params }: { params: { slug: string[] } }) => {
           {isRoot ? (
             <div className='flex flex-col gap-6 h-full pb-8 overflow-scroll'>
               {(transcripts as ContentTreeArray[]).map((item, i) => (
-                <TranscriptDetailsCard key={i} slug={slug} data={item} />
+                // without suspense, page deopts into CSR due to useSearchParams hook in component
+                <Suspense fallback={<></>}>
+                  <TranscriptDetailsCard key={i} slug={slug} data={item} />
+                </Suspense>
               ))}
             </div>
           ) : (

@@ -3,6 +3,8 @@ import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { Transcript } from "../../../.contentlayer/generated/types";
 import { createSlug } from "@/utils";
 import Link from "next/link";
+import Pill from "@/components/common/Pill";
+import useURLManager from "@/service/URLManager/useURLManager";
 
 interface TranscriptCardProps {
   data: Transcript;
@@ -13,6 +15,7 @@ interface TranscriptCardProps {
 
 const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCardProps) => {
   const remainingSpeakers = data?.speakers?.length && data?.speakers.length > 2 ? data?.speakers.length - 2 : 0;
+  const {toggleFilter} = useURLManager();
 
   return (
     <Link
@@ -41,12 +44,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
                   {data?.speakers.slice(0, 2).map((speaker, idx) => (
-                    <p
-                      key={idx}
-                      className='py-[4.11px] px-[16.43px] rounded-[5.13px] bg-gray-custom-700 max-md:px-3 max-md:py-[2px] max-xl:text-[13px] max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'
-                    >
-                      {speaker}
-                    </p>
+                    <Pill key={speaker + idx} kind="button" name={speaker} toggleFilter={toggleFilter} type="authors" value={speaker} />
                   ))}
 
                   {remainingSpeakers === 0 ? null : (
