@@ -102,7 +102,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
 
       {summary || body ? (
         <section>
-          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 2xl:leading-[25px] line-clamp-3'>{summary ? summary : body}</p>
+          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 2xl:leading-[25px] line-clamp-3' style={{"wordBreak": "break-word"}}>{summary ? summary : body}</p>
         </section>
       ) : null}
     </div>

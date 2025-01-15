@@ -10,6 +10,7 @@ import { useSearch } from "@/app/search/useSearch";
 import SidebarSection from "./SidebarSection";
 import { ArbitraryCallback, Facet } from "@/app/search/types";
 import { useUIContext } from "@/context/UIContext";
+import { getFilterDisplayName } from "@/utils/search";
 
 export const FilterMenuMobile = () => {
   const { sidebarToggleManager } = useUIContext();
@@ -101,7 +102,7 @@ const AppliedFilters = ({
                 }}
               >
                 <span className="capitalize text-sm font-semibold 2xl:text-sm">
-                  {filter.value}
+                  {getFilterDisplayName({ field: filter.field, value: filter.value })}
                 </span>
                 <CloseIconOutlined />
               </div>
