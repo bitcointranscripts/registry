@@ -55,10 +55,11 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
 
   return (
     <div className="flex items-center gap-2 text-sm md:text-base">
+      {/* hide farthest left page controls on mobile */}
       <button
         onClick={() => onChange(1)}
         disabled={current === 1}
-        className="md:p-1 disabled:hidden"
+        className="hidden md:block md:p-1 disabled:hidden"
         aria-label="First page"
       >
         <svg
@@ -147,10 +148,11 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
         </svg>
       </button>
 
+      {/* hide farthest right page controls on mobile */}
       <button
         onClick={() => onChange(totalPages)}
         disabled={current === totalPages}
-        className="md:p-1 disabled:hidden"
+        className="hidden md:block md:p-1 disabled:hidden"
         aria-label="Last page"
       >
         <svg

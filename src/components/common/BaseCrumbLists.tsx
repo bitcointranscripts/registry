@@ -12,7 +12,7 @@ const BaseCrumbLists = ({crumbsArray}:{crumbsArray:BaseCrumbType[]}) => {
       {crumbsArray.map((link, i) => (
         <div key={link.name} className="flex gap-1 items-center">
           <Link
-            className={`capitalize hover:underline font-medium text-sm 2xl:text-base text-nowrap ${
+            className={`capitalize hover:underline font-medium text-sm 2xl:text-base ${
               link.isActive
                 ? "text-orange-custom-100"
                 : "text-black md:text-gray-custom-800"

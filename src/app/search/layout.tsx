@@ -20,6 +20,7 @@ export default function BaseLayout({
     <>
       <SearchContextProvider>
         <section
+          id="search-page"
           data-sb-open={sidebarToggleManager.state}
           className="group scroll-smooth max-h-[calc(100svh-var(--header-height)-2px)] overflow-auto"
         >
@@ -50,7 +51,10 @@ const SearchSidebar = () => {
   const callback = () => {
     if (isMobile) {
       sidebarToggleManager.updater(false);
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      const element = document.getElementById("search-page");
+      if (element) {
+        element.scrollTo({top: 5, behavior: 'smooth'});
+      }
     }
   };
 

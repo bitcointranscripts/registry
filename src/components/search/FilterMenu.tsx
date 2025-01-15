@@ -14,12 +14,20 @@ import { getFilterDisplayName } from "@/utils/search";
 
 export const FilterMenuMobile = () => {
   const { sidebarToggleManager } = useUIContext();
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    sidebarToggleManager.updater();
+    const element = document.getElementById("search-page");
+    if (element) {
+      element.scrollTo({top: 5, behavior: 'smooth'});
+    }
+  }
   return (
     <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[0px] bg-white">
       <p className="text-[14px] font-bold">Filters</p>
       <button
         className="mr-2 active:scale-90 p-1"
-        onClick={() => sidebarToggleManager.updater()}
+        onClick={(e) => handleClick(e)}
       >
         <FilterIcon
           className="w-5 h-5"
