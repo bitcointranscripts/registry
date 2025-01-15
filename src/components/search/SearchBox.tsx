@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   CloseIconOutlined,
   SearchIcon,
@@ -41,6 +41,11 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
       onSubmit(searchInput);
     }
   };
+
+  // set search input value on mount and update it when searchQuery changes (e.g navigates to a new page)
+  useEffect(() => {
+    setSearchInput(searchQuery)
+  }, [searchQuery])
 
   return (
     <form

@@ -7,6 +7,7 @@ import { useSearch } from "@/app/search/useSearch";
 import { unsluggify } from "@/utils";
 import useURLManager from "@/service/URLManager/useURLManager";
 import { AuthorIcon, SourceIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { getTopicTitle } from "@/utils/search";
 
 const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallback }) => {
   const label = FacelLabelMapping[facet];
@@ -24,7 +25,7 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
   const selectedOptions = filterFields.filter((item) => item.field === facet);
 
   const options = queryResult.data?.aggregations?.[facet]?.buckets.map((item) => ({
-    label: unsluggify(item.key),
+    label: facet === 'tags' ? getTopicTitle(item.key) : unsluggify(item.key),
     count: item.doc_count,
     value: item.key,
     selected: Boolean(selectedOptions.find((option) => option.value === item.key)),

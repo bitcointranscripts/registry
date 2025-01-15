@@ -79,6 +79,11 @@ const MobileSearchBox = ({
     };
   }, [open, searchBoxRef.current]);
 
+  // set search input value on mount and update it when searchQuery changes (e.g navigates to a new page)
+  useEffect(() => {
+    setSearchInput(searchQuery)
+  }, [searchQuery])
+
   return (
     <form
       data-freeze-body-mobile={open}
