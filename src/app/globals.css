@@ -33,6 +33,9 @@
   --background-end-rgb: 255, 255, 255;
   --basic-mono-font: basic-mono;
   --header-height: 86px;
+  --stroke: #bfbfbf;
+  --primary-text: #292929;
+  --accent: #F7931A;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -90,4 +93,86 @@ body {
   background-color: white;
   width: 100%;
   z-index: -1;
+}
+
+/* styling for non-interactive body
+this is a hack to make the body non-interactive
+IMPORTANT: elements oustide the element with data-freeze-body that needs interactivity must have the class "pointer-events-auto" else it will be frozen too */
+
+[data-freeze-body="true"] {
+  pointer-events: auto;
+}
+
+[data-freeze-body="true"]::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  background-color: rgba(128, 128, 128, 0.15);
+  background-color: rgba(var(--background), 0.15);
+}
+
+body:has([data-freeze-body="true"]) {
+  overflow: hidden;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  [data-freeze-body-mobile="true"] {
+    pointer-events: auto;
+  }
+
+  [data-freeze-body-mobile="true"]::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    background-color: rgba(128, 128, 128, 0.15);
+  }
+
+  body:has([data-freeze-body-mobile="true"]) {
+    overflow: hidden;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #main:has(form[data-input-focus="true"]) .navBar {
+    display: none !important;
+  }
+  
+  .popout {
+    position: absolute;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    padding: 16px 4px 0px;
+    z-index: 99;
+    animation: glow-in 300ms ease-in-out forwards;
+  }
+
+  .popout .fallback-height {
+    max-height: clamp(35vh, 200px, 80vh);
+  }
+}
+
+@keyframes glow-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

@@ -1,51 +1,72 @@
+"use client";
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { ContentTreeArray } from "@/utils/data";
-import DateIcon from "/public/svgs/date-icon.svg";
-import TagsIcon from "/public/svgs/tags-icon.svg";
-import { ContentData, createSlug, formatDate, unsluggify } from "@/utils";
-import { MicIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { ContentData, formatDate } from "@/utils";
+import { MicIcon, BookmarkIcon, CalendarIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
+import useURLManager from "@/service/URLManager/useURLManager";
 
-const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[] }) => {
+const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, breadCrumbsComponent?: React.ReactNode }) => {
+  const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
+
+  const selectedSpeakers = getFilter("authors");
+  const selectedTags = getFilter("tags");
+
+  const basePath = "/search";
+
   const { speakers, tagsDetailed,  summary, date, title, body, languageURL } = data;
-  const calculateRemaining = (data: ContentData[] | string[]) => (data?.length && data.length > 3 ? data.length - 3 : 0);
+  const speakersToDisplay = pillCountLimit ? speakers?.slice(0, pillCountLimit) : speakers;
+  const tagsToDisplay = pillCountLimit ? tagsDetailed?.slice(0, pillCountLimit) : tagsDetailed;
+
+  const calculateRemaining = (data: ContentData[] | string[]) => {
+    if (!pillCountLimit) return 0;
+    // only truncate if data exceeds limit
+    if (data?.length && data.length > pillCountLimit) {
+      return data.length - pillCountLimit
+    }
+    return 0
+  }
+
+  const getSpeakerLink = (speaker: string) => {
+    const baseFilterParam = toggleFilterFromParams({ filterType: "authors", filterValue: speaker });
+    return `${basePath}?${baseFilterParam}`;
+  }
 
   return (
     <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
-      <section className='flex justify-between'>
-        <div className='flex md:flex-row flex-col justify-between gap-2 w-full'>
-          <Link
+      <section className='flex md:flex-row flex-col justify-between gap-2 w-full'>
+        <div className='flex flex-col gap-2 w-full'>
+          {breadCrumbsComponent}
+          <a
             href={`${languageURL}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
-          </Link>
-          {date && (
-            <div className='flex gap-2 items-center h-fit'>
-              <Image src={DateIcon} alt='date icon' className='w-[18px] md:w-[20px]' />
-              <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
-            </div>
-          )}
+          </a>
         </div>
+        {date && (
+          <div className='md:self-start flex gap-2 items-center shrink-0'>
+            <CalendarIcon className='w-[18px] md:w-[20px]' />
+            <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+          </div>
+        )}
       </section>
 
       <section className='flex flex-col gap-4'>
         {speakers?.length ? (
-          <section className='flex gap-2 items-center max-md:gap-1'>
+          <section className='flex gap-2'>
             <>
               <span>
                 <MicIcon className='w-5 md:w-6' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
-                <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
-                  {speakers.slice(0, 3).map((speaker, idx) => (
-                    <Pill key={speaker} name={speaker} slug={`/speakers/${createSlug(speaker)}`}  />
+                <div className='flex flex-wrap gap-[9px] text-xs md:text-sm 2xl:text-base'>
+                  {speakersToDisplay?.map((speaker, idx) => (
+                    <Pill key={speaker} kind="link" name={speaker} slug={getSpeakerLink(speaker)} isSelected={selectedSpeakers.includes(speaker)}/>
                   ))}
 
                   {calculateRemaining(speakers) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-md:leading-[100%]'>
                       + {calculateRemaining(speakers)} more
                     </p>
                   )}
@@ -55,20 +76,20 @@ const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[
           </section>
         ) : null}
 
-        <section className='flex gap-2 items-center max-md:gap-1'>
+        <section className='flex gap-2'>
           {tagsDetailed?.length ? (
             <>
               <span>
-                <Image src={TagsIcon} alt='date icon' className='w-5 md:w-6' />
+                <BookmarkIcon className='w-5 md:w-6' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
-                <div className='flex flex-wrap gap-[9px] max-md:gap-2'>
-                  {tagsDetailed.slice(0, 3).map((tag, idx) => (
-                    <Pill key={idx} name={tag.name} slug={`/tags/${tag.slug}`}  />
+                <div className='flex flex-wrap gap-[9px] text-xs md:text-sm 2xl:text-base'>
+                  {tagsToDisplay?.map((tag, idx) => (
+                    <Pill key={idx} kind="button" name={tag.name} value={tag.slug} type={"tags"} toggleFilter={toggleFilter} isSelected={selectedTags.includes(tag.slug)}/>
                   ))}
 
                   {calculateRemaining(tagsDetailed) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-md:leading-[100%]'>
                       + {calculateRemaining(tagsDetailed)} more
                     </p>
                   )}
@@ -81,7 +102,7 @@ const TranscriptDetailsCard = ({ data }: { data: ContentTreeArray; slug: string[
 
       {summary || body ? (
         <section>
-          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 2xl:leading-[25px] line-clamp-3'>{summary ? summary : body}</p>
+          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 2xl:leading-[25px] line-clamp-3' style={{"wordBreak": "break-word"}}>{summary ? summary : body}</p>
         </section>
       ) : null}
     </div>
