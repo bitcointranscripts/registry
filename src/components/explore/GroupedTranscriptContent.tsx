@@ -1,29 +1,26 @@
 "use client";
 import React from "react";
 import SingleTranscriptContent from "./SingleTranscriptContent";
-import { createSlug, TopicsData } from "@/utils";
+import { ExploreGroupedData } from "@/utils";
 import { useInView } from "react-intersection-observer";
+import { twMerge } from "tailwind-merge";
 
 interface IGroupedTranscriptContent {
-  topicsByAlphabet: [string, TopicsData[]];
+  dataByHeading: ExploreGroupedData;
   setCurrentGroup: React.Dispatch<React.SetStateAction<string>>;
   linkName: string;
   type: "alphabet" | "words";
 }
 
 const GroupedTranscriptContent = ({
-  topicsByAlphabet,
+  dataByHeading,
   setCurrentGroup,
   linkName,
   type,
 }: IGroupedTranscriptContent) => {
-  const handleAxisChange = (
-    inView: boolean,
-    entry: IntersectionObserverEntry
-  ) => {
-  
+  const handleAxisChange = (inView: boolean) => {
     if (inView) {
-      setCurrentGroup(topicsByAlphabet[0]);
+      setCurrentGroup(dataByHeading.slug);
     }
   };
   const { ref } = useInView({
@@ -31,37 +28,24 @@ const GroupedTranscriptContent = ({
     onChange: handleAxisChange,
   });
 
-  return type === "alphabet" ? (
+  return (
     <div
       ref={ref}
-      id={topicsByAlphabet[0].toLowerCase()}
-      className="flex flex-col gap-7 "
+      id={dataByHeading.slug}
+      className={twMerge(
+        "flex flex-col gap-7",
+        dataByHeading?.nested?.length === 0 && "hidden",
+      )}
     >
-      <h4 className="font-bold text-2xl capitalize">{topicsByAlphabet[0]}</h4>
+      <h4 className="font-bold text-2xl capitalize">{dataByHeading.name}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        {topicsByAlphabet[1].map((topics, i) => (
-          <SingleTranscriptContent
-            key={`${topics.slug}${i}`}
-            {...topics}
-            linkName={linkName}
-          />
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div
-      ref={ref}
-      id={createSlug(topicsByAlphabet[0])}
-      className="flex flex-col gap-7"
-    >
-      <h4 className="font-bold text-2xl capitalize">{topicsByAlphabet[0]}</h4>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        {topicsByAlphabet[1] &&
-        topicsByAlphabet[1].map((data, i) => (
+        {dataByHeading.nested &&
+          dataByHeading.nested.map((topic, i) => (
             <SingleTranscriptContent
-              key={`${data.slug}${i}`}
-              {...data}
-              name={data.name}
+              key={topic.slug}
+              name={topic.name}
+              slug={topic.slug}
+              count={topic.count}
               linkName={linkName}
             />
           ))}

@@ -3,8 +3,8 @@
 import { Resources } from "contentlayer/generated";
 import React, { SetStateAction, useState } from "react";
 import TranscriptTabContent from "../individual-transcript/TranscriptTabContent";
-import ContentGrouping from "../explore/ContentGrouping";
-import { ContentData, GroupedData, TopicsData } from "@/utils";
+import NavigationByWords from "../explore/NavigationByWords";
+import { NavigationList } from "@/utils";
 
 const Tabs = ({
   summary,
@@ -18,7 +18,7 @@ const Tabs = ({
   markdown: string;
   extraInfo?: Resources[];
   currentHeading?: string;
-  groupedHeading?: Record<string, ContentData[]>;
+  groupedHeading?: NavigationList[];
   setCurrentHeading?: React.Dispatch<SetStateAction<string>>;
 }) => {
   const [openTabs, setOpenTabs] = useState<
@@ -51,11 +51,11 @@ const Tabs = ({
       </div>
 
      {/* This is needed since the layout for the mobile design changes and goes under the tabs */}
-      {Object.keys({ ...groupedHeading }).length > 0 && (
+      {groupedHeading && (
         <div className="block w-full pt-4 lg:hidden sticky top-[20px] md:top-[65px] z-[5]">
-          <ContentGrouping
+          <NavigationByWords
             currentGroup={currentHeading || ""}
-            groupedData={(groupedHeading as GroupedData) || []}
+            navigationList={groupedHeading}
             screen="mobile"
           />
         </div>

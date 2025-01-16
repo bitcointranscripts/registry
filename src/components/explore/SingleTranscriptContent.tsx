@@ -1,10 +1,10 @@
-import { getDoubleDigits, TopicsData } from "@/utils";
+import { ExploreGroupedData, getDoubleDigits } from "@/utils";
 import Link from "next/link";
 import React from "react";
 
 type SingleContent = {
   linkName: string;
-} & TopicsData;
+} & ExploreGroupedData;
 const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent) => {
   let url = ""
 
@@ -39,7 +39,7 @@ const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent)
       prefetch={shouldPrefetch}
     >
       <span className='text-wrap break-words max-w-[80%]'>{name}</span>
-      <span className='font-normal font-basis-mono'>{getDoubleDigits(count)}</span>
+      <span className='font-normal font-basis-mono'>{getDoubleDigits(count || 0)}</span>
     </Link>
   );
 };

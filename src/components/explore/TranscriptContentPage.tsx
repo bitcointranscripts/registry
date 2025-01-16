@@ -2,24 +2,23 @@
 
 import React, { FC, useState } from "react";
 import GroupedTranscriptContent from "./GroupedTranscriptContent";
-import AlphabetGrouping from "./AlphabetGrouping";
+import AlphabetNavigation from "./AlphabetNavigation";
 import {
-  createSlug,
+    ExploreGroupedData,
   groupDataByAlphabet,
-  GroupedData,
   sortKeysAlphabetically,
 } from "@/utils";
-import MobileAlphabetGrouping from "./MobileAlphabetGrouping";
-import ContentGrouping from "./ContentGrouping";
+import MobileAlphabetNavigation from "./MobileAlphabetNavigation";
+import NavigationByWords from "./NavigationByWords";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
-import { LanguageCodes } from '@/config';
+import { LanguageCodes } from "@/config";
 
 interface ITranscriptContentPage {
   header: string;
   description?: string;
   mobileDescription?: string;
-  data: any /* A Json that changes could be topics, speakers, categories  */;
+  data: ExploreGroupedData[];
   type: "alphabet" | "words";
   linkName: string;
 }
@@ -32,14 +31,12 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
   linkName,
   type,
 }) => {
+
   const groupedData =
     type === "alphabet"
-      ? groupDataByAlphabet(data) as GroupedData
-      : sortKeysAlphabetically(data) as GroupedData;
-
-  const [currentGroup, setCurrentGroup] = useState<string>(
-    type === "alphabet" ? "A" : createSlug(Object.keys(groupedData)[0])
-  );
+      ? groupDataByAlphabet(data)
+      : sortKeysAlphabetically(data);
+  const [currentGroup, setCurrentGroup] = useState<string>(groupedData[0].slug);
 
   const pathname = usePathname();
   const pathnameArray = pathname.split("/");
@@ -58,21 +55,23 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
   });
 
   // remove language codes from paths passed to breadcrumbs
-  const allRoutes = routes.filter((route) => !LanguageCodes.includes(route.name))
+  const allRoutes = routes.filter(
+    (route) => !LanguageCodes.includes(route.name),
+  );
 
   return (
     <div className="flex items-start relative lg:gap-[50px]">
       <div className="flex flex-col w-full gap-6 lg:gap-10 no-scrollbar">
         <div className="block lg:hidden sticky top-0">
           {type == "alphabet" && (
-            <MobileAlphabetGrouping
+            <MobileAlphabetNavigation
               currentGroup={currentGroup}
               groupedData={groupedData}
             />
           )}
           {type == "words" && (
-            <ContentGrouping
-              groupedData={groupedData}
+            <NavigationByWords
+              navigationList={groupedData}
               currentGroup={currentGroup}
               screen="mobile"
             />
@@ -92,25 +91,12 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         </div>
 
         <div className="flex-col flex gap-10  pb-10">
-          {groupedData &&
-            type === "alphabet" &&
-            Object.entries(groupedData).map((arg, i) => (
+          {
+            groupedData.map((alp) => (
               <GroupedTranscriptContent
                 setCurrentGroup={setCurrentGroup}
-                key={`${arg[0]}${i}`}
-                topicsByAlphabet={arg}
-                linkName={linkName}
-                type={type}
-              />
-            ))}
-
-          {groupedData &&
-            type == "words" &&
-            Object.entries(groupedData).map((arg, i) => (
-              <GroupedTranscriptContent
-                setCurrentGroup={setCurrentGroup}
-                key={`${arg[0]}${i}`}
-                topicsByAlphabet={arg}
+                key={alp.slug}
+                dataByHeading={alp} // The Heading above all GroupedData
                 linkName={linkName}
                 type={type}
               />
@@ -120,14 +106,14 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
       <div className="hidden lg:flex sticky top-0 self-start flex-shrink-0 w-fit lg:justify-center ">
         {type === "alphabet" && (
-          <AlphabetGrouping
+          <AlphabetNavigation
             groupedData={groupedData}
             currentGroup={currentGroup}
           />
         )}
         {type == "words" && (
-          <ContentGrouping
-            groupedData={groupedData}
+          <NavigationByWords
+            navigationList={groupedData}
             currentGroup={currentGroup}
             screen="desktop"
           />
