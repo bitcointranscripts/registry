@@ -1,10 +1,8 @@
 import path from "path";
 import * as fs from "fs";
 import {
-  ContentData,
   createSlug,
-  SpeakerData,
-  TopicsData,
+  FieldCountItem,
   unsluggify,
 } from "./src/utils";
 import {
@@ -113,8 +111,8 @@ function buildTopicsMap(
 
 function generateAlphabeticalList(
   processedTopics: Map<string, ProcessedTopic>
-): TopicsData[] {
-  const result: TopicsData[] = [];
+): FieldCountItem[] {
+  const result: FieldCountItem[] = [];
   // The categories property is not needed for this list, so we drop it
   for (const { name, slug, count } of processedTopics.values()) {
     result.push({ name, slug, count });
@@ -124,8 +122,8 @@ function generateAlphabeticalList(
 
 function generateCategorizedList(
   processedTopics: Map<string, ProcessedTopic>
-): Record<string, TopicsData[]> {
-  const categorizedTopics: Record<string, TopicsData[]> = {};
+): Record<string, FieldCountItem[]> {
+  const categorizedTopics: Record<string, FieldCountItem[]> = {};
 
   Array.from(processedTopics.values()).forEach(
     ({ name, slug, count, categories }) => {
@@ -182,7 +180,7 @@ function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
   const slugSpeakers: any = {};
-  const speakerArray: SpeakerData[] = [];
+  const speakerArray: FieldCountItem[] = [];
 
   transcripts.forEach((transcript) => {
     const slugSpeakersArray = transcript.speakers?.map((speaker) => ({
@@ -382,21 +380,21 @@ export const Transcript = defineDocumentType(() => ({
       type: "list",
       resolve: (doc) => {
          // doc?.tags doesn't give an array in contentLayer so we do  _array to get it
-        const topicsStore = doc?.tags as any || []; 
+        const topicsStore = doc?.tags as any || [];
         const topics = (topicsStore?._array as string[]) ?? [];
 
         const topicsWithTitles = topics.map((topic) => {
           const currentTopic = getTopics().find(
-            (topicData: ContentData) => topicData.slug === topic
+            (topicData: FieldCountItem) => topicData.slug === topic
           );
 
           if(currentTopic?.title && currentTopic?.title.includes("(Miscellaneous)")) {
-            return { 
+            return {
               name: currentTopic?.title.replace("(Miscellaneous)",""),
               slug: currentTopic.slug,
             }
           }
-          return { 
+          return {
               name: currentTopic?.title || topic,
               slug: currentTopic?.slug || topic,
           };

@@ -4,7 +4,6 @@ import "./markdown.css";
 import { InView } from "react-intersection-observer";
 import { createContentSlug } from "@/utils";
 
-
 function formatSpeakerText(text: string): string {
   // Regular expression pattern to match "Speaker" or "Speaker:" followed by a timestamp
   const pattern = /(\b\w+(?: \w+)?\s*):? (\d{2}:\d{2}:\d{2})/g;
@@ -57,13 +56,29 @@ const TranscriptTabContent = ({
               as="div"
               threshold={1}
               rootMargin="35% 0% -65% 0%"
-              onChange={(inView, entry) => {
+              onChange={(inView) => {
                 if (setCurrentHeading && inView) {
                   setCurrentHeading(createContentSlug(props?.id || ""));
                 }
               }}
             >
               <h2 id={createContentSlug(props?.id || "")}>{children}</h2>
+            </InView>
+          );
+        },
+        h3: ({ children = [], className, ...props }) => {
+          return (
+            <InView
+              as="div"
+              threshold={1}
+              rootMargin="35% 0% -65% 0%"
+              onChange={(inView) => {
+                if (setCurrentHeading && inView) {
+                  setCurrentHeading(createContentSlug(props?.id || ""));
+                }
+              }}
+            >
+              <h3 id={createContentSlug(props?.id || "")}>{children}</h3>
             </InView>
           );
         },

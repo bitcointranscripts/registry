@@ -7,8 +7,7 @@ import {
   CalendarIcon,
   MicIcon,
 } from "@bitcoin-dev-project/bdp-ui/icons";
-import Link from "next/link";
-import { ContentData, createSlug } from "@/utils";
+import { createSlug, FieldCountItem } from "@/utils";
 import AiGeneratedIcon from "../svgs/AIGeneratedIcon";
 import { format, isDate } from "date-fns";
 import Pill from "./Pill";
@@ -17,7 +16,7 @@ import { getIsolatedFacetLink } from "@/service/URLManager/helper";
 interface ITranscriptMetadataComponent {
   title: string;
   date: string | Date;
-  topics: ContentData[];
+  topics: FieldCountItem[];
   speakers: string[] | null;
   transcriptBy: string | string[];
 }
@@ -88,7 +87,7 @@ const TranscriptMetadataComponent = ({
             }
             footer={
               <div className="pl-2.5">
-                {formattedDate ? 
+                {formattedDate ?
                 <p className="text-xs md:text-sm lg:text-base 2xl:text-lg md:font-medium">
                   {formattedDate}
                 </p>:
@@ -160,7 +159,7 @@ const TranscriptMetadataComponent = ({
                       <span>
                         AI Generated (Review for sats)
                       </span>
-                      
+
                     </a>{" "}
                   </>
                 ) : (
