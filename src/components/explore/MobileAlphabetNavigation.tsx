@@ -1,17 +1,12 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { IAlphabetGrouping } from "./AlphabetGrouping";
-import { alphabeticalArrangement } from "@/utils/data";
-import { getAllCharactersProperty } from "@/utils";
+import { IAlphabetNavigation } from "./AlphabetNavigation";
 
 const MobileAlphabetGrouping = ({
   currentGroup,
   groupedData,
-}: IAlphabetGrouping) => {
-  const allCharacters = getAllCharactersProperty(
-    alphabeticalArrangement,
-    groupedData
-  );
+}: IAlphabetNavigation) => {
+
   const selectRef = useRef<HTMLSelectElement>(null);
   const linkRef = useRef<HTMLAnchorElement>(null);
   const onOptionsChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
@@ -39,15 +34,15 @@ const MobileAlphabetGrouping = ({
         <select
           onChange={onOptionsChange}
           ref={selectRef}
-          className="pr-3  bg-orange-custom-800   w-full outline-none font-medium"
+          className="pr-3 bg-orange-custom-800 w-full outline-none font-medium"
         >
-          {Object.entries(allCharacters).map((char) => (
+          {groupedData.map((char) => (
             <option
-              key={char[1].alp}
-              value={char[1].alp}
-              disabled={char[1].isDisabled}
+              key={char.name}
+              value={char.slug}
+              disabled={char.nested && char.nested.length === 0}
             >
-              {char[1].alp}{" "}
+              {char.name}{" "}
             </option>
           ))}
         </select>
