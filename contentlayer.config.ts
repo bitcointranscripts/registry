@@ -14,7 +14,7 @@ import {
   Transcript as ContentTranscriptType,
   Source as ContentSourceType,
 } from "./.contentlayer/generated/types";
-import { LanguageCodes } from "./src/config";
+import { LanguageCode, OtherSupportedLanguages } from "./src/config";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -411,10 +411,10 @@ export const Transcript = defineDocumentType(() => ({
       resolve: (doc) => {
         const transcript = doc._raw.flattenedPath.split("/").pop();
         const lan = transcript?.match(getLanCode);
-        const languageCode = (lan?.[lan.length - 1] || "").replace(".", "");
-        const finalLanguage = LanguageCodes.includes(languageCode)
+        const languageCode = (lan?.[lan.length - 1] || "").replace(".", "") as LanguageCode;
+        const finalLanguage = OtherSupportedLanguages.includes(languageCode)
           ? languageCode
-          : "en";
+          : LanguageCode.en;
         return finalLanguage;
       },
     },
@@ -428,9 +428,9 @@ export const Transcript = defineDocumentType(() => ({
         );
 
         const lan = transcript?.match(getLanCode);
-        const languageCode = (lan?.[0] || "").replace(".", "");
+        const languageCode = (lan?.[0] || "").replace(".", "") as LanguageCode;
 
-        if (LanguageCodes.includes(languageCode)) {
+        if (OtherSupportedLanguages.includes(languageCode)) {
           return `/${languageCode}/${fullPathWithoutDot}`;
         }
 

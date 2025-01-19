@@ -32,6 +32,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "**/*.json",
+    ".contentlayer.config.ts",
     ".contentlayer/generated",
     ".contentlayer/generated/**/*.json"
   ],

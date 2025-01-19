@@ -1,6 +1,6 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
 import { alphabeticalArrangement, ContentTreeArray } from "./data";
-import { LanguageCodes } from "../config";
+import { LanguageCode, OtherSupportedLanguages } from "../config";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -59,7 +59,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
-  const languageRegex = new RegExp(`\\.(${LanguageCodes.join("|")})(\\.md)?$`);
+  const languageRegex = new RegExp(`\\.(${OtherSupportedLanguages.join("|")})(\\.md)?$`);
 
   // Optimization for landingpage — obscene amount of data passed to the client (reduced from 6.6s to 795ms)
   const lightWeightTranscripts = allTranscripts.map(({ body, summary, ...fieldsToUse }) => {
@@ -255,10 +255,14 @@ export const countItemsAndSort = (args: { [category: string]: FieldCountItem[] }
 };
 
 export const constructSlugPaths = (slug: string[]) => {
+  // receives a slug array e.g [ 'es', 'sources' ], [ 'andreas-autonopolous' ] note: 'en' is not included in the array
+
   const isEnglishSlug =
-    slug[0] !== "en" && slug[0].length > 2 && !LanguageCodes.includes(slug[0]);
+    slug[0].length > 2 && !OtherSupportedLanguages.includes(slug[0] as LanguageCode);
   const englishSlug = ["en", ...slug];
   const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
+
+  // swap languageCode index in slug, ['es', 'sources'] -> ['sources', 'es']
   [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];
 
   let slugPaths = newSlug;

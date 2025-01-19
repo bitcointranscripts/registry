@@ -12,6 +12,12 @@ export type SourceData = {
 export type NestedSource<T extends string> = Record<T, SourceData>;
 
 // e.g { "adopting-bitcoin": { "en": {...} } }
-export type SourceTree = Record<string, NestedSource<LanguageCode>>
+export type SourceTree = Record<string, NestedSource<string>>
 
 export type TraversableSource = SourceTree | NestedSource<string> | string[];
+
+export type LanguageSwitchConfig = {
+  pageAvailableLanguages: { language: LanguageCode; url: string }[];
+  websiteLanguages: { language: LanguageCode; url: string }[];
+  currentLanguage: LanguageCode;
+};

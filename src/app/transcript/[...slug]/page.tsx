@@ -5,6 +5,9 @@ import { notFound } from "next/navigation";
 import IndividualTranscript from "@/components/individual-transcript/IndividualTranscript";
 
 import { BaseCrumbType } from "@/components/common/BaseCrumbLists";
+import { findAlternateLanguageForTranscript } from "@/utils/sources";
+import { LanguageCode } from "@/config";
+import { Metadata } from "next";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -20,6 +23,42 @@ export function generateStaticParams() {
   });
   return allSingleTranscriptPaths;
 }
+
+export const generateMetadata = async ({params}: { params: { slug: string[] } }): Promise<Metadata> => {
+
+  const slugArray = params.slug;
+  let transcriptUrl = `/${slugArray.join("/")}`;
+
+  const transcript = allTranscripts.find(
+    (transcript) => transcript.languageURL === transcriptUrl
+  );
+
+  if (!transcript) {
+    return notFound();
+  }
+
+  const {slugAsParams: slug, language} = transcript
+
+  const alternateLanguages = findAlternateLanguageForTranscript(slug, (language as LanguageCode), allSources)
+
+  const metadataLanguages = alternateLanguages.reduce((acc, language) => {
+    const alternateUrl = language === LanguageCode.en ? `/${slug.join("/")}` : `/${language}/${slug.join("/")}`;
+    acc[language] = alternateUrl;
+    return acc;
+  }, {} as Record<string, string>);
+
+  return {
+    title: transcript.title,
+    alternates: {
+      canonical: "/",
+      languages: metadataLanguages // Add custom metadata for languages
+    },
+    other: {
+      alternateLanguages,
+      language: transcript.language
+    }
+  };
+};
 
 const Page = ({ params }: { params: { slug: string[] } }) => {
   const slugArray = params.slug;

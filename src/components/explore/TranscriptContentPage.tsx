@@ -12,7 +12,7 @@ import MobileAlphabetNavigation from "./MobileAlphabetNavigation";
 import NavigationByWords from "./NavigationByWords";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
-import { LanguageCodes } from "@/config";
+import { OtherSupportedLanguages } from "@/config";
 
 interface ITranscriptContentPage {
   header: string;
@@ -56,7 +56,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
   // remove language codes from paths passed to breadcrumbs
   const allRoutes = routes.filter(
-    (route) => !LanguageCodes.includes(route.name),
+    (route) => !OtherSupportedLanguages.includes(route.name as any),
   );
 
   return (

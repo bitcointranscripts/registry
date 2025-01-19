@@ -9,6 +9,7 @@ import allSources from "@/public/sources-data.json";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { getSourceBreadcrumbsFromSlug } from "@/utils/sources";
 import { getTopicTitle } from "@/utils/search";
+import { LanguageCode, LanguageCodes } from "@/config";
 
 type Result = EsSearchResult["_source"];
 
@@ -16,6 +17,8 @@ export const SearchResultCard = ({ result, className }: { result: Result, classN
   const { transcript_source, title, body, authors, tags, id, created_at: date, url, language, summary } = result;
   
   const flattenedPath = new URL(url).pathname.split("/").slice(1).join("/");
+
+  const parsedLanguage = LanguageCodes.find(lan => lan === language)
   
   const transcriptData: ContentTreeArray = {
     title,
@@ -31,7 +34,7 @@ export const SearchResultCard = ({ result, className }: { result: Result, classN
   const breadCrumbs = getSourceBreadcrumbsFromSlug({
     slug: transcript_source.split("/"),
     current: allSources,
-    language,
+    language: parsedLanguage ?? LanguageCode.en,
   })
 
   return (
