@@ -73,13 +73,13 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
         <div key={link.name} className='flex gap-1 items-center'>
           <Link
             className={`capitalize hover:underline font-medium text-sm 2xl:text-base text-nowrap ${
-              isActive.name.toLowerCase() === link.name.toLowerCase() ? "text-orange-custom-100" : "text-black md:text-gray-custom-800"
+              isActive.name.toLowerCase() === link.name.toLowerCase() ? "text-orange-custom-100" : "text-black md:text-gray-custom-800 dark:text-gray-custom-600"
             }`}
             href={link.link}
           >
             {link.name}
           </Link>
-          {i !== allRoutes.length - 1 && <p className='text-custom-black-custom-200'>/</p>}
+          {i !== allRoutes.length - 1 && <p className='text-custom-black-custom-200 dark:text-gray-custom-600'>/</p>}
         </div>
       ))}
     </div>

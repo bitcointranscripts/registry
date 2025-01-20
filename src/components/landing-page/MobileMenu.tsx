@@ -9,7 +9,7 @@ const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}
   const links = ExploreNavigationItems;
 
   return (
-    <div className='flex flex-col gap-6 bg-white min-h-full overflow-y-scroll'>
+    <div className='flex flex-col gap-6 bg-white dark:bg-dark-custom-100 min-h-full overflow-y-scroll'>
       <section className='flex-col gap-2 '>
         <p className='text-lg font-medium text-black'>Transcripts</p>
         <div className='w-full flex flex-col'>
@@ -17,7 +17,9 @@ const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}
             <Link
               href={link.href}
               onClick={()=>setOpen(false)}
-              className='capitalize py-3 px-4 text-gray-custom-1000 hover:bg-orange-custom-800 hover:font-semibold hover:text-orange-custom-100'
+              className='capitalize py-3 px-4 text-gray-custom-1000 dark:text-black
+              hover:bg-orange-custom-800 hover:font-semibold hover:text-orange-custom-100 dark:hover:bg-brown-custom-100
+              dark:hover:text-orange-custom-100'
             >
               {link.title}
             </Link>
@@ -29,7 +31,7 @@ const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}
         <div className='w-fit hidden'>
           <LanguageSwitcher />
         </div>
-        <div className='w-fit hidden'>
+        <div className='w-fit'>
           <ThemeSwitcher />
         </div>
         <div className='flex flex-col gap-2'>

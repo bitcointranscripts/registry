@@ -23,8 +23,8 @@ export const FilterMenuMobile = () => {
     }
   }
   return (
-    <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[0px] bg-white">
-      <p className="text-[14px] font-bold">Filters</p>
+    <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[0px] bg-white dark:bg-dark-custom-100">
+      <p className="text-[14px] font-bold dark:text-black">Filters</p>
       <button
         className="mr-2 active:scale-90 p-1"
         onClick={(e) => handleClick(e)}
@@ -46,7 +46,7 @@ const FilterMenu = ({ callback }: { callback: ArbitraryCallback }) => {
       <div className="md:hidden w-full">
         <FilterMenuMobile />
       </div>
-      <SidebarSection className="hidden md:flex w-full text-custom-primary-text justify-between">
+      <SidebarSection className="hidden md:flex w-full text-custom-primary-text dark:text-black justify-between">
         <div className="flex items-center gap-2">
           <FilterIcon className="w-[20px] hidden md:flex" />
           <p className="text-base 2xl:text-lg font-bold leading-none">
@@ -76,7 +76,7 @@ const AppliedFilters = ({
     callback();
   };
   return (
-    <SidebarSection className="text-custom-primary-text">
+    <SidebarSection className="text-custom-primary-text dark:text-black">
       <div className="flex justify-between mb-4 2xl:mb-6">
         <p className="text-sm 2xl:text-base font-bold">Applied Filters</p>
         <div

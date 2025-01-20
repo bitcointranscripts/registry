@@ -8,12 +8,12 @@ import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 const ExploreNavigation = () => {
   return (
     <section className='hidden md:flex  flex-shrink-0 sticky top-0 overflow-y-auto flex-col self-start gap-4 2xl:gap-6 w-full max-w-[240px] 2xl:max-w-[320px]'>
-      <div className='flex flex-col gap-4 2xl:gap-6 rounded-lg px-5 py-[23px] border border-gray-custom-1200'>
+      <div className='flex flex-col gap-4 2xl:gap-6 rounded-lg px-5 py-[23px] border border-gray-custom-1200 dark:border-gray-custom-1800'>
         {ExploreNavigationItems.map((item) => (
           <ExploreNavigationItem key={item.href} href={item.href} title={item.title} />
         ))}
       </div>
-      <div className='flex flex-col gap-4 rounded-lg p-4 border border-gray-custom-1200'>
+      <div className='flex flex-col gap-4 rounded-lg p-4 border border-gray-custom-1200 dark:border-gray-custom-1800'>
         <p className='text-sm 2xl:text-lg font-semibold'>Review Transcripts</p>
         <Link
           href='https://review.btctranscripts.com'
@@ -55,8 +55,9 @@ const ExploreNavigationItem = ({ href, title }: { href: string; title: string })
       data-active={isActive}
       href={href}
       className={twMerge(
-        "text-sm 2xl:text-lg leading-none px-4 py-4 rounded-lg 2xl:px-6 2xl:py-6 2xl:rounded-xl hover:bg-orange-custom-800 hover:text-orange-custom-100 transition-all",
-        isActive ? "bg-orange-custom-800 text-orange-custom-100 font-semibold" : ""
+        `text-sm 2xl:text-lg leading-none px-4 py-4 rounded-lg 2xl:px-6 2xl:py-6 2xl:rounded-xl hover:bg-orange-custom-800  hover:text-orange-custom-100
+        transition-all dark:hover:bg-brown-custom-100 `,
+        isActive ? "bg-orange-custom-800 text-orange-custom-100 font-semibold dark:bg-brown-custom-100" : ""
       )}
     >
       {title}

@@ -11,7 +11,7 @@ function formatSpeakerText(text: string): string {
   // Replace matched text with formatted HTML
   return text.replace(pattern, (match, speaker, time) => {
     // HTML for the speaker's name
-    const formattedSpeaker = `<span className="font-bold text-black text-base leading-[1.36rem]">${speaker}:</span>`;
+    const formattedSpeaker = `<span className="font-bold text-black dark:text-gray-custom-100 text-base leading-[1.36rem]">${speaker}:</span>`;
     // HTML for the timestamp
     const formattedTime = `<span className="text-gray-custom-1700 font-bold text-base leading-[1.36rem]">${time}</span>`;
 

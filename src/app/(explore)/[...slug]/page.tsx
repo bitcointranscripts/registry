@@ -4,7 +4,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
-import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
 import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
@@ -13,6 +12,7 @@ import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
 import { LanguageCodes } from "@/config";
+import WorldIcon from "@/components/svgs/WorldIcon";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -90,7 +90,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
       <div className='flex items-start lg:gap-[50px]'>
         <div className='flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar'>
           <div
-            className={`flex flex-col ${
+            className={`flex flex-col dark:border-b-gray-custom-1800 ${
               isRoot ? "border-b border-b-[#9B9B9B] pb-6 md:border-b-0 md:pb-0" : "border-b border-b-[#9B9B9B] pb-6 lg:pb-10"
             } gap-5 2xl:gap-6`}
           >
@@ -106,7 +106,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>{metadata?.title ?? slug[slug.length - 1]}</h3>
               {isRoot && metadata?.website ? (
                 <div className='flex gap-1 items-center pt-3 md:pt-6'>
-                  <Image src={WorldIcon} alt='world icon' className='w-[18px] md:w-[20px]' />
+                  <WorldIcon className='w-[18px] md:w-[20px]' />
                   <Link
                     href={metadata?.website ?? ""}
                     target='_blank'
@@ -153,7 +153,9 @@ const page = ({ params }: { params: { slug: string[] } }) => {
                   <Link
                     key={`${value.route}-${i}}`}
                     href={`/${[...slug, value.route].join("/")}`}
-                    className='flex capitalize cursor-pointer border max-w-[100%] border-gray-custom-1200 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100'
+                    className='flex capitalize cursor-pointer border max-w-[100%]
+                    border-gray-custom-1200 dark:border-gray-custom-1800 rounded-[5px] justify-between items-center
+                    text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100 dark:text-black'
                   >
                     <span className='text-wrap break-words max-w-[80%]'>{value.title}</span>
                     <span>{value.count}</span>

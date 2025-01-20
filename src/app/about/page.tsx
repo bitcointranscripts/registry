@@ -8,11 +8,12 @@ import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import reviewers from "@/public/reviewers-data.json";
 import upperLineIcon from "@/public/svgs/upper-line-icon.svg";
 import lowerLineIcon from "@/public/svgs/lower-line-icon.svg";
+import CustomBorder from "@/components/svgs/CustomBorder";
 
 const page = () => {
   return (
     <main className='flex flex-col items-center justify-center w-full'>
-      <Wrapper className='text-black flex flex-col max-sm:px-3'>
+      <Wrapper className='text-black flex flex-col max-sm:px-3 '>
         <div className='text-center py-10 md:py-[104px] flex flex-col items-center justify-center'>
           <h1 className='text-[40px] leading-[48px] font-medium md:text-6xl 2xl:text-7xl'>What Is Bitcoin Transcripts?</h1>
           <p className='text-base md:text-xl 2xl:text-2xl 2xl:leading-[33.84px] md:max-w-[1050px] max-w-[1195px] pt-10 md:pt-12 2xl:pt-14 text-center w-full'>
@@ -22,7 +23,7 @@ const page = () => {
         </div>
       </Wrapper>
 
-      <div className='bg-gray-custom-900 w-full'>
+      <div className='bg-gray-custom-900 w-full dark:bg-dark-custom-200'>
         <Wrapper className='py-16 md:py-[104px] flex flex-col md:flex-row items-center justify-between gap-10 md:gap-8 lg:gap-[52px] max-sm:px-3'>
           <section className='max-w-full md:max-w-[50%]'>
             <h1 className='text-[40px] text-center md:text-start leading-[48px] font-medium md:text-5xl 2xl:text-6xl'>How We Got Here</h1>
@@ -59,6 +60,11 @@ const page = () => {
           </div>
 
           <div className='flex flex-col gap-10 md:gap-20 relative'>
+            <div
+            className="flex w-full max-w-24 md:max-w-[184px] z-[-1] h-full justify-center absolute">
+              <CustomBorder className='h-full' />
+            </div>
+
             {processFlowData.map((item) => (
               <div key={item.title} className='flex flex-row items-center gap-4 sm:gap-[31px]'>
                 <section
@@ -152,9 +158,9 @@ const GroupedImageSection = ({
                 alt={title}
                 width={132}
                 height={132}
-                className='w-[100px] md:w-[132px] h-[100px] md:h-[132px] bg-black rounded-full border-[0.5px]'
+                className='w-[100px] md:w-[132px] h-[100px] md:h-[132px] bg-black dark:bg-gray-custom-100 rounded-full border-[0.5px]'
               />
-              <p className='text-custom-black-custom-400 text-sm leading-[22.12px] font-medium md:text-base md:font-semibold md:leading-[25.28px] whitespace-nowrap max-w-full text-nowrap overflow-hidden text-ellipsis'>
+              <p className='text-custom-black-custom-400 dark:text-gray-custom-100 text-sm leading-[22.12px] font-medium md:text-base md:font-semibold md:leading-[25.28px] whitespace-nowrap max-w-full text-nowrap overflow-hidden text-ellipsis'>
                 {title}
               </p>
             </Link>

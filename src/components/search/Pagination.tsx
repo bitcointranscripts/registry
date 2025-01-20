@@ -59,7 +59,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(1)}
         disabled={current === 1}
-        className="hidden md:block md:p-1 disabled:hidden"
+        className="hidden md:block md:p-1 disabled:hidden dark:hover:text-orange-400"
         aria-label="First page"
       >
         <svg
@@ -80,7 +80,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(Math.max(1, current - 1))}
         disabled={current === 1}
-        className="md:p-1 disabled:opacity-50"
+        className="md:p-1 disabled:opacity-50 dark:hover:text-orange-400"
         aria-label="Previous page"
       >
         <svg
@@ -118,7 +118,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
             className={`h-10 w-10 flex items-center justify-center rounded-md ${
               pageNumber === current
                 ? "bg-orange-400 text-white"
-                : "bg-white text-gray-700 hover:bg-gray-100"
+                : "bg-white text-gray-700 hover:bg-gray-100 dark:bg-transparent dark:text-black dark:hover:text-orange-400"
             } ${typeof pageNumber !== "number" ? "cursor-default" : ""}`}
             disabled={typeof pageNumber !== "number"}
           >
@@ -130,7 +130,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(Math.min(totalPages, current + 1))}
         disabled={current === totalPages}
-        className="md:p-1 disabled:opacity-50"
+        className="md:p-1 disabled:opacity-50 dark:hover:text-orange-400"
         aria-label="Next page"
       >
         <svg
@@ -152,7 +152,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
       <button
         onClick={() => onChange(totalPages)}
         disabled={current === totalPages}
-        className="hidden md:block md:p-1 disabled:hidden"
+        className="hidden md:block md:p-1 disabled:hidden dark:hover:text-orange-400"
         aria-label="Last page"
       >
         <svg

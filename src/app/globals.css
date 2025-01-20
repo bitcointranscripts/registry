@@ -34,10 +34,34 @@
   --basic-mono-font: basic-mono;
   --header-height: 86px;
   --stroke: #bfbfbf;
-  --primary-text: #292929;
+  --primary-text-light-1: #292929;
+  --primary-background:#FAFAFA;
+  --primary-text-secondary:#000;
   --accent: #F7931A;
 }
 
+.dark {
+     --primary-text-light-1: #636366;
+     --primary-background:#141414;
+     --primary-text-secondary:#FAFAFA;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    border-radius: 14px;
+}
+.dark{
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active{
+        -webkit-box-shadow: 0 0 0 30px #282828  inset !important;
+        border-radius: 20px ;
+    }
+}
 /* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -95,6 +119,13 @@ body {
   z-index: -1;
 }
 
+.dark{
+    .selection-box::before {
+      background-color: #141414;
+
+    }
+}
+
 /* styling for non-interactive body
 this is a hack to make the body non-interactive
 IMPORTANT: elements oustide the element with data-freeze-body that needs interactivity must have the class "pointer-events-auto" else it will be frozen too */
@@ -150,7 +181,7 @@ body:has([data-freeze-body="true"]) {
   #main:has(form[data-input-focus="true"]) .navBar {
     display: none !important;
   }
-  
+
   .popout {
     position: absolute;
     width: 100vw;

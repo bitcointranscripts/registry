@@ -5,6 +5,7 @@ import "./globals.css";
 import Script from "next/script";
 import Header from "@/components/layout/Header";
 import QueryProvider from "./providers";
+import { ThemeProvider } from "next-themes";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
@@ -25,8 +26,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={manrope.className}>
         <QueryProvider>
-          <Header />
+          <ThemeProvider
+        attribute={"class"}
+        >
+        <Header />
             {children}
+        </ThemeProvider>
         </QueryProvider>
       </body>
       <Script

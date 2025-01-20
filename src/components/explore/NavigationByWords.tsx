@@ -46,7 +46,7 @@ const NavigationByWords = ({
       {screen === "desktop" && (
         <div
           className={twMerge(
-            " flex-col pt-1 px-5 pb-5 hidden lg:flex  border max-h-[calc(95vh-var(--header-height))] overflow-auto scroller border-gray-custom-1200 rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
+            " flex-col pt-1 px-5 pb-5 hidden lg:flex  border max-h-[calc(95vh-var(--header-height))] overflow-auto scroller border-gray-custom-1200 dark:border-gray-custom-1800  rounded-md w-full min-w-[260px] 2xl:min-w-[354px] ",
             className,
           )}
         >
@@ -75,11 +75,11 @@ const NavigationByWords = ({
             {" "}
             link group
           </a>
-          <div className="selection-box pr-2 bg-orange-custom-800 py-2.5 px-4 rounded-md ">
+          <div className="selection-box pr-2 bg-orange-custom-800 dark:bg-brown-custom-100 py-2.5 px-4 rounded-md ">
             <select
               onChange={onOptionsChange}
               ref={selectRef}
-              className="pr-3  bg-orange-custom-800 w-full outline-none font-medium"
+              className="pr-3  bg-orange-custom-800 dark:bg-brown-custom-100 w-full outline-none font-medium"
             >
               {navigationList.map((nav) => (
                 <option key={nav.slug} value={nav.slug}>

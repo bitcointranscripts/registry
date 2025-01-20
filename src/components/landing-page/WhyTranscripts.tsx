@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import wordList from "/public/images/word-list.webp";
+import wordListDark from "/public/images/word-list-dark.webp";
 import bitcoinMap from "/public/images/bitcoin-map.png";
 import Wrapper from "../layout/Wrapper";
 import SuggestModal from "./SuggestionModal";
@@ -16,7 +17,7 @@ const WhyTranscripts = () => {
   }, [isOpen]);
 
   return (
-    <div className='flex items-center justify-center w-full bg-gray-custom-900'>
+    <div className='flex items-center justify-center w-full bg-gray-custom-900 dark:bg-dark-custom-100'>
       <Wrapper className='py-[104px] text-black flex flex-col gap-[104px] max-md:py-16 max-md:gap-12'>
         <div className='flex flex-col items-center justify-center gap-12 max-md:gap-4'>
           <p className='text-purple-custom-200 bg-purple-custom-100 py-2 px-6 rounded-full max-md:text-sm max-md:py-[2px] max-md:px-3.5'>
@@ -62,10 +63,13 @@ const WhyTranscripts = () => {
         </div>
 
         <div className='flex justify-between items-center gap-[69px] max-md:flex-col-reverse max-md:items-start max-lg:gap-8 max-md:gap-6 w-full'>
-          <section className='max-w-[50%] max-h-[612px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[277px]'>
+          <section className='max-w-[50%] dark:hidden max-h-[612px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[277px]'>
             <Image src={wordList} loading='lazy' alt='words list' height={612} width={890} />
           </section>
-
+          {/* For Dark Mode */}
+          <section className='max-w-[50%] max-h-[612px] hidden dark:block max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[277px]'>
+            <Image src={wordListDark} loading='lazy' alt='words list' height={612} width={890} />
+          </section>
           <section className='max-w-[841px] w-[50%] flex flex-col max-md:max-w-full max-md:w-full'>
             <h4 className='text-5xl font-medium max-lg:text-3xl max-md:text-2xl leading-[130%]'>Making Bitcoin Accessible</h4>
             <p className='pt-6 pb-8 md:text-base lg:text-xl 2xl:text-2xl 2xl:leading-[39.12px] max-md:pb-0 max-md:pt-[18px]'>
@@ -92,7 +96,7 @@ const WhyTranscripts = () => {
                 Review Transcripts, Earn Sats
               </Link>
               <button
-                className='text-xl bg-orange-custom-200 border-gray-custom-300 text-orange-custom-400 py-6 rounded-full flex items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8 cursor-pointer hidden'
+                className='text-xl bg-orange-custom-200 border-gray-custom-300 text-orange-custom-400 py-6 rounded-full items-center md:w-[85%] whitespace-nowrap justify-center px-32 h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8 cursor-pointer hidden'
                 onClick={() => setIsOpen(!isOpen)}
               >
                 Suggest Source for Transcription
@@ -102,6 +106,7 @@ const WhyTranscripts = () => {
           <section className='max-w-[50%] max-h-[587px] max-md:max-w-full max-md:max-h-[500px] max-[400px]:max-h-[261px]'>
             <Image src={bitcoinMap} loading='lazy' alt='bitcoin map' height={538} width={890} />
           </section>
+
         </div>
         <SuggestModal handleClose={() => setIsOpen(!isOpen)} isOpen={isOpen} />
       </Wrapper>

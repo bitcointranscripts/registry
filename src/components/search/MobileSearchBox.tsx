@@ -109,7 +109,7 @@ const MobileSearchBox = ({
             autoFocus={true}
             spellCheck="false"
           />
-          
+
           <div data-is-visible={open && !!searchInput.trim()} className="hidden ml-2 data-[is-visible='true']:flex">
             <button
               type="button"
@@ -140,7 +140,7 @@ const MobileSearchBox = ({
         className={"self-center items-center bg-gradient h-full"}
       >
         <SearchIcon
-          className="text-custom-black-custom-200 w-6 h-auto"
+          className="text-custom-black-custom-200 dark:text-black w-6 h-auto"
           onClick={triggerInputFocus}
         />
       </button>
