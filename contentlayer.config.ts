@@ -5,7 +5,7 @@ import {
   FieldCountItem,
   unsluggify,
 } from "./src/utils";
-import { Topic, ProcessedTopic, ProcessedTopicByLanguage, TopicsCountByLanguage, TagInfo, TopicsCategoryCountByLanguage } from "./src/types";
+import { Topic, ProcessedTopic, ProcessedFieldByLanguage, TopicsCountByLanguage, TagInfo, TopicsCategoryCountByLanguage } from "./src/types";
 import {
   defineDocumentType,
   defineNestedType,
@@ -51,7 +51,7 @@ const getTopics = () => {
 function buildTopicsMap(
   transcripts: ContentTranscriptType[],
   topics: Topic[]
-): ProcessedTopicByLanguage<Map<string, ProcessedTopic>> {
+): ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}> {
   // Create topics lookup map (includes aliases)
   const topicsLookup = new Map<string, Topic>();
   topics.forEach((topic) => {
@@ -60,7 +60,7 @@ function buildTopicsMap(
   });
 
   // Build the main topics map
-  const processedLanguageTopics = {} as ProcessedTopicByLanguage<Map<string, ProcessedTopic>>
+  const processedLanguageTopics = {} as ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}>
 
   // Process all transcripts
   transcripts.forEach((transcript) => {
@@ -72,9 +72,7 @@ function buildTopicsMap(
       if (!processedLanguageTopics[language]) {
         processedLanguageTopics[language] = {
           data: new Map<string, ProcessedTopic>(),
-          metadata: {
-            alternateLanguages: []
-          }
+          metadata: {}
         }
       }
 
@@ -95,15 +93,13 @@ function buildTopicsMap(
 }
 
 function generateAlphabeticalList(
-  processedTopics: ProcessedTopicByLanguage<Map<string, ProcessedTopic>>
+  processedTopics: ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}>
 ): TopicsCountByLanguage {
   const result = Object.keys(processedTopics).reduce((acc, language) => {
     if (!acc[language as LanguageCode]) {
       acc[language as LanguageCode] = {
         data: [],
-        metadata: {
-          alternateLanguages: []
-        }
+        metadata: {}
       };
     }
     const topics: FieldCountItem[] = [];
@@ -120,7 +116,7 @@ function generateAlphabeticalList(
 }
 
 function generateCategorizedList(
-  processedTopics: ProcessedTopicByLanguage<Map<string, ProcessedTopic>>
+  processedTopics: ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}>
 ): TopicsCategoryCountByLanguage {
 
   const categorizedTopicsByLanguage = {} as TopicsCategoryCountByLanguage;
@@ -128,9 +124,7 @@ function generateCategorizedList(
   Object.keys(processedTopics).forEach(language => {
     categorizedTopicsByLanguage[language as LanguageCode] = {
       data: {},
-      metadata: {
-        alternateLanguages: []
-      }
+      metadata: {}
     };
     const categorizedTopics: Record<string, FieldCountItem[]> = {};
 
@@ -191,22 +185,30 @@ function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
   const slugSpeakers: any = {};
-  const speakerArray: FieldCountItem[] = [];
+  const speakersByLanguage = {} as ProcessedFieldByLanguage<FieldCountItem[], {}>;
 
   transcripts.forEach((transcript) => {
+    const language = transcript.language as LanguageCode;
+    if (!speakersByLanguage[language]) {
+      speakersByLanguage[language] = {
+        data: [],
+        metadata: {}
+      };
+    }
     const slugSpeakersArray = transcript.speakers?.map((speaker) => ({
       slug: createSlug(speaker),
       name: speaker,
     }));
 
     slugSpeakersArray?.forEach(({ slug, name }) => {
-      if (slugSpeakers[slug] !== undefined) {
-        const index = slugSpeakers[slug];
-        speakerArray[index].count += 1;
+      const key = `${slug}-${language}`;
+      if (slugSpeakers[key] !== undefined) {
+        const index = slugSpeakers[key];
+        speakersByLanguage[language].data[index].count += 1;
       } else {
-        const speakersLength = speakerArray.length;
-        slugSpeakers[slug] = speakersLength;
-        speakerArray[speakersLength] = {
+        const speakersLength = speakersByLanguage[language].data.length;
+        slugSpeakers[key] = speakersLength;
+        speakersByLanguage[language].data[speakersLength] = {
           slug,
           name,
           count: 1,
@@ -215,7 +217,7 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
     });
   });
 
-  fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
+  fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakersByLanguage));
 }
 
 function generateSourcesCount(

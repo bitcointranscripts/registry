@@ -50,8 +50,9 @@ export interface ProcessedTopic {
   categories: string[]; // List of categories it belongs to
 }
 
-export type ProcessedTopicByLanguage<D extends any> = Record<LanguageCode, {data: D, metadata: {alternateLanguages: string[] }}>
+// note: metadata field is not used for anything at the moment. It is provided in case of future data we might need
+export type ProcessedFieldByLanguage<D extends any, M extends any> = Record<LanguageCode, {data: D, metadata: M}>
 
-export type TopicsCountByLanguage = ProcessedTopicByLanguage<FieldCountItem[]>;
+export type TopicsCountByLanguage = ProcessedFieldByLanguage<FieldCountItem[], {}>;
 
-export type TopicsCategoryCountByLanguage = ProcessedTopicByLanguage<Record<string, FieldCountItem[]>>;
+export type TopicsCategoryCountByLanguage = ProcessedFieldByLanguage<Record<string, FieldCountItem[]>, {}>;
