@@ -1,6 +1,7 @@
 import { LanguageCode, LanguageCodes, LanguageConfig } from "@/config";
 import { LanguageSwitchConfig } from "@/types";
 import { ArrowRight } from "@bitcoin-dev-project/bdp-ui/icons";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -60,6 +61,7 @@ const LanguageSwitch = () => {
       }
     };
 
+    setOpen(false);
     const languageConfig = getLanguageConfig();
     if (languageConfig.currentLanguage ) {
       setLanguageConfig(languageConfig);
@@ -90,14 +92,14 @@ const LanguageSwitch = () => {
           <div className="flex flex-col gap-2 justify-center">
             <p className="font-semibold whitespace-nowrap">Page available in</p>
             {languageConfig.pageAvailableLanguages.map((language) => (
-              <a
+              <Link
                 key={language.language}
                 href={language.url}
                 className="py-1 flex items-center gap-2 text-sm md:text-base leading-[17.6px] font-medium uppercase hover:text-custom-accent rounded-md"
               >
                 <span className="text-[26px]">{LanguageConfig[language.language].icon}</span>
                 <span>{language.language}</span>
-              </a>
+              </Link>
             ))}
           </div>
         )}

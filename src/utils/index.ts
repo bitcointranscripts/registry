@@ -1,6 +1,6 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
 import { alphabeticalArrangement, ContentTreeArray } from "./data";
-import { LanguageCode, OtherSupportedLanguages } from "../config";
+import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "../config";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -380,4 +380,26 @@ export function extractHeadings(text: string): NavigationList[] {
   });
 
   return headings;
+}
+
+export const getLangCode = (languageFromPath?: string) : Error | LanguageCode => {
+  if (!languageFromPath) {
+    return LanguageCode.en;
+  }
+  const isSupportedLanguage = LanguageCodes.includes(languageFromPath as LanguageCode);
+  if (!isSupportedLanguage) {
+    return new Error(`Language code ${languageFromPath} is not supported`);
+  }
+  return languageFromPath as LanguageCode;
+}
+
+export const deriveAlternateLanguages = ({languageCode, languages, suffix}: {languageCode: LanguageCode, languages: LanguageCode[], suffix: string}) => {
+  const alternateLanguages = languages.filter(lang => lang !== languageCode);
+
+  const metadataLanguages = alternateLanguages.reduce((acc, language) => {
+    const alternateUrl = language === LanguageCode.en ? `/${suffix}` : `/${language}/${suffix}`;
+    acc[language] = alternateUrl;
+    return acc;
+  }, {} as Record<string, string>);
+  return {alternateLanguages, metadataLanguages};
 }

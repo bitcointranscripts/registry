@@ -5,6 +5,7 @@ import {
   FieldCountItem,
   unsluggify,
 } from "./src/utils";
+import { Topic, ProcessedTopic, ProcessedTopicByLanguage, TopicsCountByLanguage, TagInfo, TopicsCategoryCountByLanguage } from "./src/types";
 import {
   defineDocumentType,
   defineNestedType,
@@ -23,32 +24,6 @@ const Resources = defineNestedType(() => ({
     url: { type: "string" },
   },
 }));
-export interface Topic {
-  title: string;
-  slug: string;
-  optech_url: string;
-  categories: string[];
-  aliases?: string[];
-  excerpt: string;
-}
-
-// The full processed topic we use internally
-interface ProcessedTopic {
-  name: string; // Display name (from topic.title or original tag)
-  slug: string; // Slugified identifier
-  count: number; // Number of occurrences
-  categories: string[]; // List of categories it belongs to
-}
-
-interface TagInfo {
-  name: string;
-  slug: string;
-  count: number;
-}
-
-interface ContentTree {
-  [key: string]: ContentTree | ContentTranscriptType[];
-}
 
 const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
   const aliases: Record<string, string> = {};
@@ -76,7 +51,7 @@ const getTopics = () => {
 function buildTopicsMap(
   transcripts: ContentTranscriptType[],
   topics: Topic[]
-): Map<string, ProcessedTopic> {
+): ProcessedTopicByLanguage<Map<string, ProcessedTopic>> {
   // Create topics lookup map (includes aliases)
   const topicsLookup = new Map<string, Topic>();
   topics.forEach((topic) => {
@@ -85,74 +60,110 @@ function buildTopicsMap(
   });
 
   // Build the main topics map
-  const processedTopics = new Map<string, ProcessedTopic>();
+  const processedLanguageTopics = {} as ProcessedTopicByLanguage<Map<string, ProcessedTopic>>
 
   // Process all transcripts
   transcripts.forEach((transcript) => {
+    const language = transcript.language as LanguageCode;
     transcript.tags?.forEach((tag) => {
       const slug = createSlug(tag);
       const topic = topicsLookup.get(slug);
 
-      if (!processedTopics.has(slug)) {
-        processedTopics.set(slug, {
+      if (!processedLanguageTopics[language]) {
+        processedLanguageTopics[language] = {
+          data: new Map<string, ProcessedTopic>(),
+          metadata: {
+            alternateLanguages: []
+          }
+        }
+      }
+
+      if (!processedLanguageTopics[language].data.has(slug)) {
+        processedLanguageTopics[language].data.set(slug, {
           name: topic?.title || tag,
           slug,
           count: 1,
           categories: topic?.categories || ["Miscellaneous"],
         });
       } else {
-        const processed = processedTopics.get(slug)!;
+        const processed = processedLanguageTopics[language].data.get(slug)!;
         processed.count += 1;
       }
     });
   });
-  return processedTopics;
+  return processedLanguageTopics;
 }
 
 function generateAlphabeticalList(
-  processedTopics: Map<string, ProcessedTopic>
-): FieldCountItem[] {
-  const result: FieldCountItem[] = [];
-  // The categories property is not needed for this list, so we drop it
-  for (const { name, slug, count } of processedTopics.values()) {
-    result.push({ name, slug, count });
-  }
-  return result.sort((a, b) => a.name.localeCompare(b.name));
+  processedTopics: ProcessedTopicByLanguage<Map<string, ProcessedTopic>>
+): TopicsCountByLanguage {
+  const result = Object.keys(processedTopics).reduce((acc, language) => {
+    if (!acc[language as LanguageCode]) {
+      acc[language as LanguageCode] = {
+        data: [],
+        metadata: {
+          alternateLanguages: []
+        }
+      };
+    }
+    const topics: FieldCountItem[] = [];
+    // The categories property is not needed for this list, so we drop it
+    for (const { name, slug, count } of processedTopics[language as LanguageCode].data.values()) {
+      topics.push({ name, slug, count });
+    }
+  
+    acc[language as LanguageCode].data = topics.sort((a, b) => a.name.localeCompare(b.name));
+    return acc;
+  }, {} as TopicsCountByLanguage);
+
+  return result;
 }
 
 function generateCategorizedList(
-  processedTopics: Map<string, ProcessedTopic>
-): Record<string, FieldCountItem[]> {
-  const categorizedTopics: Record<string, FieldCountItem[]> = {};
+  processedTopics: ProcessedTopicByLanguage<Map<string, ProcessedTopic>>
+): TopicsCategoryCountByLanguage {
 
-  Array.from(processedTopics.values()).forEach(
-    ({ name, slug, count, categories }) => {
-      categories.forEach((category) => {
-        if (!categorizedTopics[category]) {
-          categorizedTopics[category] = [];
-        }
+  const categorizedTopicsByLanguage = {} as TopicsCategoryCountByLanguage;
+  
+  Object.keys(processedTopics).forEach(language => {
+    categorizedTopicsByLanguage[language as LanguageCode] = {
+      data: {},
+      metadata: {
+        alternateLanguages: []
+      }
+    };
+    const categorizedTopics: Record<string, FieldCountItem[]> = {};
 
-        // Check if topic name contains category name and ends with "(Miscellaneous)"
-        const modifiedName =
-          name.includes(category) && name.endsWith("(Miscellaneous)")
-            ? "Miscellaneous"
-            : name;
-
-        categorizedTopics[category].push({ name: modifiedName, slug, count });
+    Array.from(processedTopics[language as LanguageCode].data.values()).forEach(
+      ({ name, slug, count, categories }) => {
+        categories.forEach((category) => {
+          if (!categorizedTopics[category]) {
+            categorizedTopics[category] = [];
+          }
+  
+          // Check if topic name contains category name and ends with "(Miscellaneous)"
+          const modifiedName =
+            name.includes(category) && name.endsWith("(Miscellaneous)")
+              ? "Miscellaneous"
+              : name;
+  
+          categorizedTopics[category].push({ name: modifiedName, slug, count });
+        });
+      }
+    );
+  
+    // Sort topics within each category
+    Object.values(categorizedTopics).forEach((topics) => {
+      topics.sort((a, b) => {
+        if (a.name == "Miscellaneous") return 1;
+        if (b.name == "Miscellaneous") return -1;
+        return a.name.localeCompare(b.name);
       });
-    }
-  );
-
-  // Sort topics within each category
-  Object.values(categorizedTopics).forEach((topics) => {
-    topics.sort((a, b) => {
-      if (a.name == "Miscellaneous") return 1;
-      if (b.name == "Miscellaneous") return -1;
-      return a.name.localeCompare(b.name);
     });
+    categorizedTopicsByLanguage[language as LanguageCode].data = categorizedTopics;
   });
 
-  return categorizedTopics;
+  return categorizedTopicsByLanguage;
 }
 
 function generateTopicsCounts(transcripts: ContentTranscriptType[]) {

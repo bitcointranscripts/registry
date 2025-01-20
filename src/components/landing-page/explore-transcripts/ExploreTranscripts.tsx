@@ -17,7 +17,7 @@ const getTypes = () => {
 };
 
 const ExploreTranscripts = () => {
-  const categories = getTags();
+  const categories = getTags()["en"].data;
   const types = getTypes();
 
   return (
