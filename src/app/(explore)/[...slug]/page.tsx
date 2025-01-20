@@ -106,11 +106,11 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>{metadata?.title ?? slug[slug.length - 1]}</h3>
               {isRoot && metadata?.website ? (
                 <div className='flex gap-1 items-center pt-3 md:pt-6'>
-                  <WorldIcon className='w-[18px] md:w-[20px] dark:text-gray-custom-100' />
+                  <WorldIcon className='w-[18px] md:w-[20px]' />
                   <Link
                     href={metadata?.website ?? ""}
                     target='_blank'
-                    className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black dark:text-gray-custom-100 underline text-wrap break-words line-clamp-1'
+                    className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline text-wrap break-words line-clamp-1'
                   >
                     {metadata.website ?? ""}
                   </Link>
@@ -155,7 +155,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
                     href={`/${[...slug, value.route].join("/")}`}
                     className='flex capitalize cursor-pointer border max-w-[100%]
                     border-gray-custom-1200 dark:border-gray-custom-1800 rounded-[5px] justify-between items-center
-                    text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100  dark:text-gray-custom-100'
+                    text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100 dark:text-black'
                   >
                     <span className='text-wrap break-words max-w-[80%]'>{value.title}</span>
                     <span>{value.count}</span>

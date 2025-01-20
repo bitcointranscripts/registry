@@ -22,7 +22,7 @@ const SearchPage = () => {
   if (isLoading) {
     return (
       <div className="mt-4">
-        <SkeletonResults count={4} />;
+        <SkeletonResults count={4} />
       </div>
     );
   }

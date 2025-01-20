@@ -18,7 +18,7 @@ const WhyTranscripts = () => {
 
   return (
     <div className='flex items-center justify-center w-full bg-gray-custom-900 dark:bg-dark-custom-100'>
-      <Wrapper className='py-[104px] text-black dark:text-gray-custom-100 flex flex-col gap-[104px] max-md:py-16 max-md:gap-12'>
+      <Wrapper className='py-[104px] text-black flex flex-col gap-[104px] max-md:py-16 max-md:gap-12'>
         <div className='flex flex-col items-center justify-center gap-12 max-md:gap-4'>
           <p className='text-purple-custom-200 bg-purple-custom-100 py-2 px-6 rounded-full max-md:text-sm max-md:py-[2px] max-md:px-3.5'>
             WHY TRANSCRIPTS?

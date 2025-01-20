@@ -16,8 +16,9 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
+        black:"var(--primary-text-secondary)",
         gray: {
-          "custom-100": "#FAFAFA",
+          "custom-100": "var(--primary-background)",
           "custom-200": "#858585",
           "custom-300": "#B5B5B5",
           "custom-400": "#BFBFBF",
@@ -38,6 +39,9 @@ const config: Config = {
           "custom-1900": "#9B9B9B",
           "custom-2000": "#B2AFAC",
           "custom-2100": "#3D3D3D",
+          "custom-2200": "#282828",
+          "custom-2300": "#787878",
+          "custom-2400": "#969696"
         },
         blue: {
           "custom-100": "#2A58FE",

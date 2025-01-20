@@ -42,8 +42,8 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
               ))}
             </Carousel.Container>
             <Carousel.Controls>
-              <Carousel.PreviousButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 rotate-180 absolute dark:text-gray-custom-100`} />} />
-              <Carousel.NextButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 dark:text-gray-custom-100`} />} />
+              <Carousel.PreviousButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 rotate-180 absolute`} />} />
+              <Carousel.NextButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5`} />} />
             </Carousel.Controls>
           </Carousel>
         </section>
@@ -55,7 +55,7 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
              dark:border-gray-custom-1800 flex gap-1 items-center max-md:py-1 max-md:px-3 '>
               <p className='leading-[19.2px] text-sm font-medium'>View All</p>
               <span>
-                <ArrowLinkRight className='text-black w-6 max-md:w-5 dark:text-gray-custom-100' />
+                <ArrowLinkRight className='text-black w-6 max-md:w-5' />
               </span>
             </Link>
           </section>
@@ -68,8 +68,8 @@ const ExploreTranscriptClient = ({ categories, types }: ExploreTranscriptClientP
               ))}
             </Carousel.Container>
             <Carousel.Controls>
-              <Carousel.PreviousButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 rotate-180 absolute dark:text-gray-custom-100`} />} />
-              <Carousel.NextButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 dark:text-gray-custom-100`} />} />
+              <Carousel.PreviousButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 rotate-180 absolute`} />} />
+              <Carousel.NextButton icon={<ArrowLinkRight className={`text-black w-6 max-md:w-5 `} />} />
             </Carousel.Controls>
           </Carousel>
         </section>

@@ -10,7 +10,7 @@ const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent)
 
   // unnecessary prefetch for links that leads to search page (waterfall requests in network with little gains)
   let shouldPrefetch = true
-  
+
   switch (linkName) {
     case "sources":
       url = `/${slug}`;
@@ -35,7 +35,7 @@ const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent)
   return (
     <Link
       href={url}
-      className='flex capitalize cursor-pointer border max-w-[100%]  border-gray-custom-1200 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100'
+      className='flex capitalize cursor-pointer border max-w-[100%]  border-gray-custom-1200 dark:border-gray-custom-1800 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100 dark:text-black'
       prefetch={shouldPrefetch}
     >
       <span className='text-wrap break-words max-w-[80%]'>{name}</span>

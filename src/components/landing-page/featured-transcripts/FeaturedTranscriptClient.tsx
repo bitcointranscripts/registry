@@ -27,9 +27,9 @@ const FeaturedTranscriptClient = ({
       <section className='flex flex-col gap-6 w-full'>
         <section className='flex items-center justify-between w-full'>
           <h3 className='text-2xl font-semibold max-md:text-xl'>Featured Transcripts</h3>
-          <button className='w-fit px-5 py-3 rounded-full border border-black dark:border-gray-custom-100 flex gap-1 items-center max-md:py-1.5 max-md:px-3' onClick={randomise}>
+          <button className='w-fit px-5 py-3 rounded-full border border-black  flex gap-1 items-center max-md:py-1.5 max-md:px-3' onClick={randomise}>
             <span>
-              <DiceIcon className='w-5 text-black max-md:w-3 dark:text-gray-custom-100' />
+              <DiceIcon className='w-5 text-black max-md:w-3 ' />
             </span>
             <p className='leading-[19.2px] text-sm font-medium max-sm:text-xs'>Randomise</p>
           </button>

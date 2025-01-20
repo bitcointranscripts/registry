@@ -36,7 +36,8 @@ export const Sort = ({callback} : {callback: ArbitraryCallback}) => {
             options.find((option) => option.value === getSort(sortField))
               ?.label ?? "Relevance"
           }
-          className="bg-gray-custom-100 font-bold"
+          className="bg-gray-custom-100 font-bold dark:text-black"
+
         />
         <SingleSelect.List
           options={options}

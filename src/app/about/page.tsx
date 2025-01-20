@@ -13,7 +13,7 @@ import CustomBorder from "@/components/svgs/CustomBorder";
 const page = () => {
   return (
     <main className='flex flex-col items-center justify-center w-full'>
-      <Wrapper className='text-black flex flex-col max-sm:px-3 dark:text-gray-custom-100'>
+      <Wrapper className='text-black flex flex-col max-sm:px-3 '>
         <div className='text-center py-10 md:py-[104px] flex flex-col items-center justify-center'>
           <h1 className='text-[40px] leading-[48px] font-medium md:text-6xl 2xl:text-7xl'>What Is Bitcoin Transcripts?</h1>
           <p className='text-base md:text-xl 2xl:text-2xl 2xl:leading-[33.84px] md:max-w-[1050px] max-w-[1195px] pt-10 md:pt-12 2xl:pt-14 text-center w-full'>

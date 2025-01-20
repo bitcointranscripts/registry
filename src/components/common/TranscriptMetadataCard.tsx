@@ -11,6 +11,10 @@ import { createSlug, FieldCountItem } from "@/utils";
 import AiGeneratedIcon from "../svgs/AIGeneratedIcon";
 import { format, isDate } from "date-fns";
 import Pill from "./Pill";
+import EyeClose from "../svgs/EyeClose";
+import EyeOpen from "../svgs/EyeOpen";
+import { getIsolatedFacetLink } from "@/service/URLManager/helper";
+import PencilIcon from "../svgs/PencilIcon";
 interface ITranscriptMetadataComponent {
   title: string;
   date: string | Date;
@@ -32,34 +36,34 @@ const TranscriptMetadataComponent = ({
     setShowDetail((prev) => !prev);
   };
 
-  
+
   const convertedDate  = date ? new Date(date) : false
- 
+
   const formattedDate =   isDate(convertedDate) ? format(convertedDate, "d MMMM, yyyy") : "";
 
 
   return (
-    <div className="border flex text-black dark:text-gray-custom-100 flex-col rounded-2xl p-4 md:p-5 2xl:p-6 gap-4 w-full border-gray-custom-1200 dark:border-gray-custom-1800">
+    <div className="border flex text-black flex-col rounded-2xl p-4 md:p-5 2xl:p-6 gap-4 w-full border-gray-custom-1200 dark:border-gray-custom-1800">
       <div className="flex flex-col md:flex-row flex-wrap gap-4 justify-between ">
         <h4 className="text-orange-custom-100 text-xl font-bold md:text-2xl 2xl:text-[2rem]">
           {title}
         </h4>
         <button
           onClick={handleShowDetail}
-          className="text-black dark:text-gray-custom-100
+          className="text-black
           text-sm lg:text-base gap-1 py-1.5 2xl:py-2 px-5 flex items-center border
           w-[149px] md:w-[154px] rounded-lg border-gray-custom-1100 whitespace-nowrap"
         >
           {showDetail ? (
             <>
-              <EyeClose className="w-5 dark:text-gray-custom-100" />
+              <EyeClose className="w-5" />
               <span className="font-medium text-sm 2xl:text-base">
                 Hide Details{" "}
               </span>
             </>
           ) : (
             <>
-              <EyeOpen className="w-5 dark:text-gray-custom-100" />
+              <EyeOpen className="w-5" />
               <span className="font-medium text-sm 2xl:text-base">
                 Show Details
               </span>
@@ -101,7 +105,7 @@ const TranscriptMetadataComponent = ({
                 {topics && topics.length > 0 ? (
                   topics.map((topic) => (
                     <Pill key={topic.slug} kind="link" name={topic.name} slug={getIsolatedFacetLink({filter_field: "tags", filter_value: topic.slug})} />
-                  )):
+                  ))):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
                 }
               </div>
@@ -120,7 +124,7 @@ const TranscriptMetadataComponent = ({
                 {speakers && speakers.length > 0 ? (
                   speakers.map((speaker) => (
                     <Pill key={speaker} kind="link" name={speaker} slug={getIsolatedFacetLink({filter_field: "authors", filter_value: speaker})} />
-                  )):
+                  ))):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">Not available</p>
                 }
               </div>

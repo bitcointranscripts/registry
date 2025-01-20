@@ -33,21 +33,21 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
   }
 
   return (
-    <div className='border border-gray-custom-1200 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
+    <div className='border border-gray-custom-1200 dark:border-gray-custom-1800 rounded-lg p-4 md:p-5 2xl:p-6 flex flex-col gap-3 md:gap-4'>
       <section className='flex md:flex-row flex-col justify-between gap-2 w-full'>
         <div className='flex flex-col gap-2 w-full'>
           {breadCrumbsComponent}
           <a
             href={`${languageURL}`}
-            className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black dark:text-gray-custom-100'
+            className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
           </a>
         </div>
         {date && (
           <div className='md:self-start flex gap-2 items-center shrink-0'>
-            <CalendarIcon className='w-[18px] md:w-[20px]' />
-            <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800'>{formatDate(date!)}</p>
+            <CalendarIcon className='w-[18px] md:w-[20px] dark:text-gray-custom-600' />
+            <p className='text-xs md:text-sm 2xl:text-base leading-[17.6px] font-medium text-gray-custom-800 dark:text-gray-custom-600'>{formatDate(date!)}</p>
           </div>
         )}
       </section>
@@ -57,7 +57,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
           <section className='flex gap-2'>
             <>
               <span>
-                <MicIcon className='w-5 md:w-6 dark:text-gray-custom-100' />
+                <MicIcon className='w-5 md:w-6 ' />
               </span>
               <div className='flex gap-[9px] flex-wrap'>
                 <div className='flex flex-wrap gap-[9px] text-xs md:text-sm 2xl:text-base'>
@@ -89,7 +89,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
                   ))}
 
                   {calculateRemaining(tagsDetailed) === 0 ? null : (
-                    <p className='py-[2px] px-5 rounded-[5px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-md:leading-[100%]'>
+                    <p className='py-[2px] px-5 rounded-[5px] dark:bg-gray-custom-2100 dark:hover:bg-gray-custom-1800 dark:hover:text-black bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 lg:py-1 max-md:leading-[100%]'>
                       + {calculateRemaining(tagsDetailed)} more
                     </p>
                   )}
@@ -102,7 +102,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
 
       {summary || body ? (
         <section>
-          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 2xl:leading-[25px] line-clamp-3' style={{"wordBreak": "break-word"}}>{summary ? summary : body}</p>
+          <p className='text-sm md:text 2xl:text-base text-custom-black-custom-300 dark:text-black 2xl:leading-[25px] line-clamp-3' style={{"wordBreak": "break-word"}}>{summary ? summary : body}</p>
         </section>
       ) : null}
     </div>

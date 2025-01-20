@@ -60,7 +60,7 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
         <div className="relative block w-full">
           {/* input box container */}
           <div
-            className={`rounded-l-[14px] border border-r-0 h-[48px] w-full bg-custom-background border-gray-custom-300 flex`}
+            className={`rounded-l-[14px] border border-r-0 h-[48px] w-full bg-custom-background border-gray-custom-300 dark:border-gray-custom-2300 flex dark:bg-gray-custom-2200 `}
           >
             <input
               id="header-search-input"
@@ -69,10 +69,10 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
               value={searchInput}
               inputMode="search"
               placeholder="Search here"
-              className="text-custom-primary-text font-medium placeholder:text-gray-custom-300 py-1.5 md:py-3 px-3 md:px-6 md:text-base placeholder:text-[14px] md:placeholder:text-base h-full w-full border-none outline-none bg-transparent"
+              className="text-custom-primary-text dark:text-black font-medium placeholder:text-gray-custom-300 py-1.5 md:py-3 px-3 md:px-6 md:text-base placeholder:text-[14px] md:placeholder:text-base h-full w-full border-none outline-none bg-transparent"
               onFocus={() => setFocus(true)}
             />
-            
+
             <button
               type="button"
               data-is-visible={onFocus && !!(searchInput.trim())}
@@ -80,7 +80,7 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
               className="m-3 hidden data-[is-visible='true']:grid place-items-center text-gray-custom-200"
             >
               <CloseIconOutlined
-                className="pointer-events-none w-[12px] md:w-[14px] transition-all duration-300 active:scale-95"
+                className="pointer-events-none w-[12px] md:w-[14px] transition-all duration-300 active:scale-95 dark:text-black"
               />
             </button>
           </div>
