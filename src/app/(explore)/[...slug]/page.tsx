@@ -12,13 +12,16 @@ import { allSources as allContentSources, allTranscripts } from "contentlayer/ge
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
-import { LanguageCodes } from "@/config";
+import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "@/config";
+import { Metadata } from "next";
+import { SourceTree } from "@/types";
+import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const languageSlugs = LanguageCodes.map((lang) => ({ slug: [lang, "sources"] }));
+  const languageSlugs = OtherSupportedLanguages.map((lang) => ({ slug: [lang, "sources"] }));
 
   const allSlugs = allContentSources.map(({ language, slugAsParams }) => {
     const isEnglish = language === "en";
@@ -37,6 +40,102 @@ export function generateStaticParams() {
   return combineSlugs;
 }
 
+const checkIfSourcesLanguageRoute = (slug: string[]) => slug.length === 2 && OtherSupportedLanguages.includes(slug[0] as LanguageCode) && slug[1] === "sources";
+
+
+export const generateMetadata = async ({params}: { params: { slug: string[] } }): Promise<Metadata> => {
+
+  const isSourcesLanguageRoute = checkIfSourcesLanguageRoute(params.slug);
+
+  if (isSourcesLanguageRoute) {
+    const metadataLanguages = OtherSupportedLanguages.reduce((acc, language) => {
+      const alternateUrl = language === "en" ? `/sources` : `/${language}/sources`;
+      acc[language] = alternateUrl;
+      return acc;
+    }, {} as Record<string, string>);
+
+    return {
+      title: "Sources",
+      alternates: {
+        canonical: "/sources",
+        languages: metadataLanguages // Add custom metadata for languages
+      },
+      other: {
+        alternateLanguages: OtherSupportedLanguages,
+        language: "en"
+      }
+    };
+  }
+
+  
+  const slug = params.slug ?? [];
+  const contentTree = allSources as SourceTree;
+  const { slugPaths } = constructSlugPaths(slug);
+  let current: any = contentTree;
+
+  for (const part of slugPaths) {
+    if (typeof current === "object" && !Array.isArray(current) && part in current) {
+      current = current[part];
+    } else {
+      notFound();
+    }
+  }
+
+  const language = slugPaths[1];
+
+  if (slugPaths.length === 2) {
+    // returns all language keys for the current source
+    const languages = Object.keys(contentTree[slugPaths[0]]);
+    const otherLanguages = languages.filter(lang => lang !== slugPaths[1]);
+    const metadataLanguages = otherLanguages.reduce((acc, language) => {
+      const alternateUrl = language === LanguageCode.en ? `/${slugPaths[0]}` : `/${language}/${slugPaths[0]}`;
+      acc[language] = alternateUrl;
+      return acc;
+    }, {} as Record<string, string>);
+
+    return {
+      title: current.metadata.title,
+      alternates: {
+        canonical: "/",
+        languages: metadataLanguages // Add custom metadata for languages
+      },
+      other: {
+        alternateLanguages: otherLanguages,
+        language
+      }
+    };
+  }
+  
+  const alternateLanguages = LanguageCodes.filter(lang => lang !== language).map(language => {
+    const slugPathTocheckForData = slugPaths.filter(path => path !== "data");
+    slugPathTocheckForData[1] = language;
+    const keyHasData = traverseSourceTree(contentTree, slugPathTocheckForData, 0);
+    return keyHasData ? language : undefined;
+  }).filter((lang) => lang !== undefined);
+
+  const metadataLanguages = alternateLanguages.reduce((acc, language) => {
+    // converts [ 'advancing-bitcoin', 'en', 'data', '2019' ] to [ 'advancing-bitcoin', '2019' ]
+    const slugPathNoData = arrayWithoutElementAtIndex(slugPaths.filter(path => path !== "data"), 1);
+
+    // append language to slugPathNoData
+    const alternateUrl = language === LanguageCode.en ? `/${slugPathNoData.join("/")}` : `/${language}/${slugPathNoData.join("/")}`;
+    acc[(language as string)] = alternateUrl;
+    return acc;
+  }, {} as Record<string, string>);
+
+  return {
+    title: current.metadata.title,
+    alternates: {
+      canonical: "/",
+      languages: metadataLanguages // Add custom metadata for languages
+    },
+    other: {
+      alternateLanguages,
+      language
+    }
+  }
+};
+
 const page = ({ params }: { params: { slug: string[] } }) => {
   const slug = params.slug ?? [];
   const contentTree = allSources;
@@ -45,7 +144,10 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   let currentLanguageSource: any = allSources;
   let languageTreeArray: { slug: string; name: string; count: number }[] = [];
 
-  const isRouteForLanguage = slug.length === 2 && LanguageCodes.includes(slug[0]) && slug[1] === "sources";
+  // catch language code followed by sources e.g ["es", "sources"]. English is omitted
+  const isRouteForLanguage = slug.length === 2 && OtherSupportedLanguages.includes(slug[0] as LanguageCode) && slug[1] === "sources";
+
+  // console.log({isRouteForLanguage})
 
   if (isRouteForLanguage) {
     const language = slug[0];

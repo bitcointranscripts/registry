@@ -85,7 +85,7 @@ export const findAlternateLanguageForTranscript = (slug: string[], language: Lan
   
   Object.keys(source).filter((key) => key !== language).forEach((key) => {
     // console.log("finding for ", key)
-    const pathContent = traverseSourceTree(source, [key, ...clonedSlug], 1);
+    const pathContent = traverseSourceTree(source, [key, ...clonedSlug], 1) as SourceData;
     const transcriptLanguageSuffix = key === LanguageCode.en ? transcriptUrl : `${transcriptUrl}.${key}`;
     // console.log("path Content for", key, {pathContent})
     if ((pathContent?.data as string[])?.includes(transcriptLanguageSuffix)) {
@@ -96,7 +96,7 @@ export const findAlternateLanguageForTranscript = (slug: string[], language: Lan
 }
 
 // adopting-bitcoin/2021/2021-11-16-gloria-zhao-transaction-relay-policy
-const traverseSourceTree = (current: SourceTree | SourceData | NestedSource<string>, path: string[], level: number = 0) => {
+export const traverseSourceTree = (current: SourceTree | SourceData | NestedSource<string>, path: string[], level: number = 0): SourceTree | SourceData | NestedSource<string> | string[] | null => {
   if (!current) return null;
 
   if (path.length === 0) return current;
@@ -114,4 +114,8 @@ const traverseSourceTree = (current: SourceTree | SourceData | NestedSource<stri
   } else {
     return traverseSourceTree(((current as SourceData).data as NestedSource<string>)[currentPath], path, level + 1);
   }
+};
+
+export const arrayWithoutElementAtIndex = (arr: any[], index: number) => {
+  return [...arr.slice(0, index), ...arr.slice(index + 1)];
 }
