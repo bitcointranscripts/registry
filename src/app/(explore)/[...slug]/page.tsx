@@ -6,14 +6,15 @@ import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
-import { constructSlugPaths, deriveAlternateLanguages, deriveSourcesList, fetchTranscriptDetails, getLangCode, loopArrOrObject } from "@/utils";
+import allSourcesCount from "@/public/source-count-data.json";
+import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { allSources as allContentSources, allTranscripts } from "contentlayer/generated";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
+import { Metadata, ResolvingMetadata } from "next";
 import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "@/config";
-import { Metadata } from "next";
 import { SourceTree } from "@/types";
 import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
 import { parseLanguageString } from "@/utils/locale";
@@ -48,6 +49,9 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
 
   const isSourcesLanguageRoute = checkIfSourcesLanguageRoute(params.slug);
 
+  const id = params.slug[0]
+  const foundSource = allSourcesCount.find((source) => source.slug === id);
+
   if (isSourcesLanguageRoute) {
     const languageCode = params.slug[0] as LanguageCode;
     const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
@@ -61,6 +65,14 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
       alternates: {
         canonical: "/sources",
         languages: metadataLanguages // Add custom metadata for languages
+      },
+      openGraph:{
+        images:[{
+          url:`/api/og-image/${foundSource?.slug}`,
+          width: 1280,
+          height: 720,
+          alt: `${foundSource?.name} OG Image`
+        }]
       },
       other: {
         alternateLanguages,
