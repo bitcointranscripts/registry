@@ -4,7 +4,7 @@ import React, { FC, useState } from "react";
 import GroupedTranscriptContent from "./GroupedTranscriptContent";
 import AlphabetNavigation from "./AlphabetNavigation";
 import {
-    ExploreGroupedData,
+  ExploreGroupedData,
   groupDataByAlphabet,
   sortKeysAlphabetically,
 } from "@/utils";
@@ -12,7 +12,8 @@ import MobileAlphabetNavigation from "./MobileAlphabetNavigation";
 import NavigationByWords from "./NavigationByWords";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
-import { OtherSupportedLanguages } from "@/config";
+import { LanguageCode, OtherSupportedLanguages } from "@/config";
+import SingleTranscriptContent from "./SingleTranscriptContent";
 
 interface ITranscriptContentPage {
   header: string;
@@ -21,6 +22,7 @@ interface ITranscriptContentPage {
   data: ExploreGroupedData[];
   type: "alphabet" | "words";
   linkName: string;
+  languageCode: LanguageCode;
 }
 
 const TranscriptContentPage: FC<ITranscriptContentPage> = ({
@@ -30,8 +32,8 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
   mobileDescription,
   linkName,
   type,
+  languageCode,
 }) => {
-
   const groupedData =
     type === "alphabet"
       ? groupDataByAlphabet(data)
@@ -56,8 +58,10 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
   // remove language codes from paths passed to breadcrumbs
   const allRoutes = routes.filter(
-    (route) => !OtherSupportedLanguages.includes(route.name as any),
+    (route) => !OtherSupportedLanguages.includes(route.name as any)
   );
+
+  console.log({ allRoutes });
 
   return (
     <div className="flex items-start relative lg:gap-[50px]">
@@ -91,16 +95,24 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         </div>
 
         <div className="flex-col flex gap-10  pb-10">
-          {
-            groupedData.map((alp) => (
-              <GroupedTranscriptContent
-                setCurrentGroup={setCurrentGroup}
-                key={alp.slug}
-                dataByHeading={alp} // The Heading above all GroupedData
-                linkName={linkName}
-                type={type}
-              />
-            ))}
+          {groupedData.map((alp) => (
+            <GroupedTranscriptContent
+              setCurrentGroup={setCurrentGroup}
+              key={alp.slug}
+              dataByHeading={alp} // The Heading above all GroupedData
+            >
+              {(topic) => (
+                <SingleTranscriptContent
+                  key={topic.slug}
+                  name={topic.name}
+                  slug={topic.slug}
+                  count={topic.count}
+                  linkName={linkName}
+                  languageCode={languageCode}
+                />
+              )}
+            </GroupedTranscriptContent>
+          ))}
         </div>
       </div>
 

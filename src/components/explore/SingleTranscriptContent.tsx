@@ -1,19 +1,23 @@
+import { LanguageCode } from "@/config";
 import { ExploreGroupedData, getDoubleDigits } from "@/utils";
 import Link from "next/link";
 import React from "react";
 
 type SingleContent = {
   linkName: string;
+  languageCode: LanguageCode;
 } & ExploreGroupedData;
-const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent) => {
+const SingleTranscriptContent = ({ count, slug, name, linkName, languageCode }: SingleContent) => {
   let url = ""
+
+  console.log({languageCode, linkName, slug})
 
   // unnecessary prefetch for links that leads to search page (waterfall requests in network with little gains)
   let shouldPrefetch = true
   
   switch (linkName) {
     case "sources":
-      url = `/${slug}`;
+      url = languageCode === "en" ? `/${slug}` : `/${languageCode}/${slug}`;
       break;
     case "tags":
       url = `/search?filter_tags=${slug}`;
@@ -27,8 +31,10 @@ const SingleTranscriptContent = ({ count, slug, name, linkName }: SingleContent)
       url = `/search?filter_authors=${name}`;
       shouldPrefetch = false;
       break;
+    case "types":
+      url = languageCode === "en" ? `/${slug}` : `/${languageCode}/${slug}`;
     default:
-      url = `/${linkName}/${slug}`;
+      url = languageCode === "en" ? `/${linkName}` : `/${languageCode}/${linkName}`;
       break;
   }
 

@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import SingleTranscriptContent from "./SingleTranscriptContent";
 import { ExploreGroupedData } from "@/utils";
 import { useInView } from "react-intersection-observer";
 import { twMerge } from "tailwind-merge";
@@ -8,15 +7,13 @@ import { twMerge } from "tailwind-merge";
 interface IGroupedTranscriptContent {
   dataByHeading: ExploreGroupedData;
   setCurrentGroup: React.Dispatch<React.SetStateAction<string>>;
-  linkName: string;
-  type: "alphabet" | "words";
+  children: (topic: ExploreGroupedData) => React.ReactNode; // Assuming each topic is any type, adjust as needed
 }
 
 const GroupedTranscriptContent = ({
   dataByHeading,
   setCurrentGroup,
-  linkName,
-  type,
+  children
 }: IGroupedTranscriptContent) => {
   const handleAxisChange = (inView: boolean) => {
     if (inView) {
@@ -41,13 +38,7 @@ const GroupedTranscriptContent = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {dataByHeading.nested &&
           dataByHeading.nested.map((topic, i) => (
-            <SingleTranscriptContent
-              key={topic.slug}
-              name={topic.name}
-              slug={topic.slug}
-              count={topic.count}
-              linkName={linkName}
-            />
+            children(topic)
           ))}
       </div>
     </div>

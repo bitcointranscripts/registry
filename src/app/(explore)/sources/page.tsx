@@ -2,7 +2,7 @@ import React from "react";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
 import allSources from "@/public/source-count-data.json";
 import { Metadata } from "next";
-import { OtherSupportedLanguages } from "@/config";
+import { LanguageCode, OtherSupportedLanguages } from "@/config";
 
 const metadataLanguages = OtherSupportedLanguages.reduce((acc, language) => {
   const alternateUrl = language === "en" ? `/sources` : `/${language}/sources`;
@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 const SourcesPage = () => {
+  const languageCode = LanguageCode.en;
   return (
     <div className="flex flex-col text-black">
       <TranscriptContentPage
@@ -31,6 +32,7 @@ const SourcesPage = () => {
         description="Sources help you find transcripts within a specific talk, meetup, conference, and the likes."
         type="alphabet"
         linkName="sources"
+        languageCode={languageCode}
       />
     </div>
   );

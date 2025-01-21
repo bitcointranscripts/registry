@@ -9,20 +9,28 @@ import { deriveAlternateLanguages, getLangCode } from "@/utils";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const topicLanguageSlugs = Object.keys(allTopics).map(lang => {
+  const topicLanguageSlugs = Object.keys(allTopics).map((lang) => {
     return { languageCode: lang };
-  } );
+  });
   return topicLanguageSlugs;
 }
 
-export function generateMetadata ({ params }: { params: { languageCode: string } }): Metadata {
+export function generateMetadata({
+  params,
+}: {
+  params: { languageCode: string };
+}): Metadata {
   const languageCode = getLangCode(params.languageCode);
   if (languageCode instanceof Error) {
     return notFound();
   }
 
   const languageKeys = Object.keys(allTopics) as LanguageCode[];
-  const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({languageCode, languages: languageKeys, suffix: "topics"});
+  const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
+    languageCode,
+    languages: languageKeys,
+    suffix: "topics",
+  });
 
   return {
     title: "Topics",
@@ -47,7 +55,14 @@ const TopicsPage = ({ params }: { params: { languageCode: string } }) => {
 
   return (
     <div className="flex flex-col  text-black">
-        <TranscriptContentPage header="Topics" data={topics} description="Bitcoin is made up of an endless amount of topics, and there’s no shortage of rabbit holes to go down. "  type="alphabet" linkName="tags"/>
+      <TranscriptContentPage
+        header="Topics"
+        data={topics}
+        description="Bitcoin is made up of an endless amount of topics, and there’s no shortage of rabbit holes to go down. "
+        type="alphabet"
+        linkName="tags"
+        languageCode={languageCode}
+      />
     </div>
   );
 };

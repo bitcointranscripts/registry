@@ -50,6 +50,7 @@ const CategoriesPage = () => {
         description="Explore the main areas of focus within the Bitcoin technical ecosystem."
         type="words"
         linkName="tags"
+        languageCode={languageCode}
       />
     </div>
   );

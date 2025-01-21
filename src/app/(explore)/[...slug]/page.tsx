@@ -170,7 +170,8 @@ const page = ({ params }: { params: { slug: string[] } }) => {
           data={languageTreeArray}
           description='Sources help you find transcripts within a specific talk, meetup, conference, and the likes.'
           type='alphabet'
-          linkName={language}
+          linkName='sources'
+          languageCode={language as LanguageCode}
         />
       </div>
     );

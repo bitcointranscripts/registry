@@ -61,6 +61,7 @@ const SpeakerPage = ({ params }: { params: { languageCode: string } }) => {
         description="Discover insights from key figures of the Bitcoin community."
         type="alphabet"
         linkName="speakers"
+        languageCode={languageCode}
       />
     </div>
   );

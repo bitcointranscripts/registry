@@ -329,7 +329,6 @@ export const deriveSourcesList = (languageTree: any) => {
 
   const getValues = Object.entries(languageTree).map(([key, value]) => {
     const valDetails = (value as unknown as any).data;
-
     const extractCount = (arr: {} | []) => {
       let count: number = 0;
 

@@ -62,7 +62,7 @@ const TypesPage = ({params}: {params: { languageCode: LanguageCode}}) => {
         data={reStructuredTypes}
         description="Sources tend to fall into discrete types, from podcasts to meetups. Find transcripts in your preferred format of communication."
         type="words"
-        linkName="sources"
+        linkName="types"
         languageCode={languageCode}
       />
     </div>
