@@ -6,7 +6,7 @@ import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
-import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
+import { constructSlugPaths, deriveAlternateLanguages, deriveSourcesList, fetchTranscriptDetails, getLangCode, loopArrOrObject } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { allSources as allContentSources, allTranscripts } from "contentlayer/generated";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
@@ -48,11 +48,12 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
   const isSourcesLanguageRoute = checkIfSourcesLanguageRoute(params.slug);
 
   if (isSourcesLanguageRoute) {
-    const metadataLanguages = OtherSupportedLanguages.reduce((acc, language) => {
-      const alternateUrl = language === "en" ? `/sources` : `/${language}/sources`;
-      acc[language] = alternateUrl;
-      return acc;
-    }, {} as Record<string, string>);
+    const languageCode = params.slug[0] as LanguageCode;
+    const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
+        languageCode,
+        languages: LanguageCodes,
+        suffix: "sources",
+      });
 
     return {
       title: "Sources",
@@ -61,8 +62,8 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
         languages: metadataLanguages // Add custom metadata for languages
       },
       other: {
-        alternateLanguages: OtherSupportedLanguages,
-        language: "en"
+        alternateLanguages,
+        language: languageCode
       }
     };
   }
@@ -189,6 +190,14 @@ const page = ({ params }: { params: { slug: string[] } }) => {
     const isRoot = Array.isArray(current.data);
     const { transcripts } = fetchTranscriptDetails(allTranscripts, data, isRoot);
 
+    const constructBackLink = () => {
+      const slugPathsCopy = [...slugPaths].filter(item => item !== "data")
+      const language = slugPathsCopy.splice(1,1)[0]
+      const indexPath = language === "en" ? "" : `/${language}`
+      const backRoute = slugPathsCopy.slice(0, -1).length ? slugPathsCopy.slice(0, -1).join("/") : ""
+      return backRoute ? `${indexPath}/${backRoute}` : `${indexPath}/sources`
+    }
+
     return (
       <div className='flex items-start lg:gap-[50px]'>
         <div className='flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar'>
@@ -201,7 +210,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <SourcesBreadCrumbs slugPaths={slugPaths} current={contentTree} />
             </>
             <div className='flex flex-col'>
-              <Link href={slug.slice(0, -1).join("/") === "" ? `/sources` : `/${slug.slice(0, -1).join("/")}`} className='flex gap-1 items-center'>
+              <Link href={constructBackLink()} className='flex gap-1 items-center'>
                 <ArrowLinkRight className='rotate-180 w-5 md:w-6' />
                 <p>Back</p>
               </Link>

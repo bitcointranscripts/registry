@@ -266,7 +266,6 @@ const createTypesCount = (
   // Non english sources don't have types
   // To build the types count for other languages, we need to get the english sources for that type
   // Find if a language source has that english source
-  // console.log("sources slice: ", sources.slice(0, 5))
   const mappedKeys = new Map<string, boolean>();
   sources.forEach((source) => {
     if (source.types) {

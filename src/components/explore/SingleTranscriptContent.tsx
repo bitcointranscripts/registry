@@ -10,8 +10,6 @@ type SingleContent = {
 const SingleTranscriptContent = ({ count, slug, name, linkName, languageCode }: SingleContent) => {
   let url = ""
 
-  console.log({languageCode, linkName, slug})
-
   // unnecessary prefetch for links that leads to search page (waterfall requests in network with little gains)
   let shouldPrefetch = true
   

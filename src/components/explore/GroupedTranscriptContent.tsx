@@ -37,7 +37,7 @@ const GroupedTranscriptContent = ({
       <h4 className="font-bold text-2xl capitalize">{dataByHeading.name}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {dataByHeading.nested &&
-          dataByHeading.nested.map((topic, i) => (
+          dataByHeading.nested.map((topic) => (
             children(topic)
           ))}
       </div>

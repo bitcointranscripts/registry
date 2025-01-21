@@ -18,7 +18,7 @@ const getTypes = () => {
 
 const ExploreTranscripts = () => {
   const categories = getTags()["en"].data;
-  const types = getTypes();
+  const types = getTypes()["en"].data;
 
   return (
     <Wrapper className='py-[104px] flex flex-col gap-14 text-black max-md:py-16 max-md:gap-12 max-w-full'>

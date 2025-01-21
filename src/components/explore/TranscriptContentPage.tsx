@@ -61,8 +61,6 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
     (route) => !OtherSupportedLanguages.includes(route.name as any)
   );
 
-  console.log({ allRoutes });
-
   return (
     <div className="flex items-start relative lg:gap-[50px]">
       <div className="flex flex-col w-full gap-6 lg:gap-10 no-scrollbar">
@@ -83,9 +81,9 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         </div>
         <div className="flex flex-col border-b border-b-[#9B9B9B] pb-6 lg:pb-10  gap-6 ">
           <BaseCrumbLists crumbsArray={allRoutes} />
-          <div className="flex flex-col gap-1  lg:gap-4">
-            <h3 className="text-xl  2xl:text-2xl font-medium">{header}</h3>
-            <p className="hidden lg:inline-block text-sm  lg:text-base 2xl:text-lg text-custom-black-custom-300">
+          <div className="flex flex-col gap-1 lg:gap-4">
+            <h3 className="text-xl 2xl:text-2xl font-medium">{header}</h3>
+            <p className="hidden lg:inline-block text-sm lg:text-base 2xl:text-lg text-custom-black-custom-300">
               {description}
             </p>
             <p className="inline-block lg:hidden text-sm lg:text-lg text-custom-black-custom-300">
@@ -103,7 +101,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
             >
               {(topic) => (
                 <SingleTranscriptContent
-                  key={topic.slug}
+                  key={topic.slug + alp.slug}
                   name={topic.name}
                   slug={topic.slug}
                   count={topic.count}
