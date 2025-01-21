@@ -5,7 +5,6 @@ import {
   createContentSlug,
   deriveAlternateLanguages,
   ExploreGroupedData,
-  getLangCode,
 } from "@/utils";
 import { LanguageCode } from "@/config";
 import { TopicsCategoryCountByLanguage } from "@/types";

@@ -25,7 +25,7 @@ export function generateMetadata({ params }: { params: { languageCode: string } 
   const languageKeys = Object.keys(allCategoriesTopic) as LanguageCode[];
 
   const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({languageCode, languages: languageKeys, suffix: "categories"});
-  console.dir({alternateLanguages, metadataLanguages}, {depth: 10})
+
   return {
     title: "Categories",
     alternates: {

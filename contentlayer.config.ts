@@ -2,6 +2,7 @@ import path from "path";
 import * as fs from "fs";
 import {
   createSlug,
+  deriveSourcesList,
   FieldCountItem,
   unsluggify,
 } from "./src/utils";
@@ -258,36 +259,67 @@ function generateSourcesCount(
 }
 
 const createTypesCount = (
-  transcripts: ContentTranscriptType[],
-  sources: ContentSourceType[]
+  sources: ContentSourceType[],
+  sourcesTree: any
 ) => {
-  const { sourcesArray, slugSources } = generateSourcesCount(
-    transcripts,
-    sources
-  );
-  const nestedTypes: any = {};
+  const nestedTypesByLanguage = {} as ProcessedFieldByLanguage<Record<string, FieldCountItem[]>, {}>;
+  // Non english sources don't have types
+  // To build the types count for other languages, we need to get the english sources for that type
+  // Find if a language source has that english source
+  // console.log("sources slice: ", sources.slice(0, 5))
+  const mappedKeys = new Map<string, boolean>();
+  sources.forEach((source) => {
+    if (source.types) {
+      const slug = source.slugAsParams[0];
+      const language = source.language as LanguageCode;
+      const sourceInfoCount = deriveSourcesList({[slug]: sourcesTree[slug][language]})[0];
 
-  sources.forEach((transcript) => {
-    if (transcript.types) {
-      transcript.types.forEach((type) => {
-        const slugType = type.charAt(0).toUpperCase() + type.slice(1);
-        const slug = transcript.slugAsParams[0];
-
-        const sourceIndex = slugSources[slug];
-        const getSource = sourcesArray[sourceIndex] ?? null;
-
-        if (!nestedTypes[slugType]) {
-          nestedTypes[slugType] = [];
-        } else {
-          if (nestedTypes[slugType].includes(getSource) || getSource === null)
-            return;
-          nestedTypes[slugType].push(getSource);
+      if (!nestedTypesByLanguage[language]) {
+        nestedTypesByLanguage[language] = {
+          data: {},
+          metadata: {}
         }
+      }
+      source.types.forEach((type) => {
+        const slugType = type.charAt(0).toUpperCase() + type.slice(1);
+
+        if (!nestedTypesByLanguage[language].data[slugType]) {
+          nestedTypesByLanguage[language].data[slugType] = [];
+        }
+
+        const mappingKey = `${slug}-${type}`;
+        if (mappedKeys.has(mappingKey)) return;
+
+        nestedTypesByLanguage[language].data[slugType].push(sourceInfoCount)
+        mappedKeys.set(mappingKey, true);
+
+        // find other language sources for the english source containing a type
+        OtherSupportedLanguages.forEach((otherLanguage) => {
+          if (otherLanguage === language) return;
+          let hasSourceInLanguage = null;
+          try {
+            hasSourceInLanguage = deriveSourcesList({[slug]: sourcesTree[slug][otherLanguage]})[0];
+          } catch (e) {
+            hasSourceInLanguage = null;
+          }
+          if (!hasSourceInLanguage) return;
+          if (!nestedTypesByLanguage[otherLanguage]) {
+            nestedTypesByLanguage[otherLanguage] = {
+              data: {},
+              metadata: {}
+            }
+          }
+          if (!nestedTypesByLanguage[otherLanguage].data[slugType]) {
+            nestedTypesByLanguage[otherLanguage].data[slugType] = [];
+          }
+          nestedTypesByLanguage[otherLanguage].data[slugType].push(hasSourceInLanguage)
+        });
+        
       });
     }
   });
 
-  fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypes));
+  fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypesByLanguage));
 };
 
 function organizeContent(
@@ -355,6 +387,8 @@ function organizeContent(
   });
 
   fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
+
+  return tree;
 }
 
 const getLanCode = /[.]\w{2}$/gi; // Removes the last two characters if there's a dot
@@ -510,11 +544,11 @@ export default makeSource({
   ],
   onSuccess: async (importData) => {
     const { allTranscripts, allSources } = await importData();
+    const sourcesTree = organizeContent(allTranscripts, allSources);
     generateTopicsCounts(allTranscripts);
-    createTypesCount(allTranscripts, allSources);
+    createTypesCount(allSources, sourcesTree);
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
-    organizeContent(allTranscripts, allSources);
   },
 });
