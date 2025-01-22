@@ -1,5 +1,6 @@
 import { LanguageCode } from "@/config";
 import { ExploreGroupedData, getDoubleDigits } from "@/utils";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 import Link from "next/link";
 import React from "react";
 
@@ -18,21 +19,21 @@ const SingleTranscriptContent = ({ count, slug, name, linkName, languageCode }: 
       url = languageCode === "en" ? `/${slug}` : `/${languageCode}/${slug}`;
       break;
     case "tags":
-      url = `/search?filter_tags=${slug}`;
+      url = generateNewUrlForLanguage(`/search?filter_tags=${slug}`, languageCode);
       shouldPrefetch = false;
       break;
     case "categories":
-      url = `/search?filter_tags=${slug}`;
+      url = generateNewUrlForLanguage(`/search?filter_tags=${slug}`, languageCode);
       shouldPrefetch = false;
       break;
     case "speakers":
-      url = `/search?filter_authors=${name}`;
+      url = generateNewUrlForLanguage(`/search?filter_tags=${slug}`, languageCode);
       shouldPrefetch = false;
       break;
     case "types":
       url = languageCode === "en" ? `/${slug}` : `/${languageCode}/${slug}`;
     default:
-      url = languageCode === "en" ? `/${linkName}` : `/${languageCode}/${linkName}`;
+      url = generateNewUrlForLanguage(`/${linkName}`, languageCode);
       break;
   }
 

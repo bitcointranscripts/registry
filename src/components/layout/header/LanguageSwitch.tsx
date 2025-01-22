@@ -1,5 +1,6 @@
 import { LanguageCode, LanguageCodes, LanguageConfig } from "@/config";
 import { LanguageSwitchConfig } from "@/types";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 import { ArrowRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -91,14 +92,14 @@ const LanguageSwitch = () => {
         {languageConfig.pageAvailableLanguages.length > 0 && (
           <div className="flex flex-col gap-2 justify-center">
             <p className="font-semibold whitespace-nowrap">Page available in</p>
-            {languageConfig.pageAvailableLanguages.map((language) => (
+            {languageConfig.pageAvailableLanguages.map(({language, url}) => (
               <Link
-                key={language.language}
-                href={language.url}
+                key={language}
+                href={generateNewUrlForLanguage(path, language)}
                 className="py-1 flex items-center gap-2 text-sm md:text-base leading-[17.6px] font-medium uppercase hover:text-custom-accent rounded-md"
               >
-                <span className="text-[26px]">{LanguageConfig[language.language].icon}</span>
-                <span>{language.language}</span>
+                <span className="text-[26px]">{LanguageConfig[language].icon}</span>
+                <span>{language}</span>
               </Link>
             ))}
           </div>
