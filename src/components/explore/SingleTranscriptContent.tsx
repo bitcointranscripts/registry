@@ -27,7 +27,7 @@ const SingleTranscriptContent = ({ count, slug, name, linkName, languageCode }: 
       shouldPrefetch = false;
       break;
     case "speakers":
-      url = generateNewUrlForLanguage(`/search?filter_tags=${slug}`, languageCode);
+      url = generateNewUrlForLanguage(`/search?filter_authors=${name}`, languageCode);
       shouldPrefetch = false;
       break;
     case "types":
