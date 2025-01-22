@@ -112,6 +112,7 @@ export type ContentTreeArray = {
   flattenedPath: string;
   summary?: string | undefined;
   body: string;
+  language: string
 };
 
 export const processFlowData = [

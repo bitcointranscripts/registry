@@ -47,7 +47,7 @@ export function getSourceBreadcrumbsFromSlug({
     return list;
   }
 
-  const pathWithLanguage = language !== "en" ? `${language}/${path}` : path;
+  const pathWithLanguage = language !== "en" ? `/${language}/${path}` : path;
 
   list.push({
     name: title,

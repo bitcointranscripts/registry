@@ -1,15 +1,16 @@
 // use server
+import type { LanguageCode } from "@/config";
 import { EsSearchResponse, SearchQuery } from "./types";
 
 type BuildQuery = (
   { queryString, size, page, filterFields, sortFields }: SearchQuery,
-  url?: string
+  { languageCode, url }: { languageCode: LanguageCode, url?: string }
 ) => Promise<EsSearchResponse>;
 
 
 export const buildQueryCall: BuildQuery = async (
   { queryString, size, page, filterFields, sortFields },
-  url
+  { languageCode, url }
 ) => {
   const body = {
     queryString,
@@ -17,11 +18,12 @@ export const buildQueryCall: BuildQuery = async (
     page,
     filterFields,
     sortFields,
+    languageCode,
   };
 
   const jsonBody = JSON.stringify(body);
 
-  return fetch(url ?? "search/api", {
+  return fetch(url ?? "/search/api", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

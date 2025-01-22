@@ -294,6 +294,7 @@ export const fetchTranscriptDetails = (
       summary,
       body,
       languageURL,
+      language
     } = curr;
 
     if (paths.includes(url)) {
@@ -307,6 +308,7 @@ export const fetchTranscriptDetails = (
         flattenedPath: _raw.flattenedPath,
         summary,
         body: createText(body),
+        language
       });
     }
     return acc.sort((a, b) => {

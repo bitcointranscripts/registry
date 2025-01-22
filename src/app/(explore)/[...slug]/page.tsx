@@ -16,6 +16,7 @@ import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "@/config";
 import { Metadata } from "next";
 import { SourceTree } from "@/types";
 import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
+import { parseLanguageString } from "@/utils/locale";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -251,12 +252,15 @@ const page = ({ params }: { params: { slug: string[] } }) => {
 
           {isRoot ? (
             <div className='flex flex-col gap-6 h-full pb-8 overflow-scroll'>
-              {(transcripts as ContentTreeArray[]).map((item, i) => (
+              {(transcripts as ContentTreeArray[]).map((item, i) => {
+                const parsedLanguage = parseLanguageString(item.language)
                 // without suspense, page deopts into CSR due to useSearchParams hook in component
+                return (
                 <Suspense fallback={<></>}>
-                  <TranscriptDetailsCard key={i} slug={slug} data={item} />
+                  <TranscriptDetailsCard key={i} slug={slug} data={item} language={parsedLanguage} />
                 </Suspense>
-              ))}
+                )
+              })}
             </div>
           ) : (
             <div className='flex-col flex gap-10 overflow-scroll pb-8'>
