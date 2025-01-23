@@ -404,3 +404,19 @@ export const deriveAlternateLanguages = ({languageCode, languages, suffix}: {lan
   }, {} as Record<string, string>);
   return {alternateLanguages, metadataLanguages};
 }
+
+
+// To load fonts on the server side
+
+export async function loadManropeFont(base:string) {
+
+  const regularFontData = await fetch(
+    new URL("/fonts/Manrope-Medium.ttf",base)
+  ).then((res) => res.arrayBuffer());
+
+  const boldFontData = await fetch(
+    new URL("/fonts/Manrope-SemiBold.ttf",base)
+  ).then((res) => res.arrayBuffer());
+
+  return { regularFontData, boldFontData };
+}

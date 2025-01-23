@@ -321,6 +321,14 @@ const createTypesCount = (
   fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypesByLanguage));
 };
 
+function lightWeightTranscript(transcripts: ContentTranscriptType[]){
+ const cleaned =  transcripts.map(({speakers, tagsDetailed, title, slugAsParams, languageURL, summary, date, ...rest})=>{
+    return {speakers, tagsDetailed, title, slugAsParams, languageURL, summary, date }
+  })
+
+   fs.writeFileSync("./public/light-transcripts.json", JSON.stringify(cleaned));
+}
+
 function organizeContent(
   transcripts: ContentTranscriptType[],
   sources: ContentSourceType[]
@@ -549,5 +557,7 @@ export default makeSource({
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
+    organizeContent(allTranscripts, allSources);
+    lightWeightTranscript(allTranscripts)
   },
 });

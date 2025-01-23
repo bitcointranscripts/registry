@@ -7,9 +7,18 @@ import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
 import allSourcesCount from "@/public/source-count-data.json";
-import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
+import {
+  constructSlugPaths,
+  deriveSourcesList,
+  fetchTranscriptDetails,
+  loopArrOrObject,
+  unsluggify,
+} from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
-import { allSources as allContentSources, allTranscripts } from "contentlayer/generated";
+import {
+  allSources as allContentSources,
+  allTranscripts,
+} from "contentlayer/generated";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
@@ -23,7 +32,9 @@ import { parseLanguageString } from "@/utils/locale";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const languageSlugs = OtherSupportedLanguages.map((lang) => ({ slug: [lang, "sources"] }));
+  const languageSlugs = LanguageCodes.map((lang) => ({
+    slug: [lang, "sources"],
+  }));
 
   const allSlugs = allContentSources.map(({ language, slugAsParams }) => {
     const isEnglish = language === "en";
@@ -178,9 +189,9 @@ const page = ({ params }: { params: { slug: string[] } }) => {
     languageTreeArray = deriveSourcesList(languageTree);
 
     return (
-      <div className='flex flex-col text-black'>
+      <div className="flex flex-col text-black">
         <TranscriptContentPage
-          header='Sources'
+          header="Sources"
           data={languageTreeArray}
           description='Sources help you find transcripts within a specific talk, meetup, conference, and the likes.'
           type='alphabet'
@@ -191,7 +202,11 @@ const page = ({ params }: { params: { slug: string[] } }) => {
     );
   } else {
     for (const part of slugPaths) {
-      if (typeof current === "object" && !Array.isArray(current) && part in current) {
+      if (
+        typeof current === "object" &&
+        !Array.isArray(current) &&
+        part in current
+      ) {
         current = current[part];
       } else {
         notFound();
@@ -212,11 +227,13 @@ const page = ({ params }: { params: { slug: string[] } }) => {
     }
 
     return (
-      <div className='flex items-start lg:gap-[50px]'>
-        <div className='flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar'>
+      <div className="flex items-start lg:gap-[50px]">
+        <div className="flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar">
           <div
             className={`flex flex-col ${
-              isRoot ? "border-b border-b-[#9B9B9B] pb-6 md:border-b-0 md:pb-0" : "border-b border-b-[#9B9B9B] pb-6 lg:pb-10"
+              isRoot
+                ? "border-b border-b-[#9B9B9B] pb-6 md:border-b-0 md:pb-0"
+                : "border-b border-b-[#9B9B9B] pb-6 lg:pb-10"
             } gap-5 2xl:gap-6`}
           >
             <>
@@ -228,14 +245,20 @@ const page = ({ params }: { params: { slug: string[] } }) => {
                 <p>Back</p>
               </Link>
 
-              <h3 className='text-xl 2xl:text-2xl font-medium pt-6 md:pt-3'>{metadata?.title ?? slug[slug.length - 1]}</h3>
+              <h3 className="text-xl 2xl:text-2xl font-medium pt-6 md:pt-3">
+                {metadata?.title ?? slug[slug.length - 1]}
+              </h3>
               {isRoot && metadata?.website ? (
-                <div className='flex gap-1 items-center pt-3 md:pt-6'>
-                  <Image src={WorldIcon} alt='world icon' className='w-[18px] md:w-[20px]' />
+                <div className="flex gap-1 items-center pt-3 md:pt-6">
+                  <Image
+                    src={WorldIcon}
+                    alt="world icon"
+                    className="w-[18px] md:w-[20px]"
+                  />
                   <Link
                     href={metadata?.website ?? ""}
-                    target='_blank'
-                    className='text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline text-wrap break-words line-clamp-1'
+                    target="_blank"
+                    className="text-xs md:text-sm xl:text-base leading-[17.6px] font-medium text-black underline text-wrap break-words line-clamp-1"
                   >
                     {metadata.website ?? ""}
                   </Link>
@@ -243,19 +266,25 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               ) : null}
 
               {isRoot && metadata?.additional_resources ? (
-                <div className='flex gap-1 items-center pt-3 md:pt-6'>
-                  <Image src={LinkIcon} alt='link icon' className='w-[18px] md:w-[20px]' />
-                  <div className='flex gap-1 flex-wrap'>
-                    {metadata.additional_resources.map((resource: any, index: number) => (
-                      <Link
-                        href={resource.url ?? ""}
-                        key={`${resource.title}-${index}`}
-                        target='_blank'
-                        className='py-[2px] px-4 rounded-[5px] bg-custom-white text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer'
-                      >
-                        {resource.title}
-                      </Link>
-                    ))}
+                <div className="flex gap-1 items-center pt-3 md:pt-6">
+                  <Image
+                    src={LinkIcon}
+                    alt="link icon"
+                    className="w-[18px] md:w-[20px]"
+                  />
+                  <div className="flex gap-1 flex-wrap">
+                    {metadata.additional_resources.map(
+                      (resource: any, index: number) => (
+                        <Link
+                          href={resource.url ?? ""}
+                          key={`${resource.title}-${index}`}
+                          target="_blank"
+                          className="py-[2px] px-4 rounded-[5px] bg-custom-white text-base leading-[21.86px] font-medium max-md:px-3 lg:py-1 max-2xl:text-sm max-md:text-sm border border-gray-custom-1500 max-md:leading-[100%] cursor-pointer"
+                        >
+                          {resource.title}
+                        </Link>
+                      ),
+                    )}
                   </div>
                 </div>
               ) : null}
@@ -275,15 +304,17 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               })}
             </div>
           ) : (
-            <div className='flex-col flex gap-10 overflow-scroll pb-8'>
-              <div className='grid grid-cols-1 sm:grid-cols-2 gap-2.5 '>
+            <div className="flex-col flex gap-10 overflow-scroll pb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 ">
                 {(data as any[]).map((value, i) => (
                   <Link
                     key={`${value.route}-${i}}`}
                     href={`/${[...slug, value.route].join("/")}`}
-                    className='flex capitalize cursor-pointer border max-w-[100%] border-gray-custom-1200 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100'
+                    className="flex capitalize cursor-pointer border max-w-[100%] border-gray-custom-1200 rounded-[5px] justify-between items-center text-sm py-5 px-4 lg:py-7 2xl:px-6 2xl:text-lg font-semibold text-gray-custom-1100"
                   >
-                    <span className='text-wrap break-words max-w-[80%]'>{value.title}</span>
+                    <span className="text-wrap break-words max-w-[80%]">
+                      {value.title}
+                    </span>
                     <span>{value.count}</span>
                   </Link>
                 ))}
@@ -291,7 +322,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
             </div>
           )}
         </div>
-        <div className='hidden lg:flex sticky top-0 flex-shrink-0 w-fit lg:justify-center 2xl:min-w-[100px] xl:min-w-[200px]'></div>
+        <div className="hidden lg:flex sticky top-0 flex-shrink-0 w-fit lg:justify-center 2xl:min-w-[100px] xl:min-w-[200px]"></div>
       </div>
     );
   }
