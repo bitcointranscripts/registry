@@ -6,6 +6,7 @@ const translations = {
     "categories": "Categorías",
     "topics": "Temas",
     "speakers": "Oradores",
+    "types": "Tipos",
     "more": "más",
   },
 

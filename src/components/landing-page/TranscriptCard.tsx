@@ -5,21 +5,26 @@ import { createSlug } from "@/utils";
 import Link from "next/link";
 import Pill from "@/components/common/Pill";
 import useURLManager from "@/service/URLManager/useURLManager";
+import { LanguageCode } from "@/config";
+import useTranslations from "@/hooks/useTranslations";
 
 interface TranscriptCardProps {
   data: Transcript;
   daysOpened?: number;
   transcripts?: number;
   source: string;
+  languageCode: LanguageCode;
 }
 
-const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCardProps) => {
+const TranscriptCard = ({ data, daysOpened, transcripts, source, languageCode }: TranscriptCardProps) => {
   const remainingSpeakers = data?.speakers?.length && data?.speakers.length > 2 ? data?.speakers.length - 2 : 0;
   const {toggleFilter} = useURLManager();
 
+  const t = useTranslations(languageCode);
+
   return (
     <Link
-      href={data.url}
+      href={data.languageURL}
       className={`flex flex-col justify-between ${
         transcripts ? "min-w-[400px] max-md:min-w-[292px]" : "max-w-[580px] w-full"
       } p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-sm cursor-pointer max-2xl:p-[18px] max-md:p-4`}
@@ -33,7 +38,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
       </section>
 
       {transcripts ? (
-        <p>{transcripts} Transcripts</p>
+        <p>{transcripts} {t("shared.transcripts")}</p>
       ) : (
         <section className='flex gap-[9px] items-center max-md:gap-1'>
           {data?.speakers?.length ? (
@@ -49,7 +54,7 @@ const TranscriptCard = ({ data, daysOpened, transcripts, source }: TranscriptCar
 
                   {remainingSpeakers === 0 ? null : (
                     <p className='py-[4.11px] px-[16.43px] rounded-[5.13px] bg-gray-custom-700 whitespace-nowrap text-nowrap max-md:px-3 max-md:py-[2px] max-xl:text-[13px] max-md:text-sm max-md:border max-md:border-gray-custom-300 max-md:leading-[100%]'>
-                      + {remainingSpeakers} more
+                      + {remainingSpeakers} {t("shared.more")}
                     </p>
                   )}
                 </div>
@@ -67,21 +72,24 @@ export const ExploreTranscriptCard = ({
   transcripts,
   url,
   type,
+  languageCode,
 }: {
   title: string;
   transcripts?: number;
   url: string;
   type: "CATEGORY" | "TYPE";
+  languageCode: LanguageCode;
 }) => {
   const parseUrl = createSlug(url);
+  const t = useTranslations(languageCode);
 
   let linkUrl = "";
   switch (type) {
     case "CATEGORY":
-      linkUrl = `/categories#${parseUrl}`;
+      linkUrl = `categories#${parseUrl}`;
       break;
     case "TYPE":
-      linkUrl = `/types#${parseUrl}`;
+      linkUrl = `types#${parseUrl}`;
       break;
     default:
       break;
@@ -96,7 +104,7 @@ export const ExploreTranscriptCard = ({
         <p className='text-xl font-medium max-xl:text-lg max-md:text-base capitalize'>{title}</p>
       </section>
 
-      <p>{transcripts} Transcripts</p>
+      <p>{transcripts} {t("shared.transcripts")}</p>
     </a>
   );
 };

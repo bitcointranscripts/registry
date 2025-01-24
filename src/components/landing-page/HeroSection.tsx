@@ -8,26 +8,29 @@ import circleBackground from "/public/svgs/circle-background.svg";
 import circleBackgroundMobile from "/public/svgs/circle-background-mobile.svg";
 import mobileDesktopImage from "/public/svgs/mobile-desktop-image.svg";
 import Wrapper from "../layout/Wrapper";
+import useTranslations from "@/hooks/useTranslations";
+import { LanguageCode } from "@/config";
 
-const HeroSection = () => {
+const HeroSection = ({languageCode}: {languageCode: LanguageCode}) => {
+  const t = useTranslations(languageCode);
   return (
     <div className='flex items-center justify-center w-full'>
       <Wrapper className='flex items-center justify-between min-h-[calc(100vh-121px)] pr-0 max-md:flex-col max-md:items-start max-md:justify-normal max-md:gap-6 max-md:pt-14 max-md:min-h-fit max-md:px-0 z-10 relative overflow-hidden'>
         <section className='w-[40%] flex flex-col gap-10 max-md:w-full max-md:gap-6 max-md:px-4'>
           <section className='text-black flex flex-col gap-6 max-md:max-w-[368px]'>
             <h1 className='2xl:text-[72px] text-[64px] leading-[130%] max-xl:text-5xl max-xl:leading-[130%] max-[953px]:text-[38px] max-[953px]:leading-[130%] max-md:text-[42px]'>
-              Unlock the treasure trove of technical bitcoin transcripts
+              {t("home.hero.title")}
             </h1>
             <p className='text-xl max-lg:text-lg max-md:text-base text-wrap'>
-              <span className='font-bold'>1042+ transcripts</span> growing every day.{" "}
-              <span className='whitespace-nowrap'>Thanks to people like you.</span>
+              <span className='font-bold'>{t("home.hero.subtitle-1")}</span> {t("home.hero.subtitle-2")}{" "}
+              <span className='whitespace-nowrap'>{t("home.hero.subtitle-3")}</span>
             </p>
           </section>
           <Link
             href='/categories'
             className='flex justify-between items-center h-20 px-8 bg-orange-custom-100 rounded-full w-[90%] max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full'
           >
-            <p className='text-xl text-white font-semibold text-nowrap max-lg:text-lg max-md:text-base'>Explore Transcripts</p>
+            <p className='text-xl text-white font-semibold text-nowrap max-lg:text-lg max-md:text-base'>{t("home.hero.cta")}</p>
             <ArrowLinkUpRight className='text-white w-6' />
           </Link>
         </section>
