@@ -57,9 +57,8 @@ const CategoriesPage = ({params}: {params: { languageCode: LanguageCode}}) => {
   return (
     <div className="flex flex-col text-black">
       <TranscriptContentPage
-        header="Categories"
+        header="categories"
         data={reStructuredCategories}
-        description="Explore the main areas of focus within the Bitcoin technical ecosystem."
         type="words"
         linkName="tags"
         languageCode={languageCode}

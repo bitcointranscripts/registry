@@ -7,6 +7,9 @@ type PageDynamicProps = {
   params: {languageCode: string};
 }
 
+// forces 404 for paths not generated from `generateStaticParams` function.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   const topicLanguageSlugs = LanguageCodes.map((lang) => {
     return { languageCode: lang };

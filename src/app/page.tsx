@@ -32,7 +32,7 @@ export default function Home({languageCode = LanguageCode.en }: {languageCode?: 
         <FeaturedTranscripts languageCode={languageCode} />
         <WhyTranscripts languageCode={languageCode} />
         <ExploreTranscripts languageCode={languageCode} />
-        <FooterComponent languageCode={languageCode} />
+        <FooterComponent />
       </div>
     </div>
   );

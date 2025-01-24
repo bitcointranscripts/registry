@@ -7,11 +7,12 @@ import { menuApps } from "@/utils/data";
 import Image from "next/image";
 import Wrapper from "./Wrapper";
 import Logo from "./Logo";
-import { LanguageCode } from "@/config";
 import useTranslations from "@/hooks/useTranslations";
 import { generateNewUrlForLanguage } from "@/utils/locale";
+import useLang from "@/hooks/useLang";
 
-const FooterComponent = ({languageCode = LanguageCode.en }: {languageCode?: LanguageCode}) => {
+const FooterComponent = () => {
+  const languageCode = useLang();
   const t = useTranslations(languageCode);
   return (
     <div className='flex flex-col items-center justify-center w-full'>

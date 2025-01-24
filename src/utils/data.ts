@@ -51,23 +51,23 @@ export const menuApps = [
 export const ExploreNavigationItems = [
   {
     href: "/categories",
-    title: "Categories",
+    title: "categories",
   },
   {
     href: "/topics",
-    title: "Topics",
+    title: "topics",
   },
   {
     href: "/speakers",
-    title: "Speakers",
+    title: "speakers",
   },
   {
     href: "/types",
-    title: "Types",
+    title: "types",
   },
   {
     href: "/sources",
-    title: "Sources",
+    title: "sources",
   },
 ];
 

@@ -14,11 +14,10 @@ import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
 import { LanguageCode, OtherSupportedLanguages } from "@/config";
 import SingleTranscriptContent from "./SingleTranscriptContent";
+import useTranslations from "@/hooks/useTranslations";
 
 interface ITranscriptContentPage {
   header: string;
-  description?: string;
-  mobileDescription?: string;
   data: ExploreGroupedData[];
   type: "alphabet" | "words";
   linkName: string;
@@ -28,12 +27,11 @@ interface ITranscriptContentPage {
 const TranscriptContentPage: FC<ITranscriptContentPage> = ({
   header,
   data,
-  description,
-  mobileDescription,
   linkName,
   type,
   languageCode,
 }) => {
+  const t = useTranslations(languageCode);
   const groupedData =
     type === "alphabet"
       ? groupDataByAlphabet(data)
@@ -49,8 +47,12 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
       .slice(0, idx + 1)
       .join("/");
 
+    let name = path || "home";
+
+    name = t(`shared.${name}`) || name;
+
     return {
-      name: path || "home",
+      name: name,
       link: route || "/",
       isActive: idx === pathnameArray.length - 1,
     };
@@ -82,12 +84,12 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         <div className="flex flex-col border-b border-b-[#9B9B9B] pb-6 lg:pb-10  gap-6 ">
           <BaseCrumbLists crumbsArray={allRoutes} />
           <div className="flex flex-col gap-1 lg:gap-4">
-            <h3 className="text-xl 2xl:text-2xl font-medium">{header}</h3>
+            <h3 className="text-xl 2xl:text-2xl font-medium uppercase">{t(`explore.${header}.title`)}</h3>
             <p className="hidden lg:inline-block text-sm lg:text-base 2xl:text-lg text-custom-black-custom-300">
-              {description}
+              {t(`explore.${header}.description`)}
             </p>
             <p className="inline-block lg:hidden text-sm lg:text-lg text-custom-black-custom-300">
-              {mobileDescription || description}
+            {t(`explore.${header}.description`)}
             </p>
           </div>
         </div>

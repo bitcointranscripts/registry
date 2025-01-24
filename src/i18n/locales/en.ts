@@ -1,5 +1,6 @@
 const translations = {
   "shared": {
+    "home": "Home",
     "transcripts": "Transcripts",
     "about": "About",
     "sources": "Sources",

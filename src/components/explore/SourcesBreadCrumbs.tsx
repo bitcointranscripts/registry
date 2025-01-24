@@ -3,13 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExploreNavigationItems } from "@/utils/data";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]; current: any }) => {
   const pathname = usePathname();
+  const language = useLang();
+
+  const t = useTranslations(language)
 
   const navListWithoutSources = ExploreNavigationItems.filter((item) => item.href !== "/sources").map((item) => item.href.slice(1));
 
-  const language = slugPaths[1];
   const pathnameArray = pathname.replace(`/${language}`, "").split("/");
   const isNotSourcesPage = navListWithoutSources.includes(pathnameArray[1]);
 
@@ -21,11 +26,16 @@ export const SourcesBreadCrumbs = ({ slugPaths, current }: { slugPaths: string[]
       .slice(0, idx + (isEnglishSlug ? 1 : 2))
       .join("/");
 
-    return { name: path || "home", link: idx === 0 ? "/" : route || "/" };
+    let name = path || "home";
+    name = t(`shared.${name}`) || name;
+
+    const homeLink = generateNewUrlForLanguage(`/`, language);
+
+    return { name, link: idx === 0 ? homeLink : route || homeLink };
   });
 
   if (!isNotSourcesPage && pathnameArray[1] !== "sources") {
-    allRoutes.splice(1, 0, { name: "Sources", link: `${isEnglishSlug ? "/sources" : `/${language}/sources`}` });
+    allRoutes.splice(1, 0, { name: t("shared.sources") ?? "Sources", link: generateNewUrlForLanguage(`/sources`, language) });
   }
 
   const breadCrumbData = () => {

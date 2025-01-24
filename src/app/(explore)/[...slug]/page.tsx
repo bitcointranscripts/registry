@@ -200,9 +200,8 @@ const page = ({ params }: { params: { slug: string[] } }) => {
     return (
       <div className="flex flex-col text-black">
         <TranscriptContentPage
-          header="Sources"
+          header='sources'
           data={languageTreeArray}
-          description='Sources help you find transcripts within a specific talk, meetup, conference, and the likes.'
           type='alphabet'
           linkName='sources'
           languageCode={language as LanguageCode}
