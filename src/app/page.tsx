@@ -4,13 +4,13 @@ import FeaturedTranscripts from "@/components/landing-page/featured-transcripts/
 import WhyTranscripts from "@/components/landing-page/WhyTranscripts";
 import ExploreTranscripts from "@/components/landing-page/explore-transcripts/ExploreTranscripts";
 import FooterComponent from "@/components/layout/FooterComponent";
-import { LanguageCode, LanguageCodes } from "@/config";
+import { LanguageCode, OtherSupportedLanguages } from "@/config";
 import { deriveAlternateLanguages } from "@/utils";
 import { Metadata } from "next";
 
 const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
   languageCode: LanguageCode.en,
-  languages: LanguageCodes,
+  languages: OtherSupportedLanguages,
   suffix: "",
 });
 

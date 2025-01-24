@@ -121,42 +121,32 @@ export type ContentTreeArray = {
 
 export const processFlowData = [
   {
-    title: "Curator Adds Sources",
-    content: "Curator adds sources and resources to the Transcription Backlog.",
+    id: "curator",
     image: "/svgs/sources-icon.svg",
     bgColor: "#FCEDF3",
   },
   {
-    title: "AI Transcription",
-    content:
-      "Resources from the backlog are sent to the AI Transcription Service for processing.",
+    id: "ai",
     image: "/svgs/ai-icon.svg",
     bgColor: "#F0F1FA",
   },
   {
-    title: "Initial Publication",
-    content:
-      "AI-generated transcripts are published on the Registry and also added to the Review Queue.",
+    id: "initial-publication",
     image: "/svgs/initial-publication-icon.svg",
     bgColor: "#FFF5EB",
   },
   {
-    title: "Human Review",
-    content:
-      "Reviewers claim and edit transcripts from the Review Queue and submit them for approval.",
+    id: "review",
     image: "/svgs/review-icon.svg",
     bgColor: "#ECF9F1",
   },
   {
-    title: "Evaluation",
-    content: "Editors review and approve finalized transcripts.",
+    id: "evaluation",
     image: "/svgs/evaluation-icon.svg",
     bgColor: "#FCEDED",
   },
   {
-    title: "Final Publication",
-    content:
-      "Approved transcripts are updated on the Registry as final versions, and Reviewers receive a payout for their work",
+    id: "final-publication",
     image: "/svgs/final-publication-icon.svg",
     bgColor: "#FCEDF3",
   },

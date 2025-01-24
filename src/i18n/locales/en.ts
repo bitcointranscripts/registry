@@ -126,6 +126,52 @@ const translations = {
       "description": "Sources help you find transcripts within a specific talk, meetup, conference, and the likes.",
     }
   },
+
+  // About page
+  "about": {
+    "title": "What Is Bitcoin Transcripts?",
+    "description": "Bitcoin Transcripts unlocks the wisdom, knowledge, and history from bitcoin tech podcasts, presentations, and other audio-visual media. We make technical bitcoin knowledge more accessible to learners, builders, and educators.",
+    "history": {
+      "title": "How We Got Here",
+      "content-1": "In the past, Bryan Bishop (@kanzure) and others would manually transcribe talks live. Bryan alone produced over 900 of these.",
+      "content-2": "Building on his foundations, we now use AI to create a transcript. We then pass along the transcript to reviewers like you for edits.",
+      "content-3": "Doing so, we make bitcoin tech knowledge and history more accessible as text. This is then fed to tools like ChatBTC and Bitcoin Search to create a richer ecosystem of insights.",
+    },
+    "process": {
+      "title": "How It Works",
+      "description": "At Bitcoin Transcripts we are building a largely autonomous transcription workflow that streamlines the AI-generation, review by humans, and publication of bitcoin tech transcripts.",
+      "curator": {
+        "title": "Curator Adds Sources",
+        "content": "Curator adds sources and resources to the Transcription Backlog.",
+      },
+      "ai": {
+        "title": "AI Transcription",
+        "content": "Resources from the backlog are sent to the AI Transcription Service for processing.",
+      },
+      "initial-publication": {
+        "title": "Initial Publication",
+        "content": "AI-generated transcripts are published on the Registry and also added to the Review Queue.",
+      },
+      "review": {
+        "title": "Human Review",
+        "content": "Reviewers claim and edit transcripts from the Review Queue and submit them for approval.",
+      },
+      "evaluation": {
+        "title": "Evaluation",
+        "content": "Editors review and approve finalized transcripts.",
+      },
+      "final-publication": {
+        "title": "Final Publication",
+        "content": "Approved transcripts are updated on the Registry as final versions, and Reviewers receive a payout for their work",
+      },
+      "cta": "This could be you!"
+    },
+    "reviewers": {
+      "title": "Reviewers",
+      "description": "Reviewers edit AI-generated transcripts, improving accuracy and readability.",
+      "cta": "Become a Reviewer"
+    }
+  }
 }
 
 export default translations
