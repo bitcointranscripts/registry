@@ -105,6 +105,15 @@ const translations = {
       "of": "de",
       "results": "Resultados"
     },
+    "speakers": {
+      "select": "Seleccionar Ponentes"
+    },
+    "sources": {
+      "select": "Seleccionar Fuentes"
+    },
+    "topics": {
+      "select": "Seleccionar Temas"
+    },
     "clear-all": "Borrar Todo"
   },
 

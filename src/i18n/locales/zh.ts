@@ -105,6 +105,15 @@ const translations = {
       "of": "共",
       "results": "结果"
     },
+    "speakers": {
+      "select": "选择讲者"
+    },
+    "sources": {
+      "select": "选择来源"
+    },
+    "topics": {
+      "select": "选择主题"
+    },
     "clear-all": "清除所有"
   },
 

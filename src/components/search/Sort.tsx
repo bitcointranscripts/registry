@@ -4,12 +4,17 @@ import SidebarSection from "./SidebarSection";
 import { SortIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import { setup } from "@/config";
 import { ArbitraryCallback } from "@/app/search/types";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
 
 export const Sort = ({callback} : {callback: ArbitraryCallback}) => {
+  const lang = useLang();
+  const t = useTranslations(lang);
+
   const options = [
-    { label: "Relevance", value: "" },
-    { label: "Newest First", value: "desc" },
-    { label: "Oldest First", value: "asc" },
+    { label: t("search.sort.relevance")!, value: "" },
+    { label: t("search.sort.newest")!, value: "desc" },
+    { label: t("search.sort.oldest")!, value: "asc" },
   ];
   const { getSort, addSort, removeSort } = useURLManager();
 
@@ -28,19 +33,19 @@ export const Sort = ({callback} : {callback: ArbitraryCallback}) => {
     <SidebarSection className="w-full relative z-[1]">
       <div className="flex items-center gap-2 text-base 2xl:text-lg font-bold pb-4 2xl:pb-6">
         <SortIcon className="w-[20px]" />
-        <span className="leading-none">Sort By</span>
+        <span className="leading-none">{t("search.sort.title")}</span>
       </div>
       <SingleSelect>
         <SingleSelect.Trigger
           defaultPlaceholder={
             options.find((option) => option.value === getSort(sortField))
-              ?.label ?? "Relevance"
+              ?.label ?? t("search.sort.relevance")!
           }
           className="bg-gray-custom-100 font-bold"
         />
         <SingleSelect.List
           options={options}
-          label="Sort by"
+          label={t("search.sort.title")!}
           onOptionSelect={handleSortBy}
           value={getSort(sortField) || ""}
         />

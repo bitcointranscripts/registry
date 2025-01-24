@@ -105,6 +105,15 @@ const translations = {
       "of": "of",
       "results": "Results",
     },
+    "speakers": {
+      "select": "Select Speakers"
+    },
+    "sources": {
+      "select": "Select Sources"
+    },
+    "topics": {
+      "select": "Select Topics"
+    },
     "clear-all": "Clear all"
   },
 

@@ -59,10 +59,10 @@ export const setup = {
 }
 
 export const FacelLabelMapping: Record<FacetKeys, string> = {
-  "authors": "Speakers",
-  "tags": "Topics",
-  "transcript_source": "Sources",
-  "domain": "Domains"
+  "authors": "speakers",
+  "tags": "topics",
+  "transcript_source": "sources",
+  "domain": "domains"
 };
 
 export const FIELDS_TO_SEARCH = [

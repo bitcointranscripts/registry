@@ -13,6 +13,7 @@ import Pagination from "@/components/search/Pagination";
 import SearchResultCard from "@/components/search/SearchResultCard";
 import NotFound from "@/app/not-found";
 import { SkeletonResults } from "@/components/search/Loader";
+import useTranslations from "@/hooks/useTranslations";
 
 const SearchPage = () => {
   const { queryResult } = useSearch();
@@ -65,6 +66,8 @@ export default function SearchClient({
   languageCode: LanguageCode;
 }) {
   const { sidebarToggleManager } = useUIContext();
+  const t = useTranslations(languageCode);
+
   return (
     <>
       <SearchContextProvider>
@@ -79,7 +82,7 @@ export default function SearchClient({
             {/* </div> */}
             {sidebarToggleManager.state ? null : (
               <div className="w-full group-data-[sb-open='true']:hidden group-data-[sb-open='true']:md:block">
-                <FilterMenuMobile />
+                <FilterMenuMobile filterHeadingText={t("search.filters.title")?? ""} />
                 <SearchPage />
               </div>
             )}
