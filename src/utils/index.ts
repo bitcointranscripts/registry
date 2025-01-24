@@ -55,11 +55,9 @@ export function shuffle(data: Transcript[]) {
   return data;
 }
 
-export const extractTranscripts = (allTranscripts: Transcript[]) => {
+export const extractTranscripts = (allTranscripts: Transcript[], languageCode: LanguageCode) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
-
-  const languageRegex = new RegExp(`\\.(${OtherSupportedLanguages.join("|")})(\\.md)?$`);
 
   // Optimization for landingpage — obscene amount of data passed to the client (reduced from 6.6s to 795ms)
   const lightWeightTranscripts = allTranscripts.map(({ body, summary, ...fieldsToUse }) => {
@@ -67,7 +65,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   })
 
   const transcripts = shuffle(lightWeightTranscripts as Transcript[]).filter((transcript) => {
-    return transcript.date && !languageRegex.test(transcript.url);
+    return transcript.date && transcript.language === languageCode;
   });
 
   // Sort and slice in one pass
