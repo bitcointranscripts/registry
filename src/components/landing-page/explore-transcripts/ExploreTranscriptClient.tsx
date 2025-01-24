@@ -8,6 +8,7 @@ import { ExploreTranscriptCard } from "../TranscriptCard";
 import { countItemsAndSort } from "@/utils";
 import { LanguageCode } from "@/config";
 import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 interface TagInfo {
   name: string;
@@ -33,7 +34,7 @@ const ExploreTranscriptClient = ({ categories, types, languageCode = LanguageCod
         <section className='flex flex-col gap-6 w-full'>
           <section className='flex items-center gap-4 w-full'>
             <h3 className='text-2xl font-semibold max-md:text-xl'>{t("shared.categories")}</h3>
-            <Link href='categories' className='w-fit px-5 py-[6px] rounded-full border border-black flex gap-1 items-center max-md:py-1 max-md:px-3'>
+            <Link href={generateNewUrlForLanguage(`/categories`, languageCode)} className='w-fit px-5 py-[6px] rounded-full border border-black flex gap-1 items-center max-md:py-1 max-md:px-3'>
               <p className='leading-[19.2px] text-sm font-medium'>{t("home.explore.view-all")}</p>
               <ArrowLinkRight className='text-black w-6 max-md:w-5' />
             </Link>
@@ -56,7 +57,7 @@ const ExploreTranscriptClient = ({ categories, types, languageCode = LanguageCod
         <section className='flex flex-col gap-6 w-full'>
           <section className='flex items-center gap-4 w-full'>
             <h3 className='text-2xl font-semibold max-md:text-xl'>{t("shared.types")}</h3>
-            <Link href='types' className='w-fit px-5 py-[6px] rounded-full border border-black flex gap-1 items-center max-md:py-1 max-md:px-3'>
+            <Link href={generateNewUrlForLanguage(`/types`, languageCode)} className='w-fit px-5 py-[6px] rounded-full border border-black flex gap-1 items-center max-md:py-1 max-md:px-3'>
               <p className='leading-[19.2px] text-sm font-medium'>{t("home.explore.view-all")}</p>
               <span>
                 <ArrowLinkRight className='text-black w-6 max-md:w-5' />

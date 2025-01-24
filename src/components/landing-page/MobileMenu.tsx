@@ -5,23 +5,27 @@ import { ExploreNavigationItems, menuApps } from "@/utils/data";
 import { ThemeSwitcher } from "../layout/header/Header";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import LanguageSwitch from "../layout/header/LanguageSwitch";
+import { generateNewUrlForLanguage } from "@/utils/locale";
+import useLang from "@/hooks/useLang";
 
 
 const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}) => {
   const links = ExploreNavigationItems;
+
+  const lang = useLang();
 
   return (
     <div className='flex flex-col gap-6 bg-white min-h-full overflow-y-scroll'>
       <section className='flex-col gap-2 '>
         <p className='text-lg font-medium text-black'>Transcripts</p>
         <div className='w-full flex flex-col'>
-          {links.map((link) => (
+          {links.map(({href, title}) => (
             <Link
-              href={link.href}
+              href={generateNewUrlForLanguage(href, lang)}
               onClick={()=>setOpen(false)}
               className='capitalize py-3 px-4 text-gray-custom-1000 hover:bg-orange-custom-800 hover:font-semibold hover:text-orange-custom-100'
             >
-              {link.title}
+              {title}
             </Link>
           ))}
         </div>
@@ -29,7 +33,7 @@ const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}
       <section className='flex flex-col gap-6'>
         <p className='text-lg font-medium text-black hidden'>About</p>
         <div className='w-fit'>
-          <LanguageSwitch />
+          <LanguageSwitch callback={() => setOpen(false)} />
         </div>
         <div className='w-fit hidden'>
           <ThemeSwitcher />

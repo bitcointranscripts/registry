@@ -8,6 +8,7 @@ import useURLManager from "@/service/URLManager/useURLManager";
 import useLang from "@/hooks/useLang";
 import { LanguageCode } from "@/config";
 import { generateNewUrlForLanguage } from "@/utils/locale";
+import Link from "next/link";
 
 const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent, language }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, breadCrumbsComponent?: React.ReactNode, language: LanguageCode }) => {
   const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
@@ -39,12 +40,12 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent,
       <section className='flex md:flex-row flex-col justify-between gap-2 w-full'>
         <div className='flex flex-col gap-2 w-full'>
           {breadCrumbsComponent}
-          <a
-            href={`${languageURL}`}
+          <Link
+            href={`/${languageURL}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}
-          </a>
+          </Link>
         </div>
         {date && (
           <div className='md:self-start flex gap-2 items-center shrink-0'>

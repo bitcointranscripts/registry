@@ -13,7 +13,7 @@ const defaultLanguageConfig: LanguageSwitchConfig = {
   websiteLanguages: [],
 }
 
-const LanguageSwitch = () => {
+const LanguageSwitch = ({ callback }: {callback?: () => void}) => {
   const path = usePathname();
 
   const [languageConfig, setLanguageConfig] = useState<LanguageSwitchConfig>(defaultLanguageConfig);
@@ -61,8 +61,6 @@ const LanguageSwitch = () => {
         websiteLanguages
       }
     };
-
-    setOpen(false);
     const languageConfig = getLanguageConfig();
     if (languageConfig.currentLanguage ) {
       setLanguageConfig(languageConfig);
@@ -72,6 +70,11 @@ const LanguageSwitch = () => {
   }, [path]);
 
   const isDisabled = !languageConfig.pageAvailableLanguages.length && !languageConfig.websiteLanguages.length;
+
+  const handleSwitch = () => {
+    setOpen(false);
+    callback && callback();
+  }
 
   return (
     <div id="language-switch" ref={wrapperRef} className="relative">
@@ -96,6 +99,7 @@ const LanguageSwitch = () => {
               <Link
                 key={language}
                 href={generateNewUrlForLanguage(path, language)}
+                onClick={handleSwitch}
                 className="py-1 flex items-center gap-2 text-sm md:text-base leading-[17.6px] font-medium uppercase hover:text-custom-accent rounded-md"
               >
                 <span className="text-[26px]">{LanguageConfig[language].icon}</span>

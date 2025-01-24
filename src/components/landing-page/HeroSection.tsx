@@ -10,6 +10,7 @@ import mobileDesktopImage from "/public/svgs/mobile-desktop-image.svg";
 import Wrapper from "../layout/Wrapper";
 import useTranslations from "@/hooks/useTranslations";
 import { LanguageCode } from "@/config";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 const HeroSection = ({languageCode}: {languageCode: LanguageCode}) => {
   const t = useTranslations(languageCode);
@@ -27,7 +28,7 @@ const HeroSection = ({languageCode}: {languageCode: LanguageCode}) => {
             </p>
           </section>
           <Link
-            href='/categories'
+            href={generateNewUrlForLanguage('/categories', languageCode)}
             className='flex justify-between items-center h-20 px-8 bg-orange-custom-100 rounded-full w-[90%] max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full'
           >
             <p className='text-xl text-white font-semibold text-nowrap max-lg:text-lg max-md:text-base'>{t("home.hero.cta")}</p>

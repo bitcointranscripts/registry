@@ -9,6 +9,7 @@ import Wrapper from "../layout/Wrapper";
 import SuggestModal from "./SuggestionModal";
 import { LanguageCode } from "@/config";
 import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 const WhyTranscripts = ({languageCode = LanguageCode.en }: {languageCode?: LanguageCode}) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -53,7 +54,7 @@ const WhyTranscripts = ({languageCode = LanguageCode.en }: {languageCode?: Langu
             </p>
             <div className='flex items-center justify-center max-md:w-full'>
               <Link
-                href='/categories'
+                href={generateNewUrlForLanguage('/categories', languageCode)}
                 className='text-xl bg-orange-custom-100 text-white py-6 rounded-full flex items-center md:w-fit px-32 whitespace-nowrap justify-center h-20 max-xl:h-[72px] max-lg:h-16 max-md:h-14 max-lg:w-full max-md:w-full font-semibold text-nowrap max-lg:text-lg max-md:text-base max-lg:px-16 max-md:px-8'
               >
                 {t("home.why.history.cta")}

@@ -15,6 +15,7 @@ import { usePathname } from "next/navigation";
 import { LanguageCode, OtherSupportedLanguages } from "@/config";
 import SingleTranscriptContent from "./SingleTranscriptContent";
 import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 interface ITranscriptContentPage {
   header: string;
@@ -53,7 +54,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
     return {
       name: name,
-      link: route || "/",
+      link: route || generateNewUrlForLanguage("/", languageCode),
       isActive: idx === pathnameArray.length - 1,
     };
   });
