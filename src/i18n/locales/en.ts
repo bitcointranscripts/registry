@@ -86,16 +86,26 @@ const translations = {
     "title": "Search",
     "placeholder": "Search here",
     "filters": {
+      "title": "Filters",
+      "applied": "Applied Filters",
       "authors": "Speakers",
       "tags": "Topics",
       "sources": "Sources",
       "types": "Types",
-      "sort": {
-        "relevance": "Relevance",
-        "newest": "Newest First",
-        "oldest": "Oldest First",
-      }
     },
+    "sort": {
+      "title": "Sort By",
+      "relevance": "Relevance",
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+    },
+    "result-size": {
+      "show": "Show",
+      "showing": "Showing",
+      "of": "of",
+      "results": "Results",
+    },
+    "clear-all": "Clear all"
   },
 
   // Explore Page

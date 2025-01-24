@@ -84,18 +84,28 @@ const translations = {
   // Search Page
   "search": {
     "title": "Buscar",
-    "placeholder": "Busca aquí",
+    "placeholder": "Buscar aquí",
     "filters": {
-      "authors": "Oradores",
+      "title": "Filtros",
+      "applied": "Filtros Aplicados",
+      "authors": "Ponentes",
       "tags": "Temas",
       "sources": "Fuentes",
-      "types": "Tipos",
-      "sort": {
-        "relevance": "Relevancia",
-        "newest": "Más reciente primero",
-        "oldest": "Más antiguo primero",
-      }
+      "types": "Tipos"
     },
+    "sort": {
+      "title": "Ordenar Por",
+      "relevance": "Relevancia",
+      "newest": "Más Recientes",
+      "oldest": "Más Antiguos"
+    },
+    "result-size": {
+      "show": "Mostrar",
+      "showing": "Mostrando",
+      "of": "de",
+      "results": "Resultados"
+    },
+    "clear-all": "Borrar Todo"
   },
 
   // Explore Page
@@ -126,6 +136,52 @@ const translations = {
       "description": "Las fuentes te ayudan a encontrar transcripciones dentro de una charla, reunión, conferencia y similares.",
     }
   },
+
+  // About page
+  "about": {
+    "title": "¿Qué es Bitcoin Transcripts?",
+    "description": "Bitcoin Transcripts desbloquea la sabiduría, el conocimiento y la historia de podcasts, presentaciones y otros medios audiovisuales sobre tecnología de Bitcoin. Hacemos que el conocimiento técnico de Bitcoin sea más accesible para estudiantes, constructores y educadores.",
+    "history": {
+      "title": "Cómo Llegamos Hasta Aquí",
+      "content-1": "En el pasado, Bryan Bishop (@kanzure) y otros transcribían manualmente las charlas en vivo. Bryan produjo más de 900 de estas por sí solo.",
+      "content-2": "Basándonos en sus fundamentos, ahora utilizamos inteligencia artificial para crear transcripciones. Luego pasamos la transcripción a revisores como tú para que realicen las ediciones.",
+      "content-3": "De esta manera, hacemos que el conocimiento y la historia de la tecnología de Bitcoin sean más accesibles como texto. Esto luego se integra en herramientas como ChatBTC y Bitcoin Search para crear un ecosistema más rico de conocimientos.",
+    },
+    "process": {
+      "title": "Cómo Funciona",
+      "description": "En Bitcoin Transcripts estamos construyendo un flujo de trabajo de transcripción en gran parte autónomo que optimiza la generación por IA, la revisión humana y la publicación de transcripciones técnicas de Bitcoin.",
+      "curator": {
+        "title": "El Curador Agrega Fuentes",
+        "content": "El curador agrega fuentes y recursos al Registro de Transcripciones.",
+      },
+      "ai": {
+        "title": "Transcripción con IA",
+        "content": "Los recursos del registro se envían al Servicio de Transcripción con IA para su procesamiento.",
+      },
+      "initial-publication": {
+        "title": "Publicación Inicial",
+        "content": "Las transcripciones generadas por IA se publican en el Registro y también se agregan a la Cola de Revisión.",
+      },
+      "review": {
+        "title": "Revisión Humana",
+        "content": "Los revisores reclaman y editan transcripciones de la Cola de Revisión y las envían para aprobación.",
+      },
+      "evaluation": {
+        "title": "Evaluación",
+        "content": "Los editores revisan y aprueban las transcripciones finalizadas.",
+      },
+      "final-publication": {
+        "title": "Publicación Final",
+        "content": "Las transcripciones aprobadas se actualizan en el Registro como versiones finales, y los revisores reciben un pago por su trabajo.",
+      },
+      "cta": "¡Esto podrías ser tú!"
+    },
+    "reviewers": {
+      "title": "Revisores",
+      "description": "Los revisores editan las transcripciones generadas por IA, mejorando su precisión y legibilidad.",
+      "cta": "Conviértete en Revisor"
+    }
+  }
 }
 
 export default translations
