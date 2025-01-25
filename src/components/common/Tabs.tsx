@@ -5,6 +5,8 @@ import React, { SetStateAction, useState } from "react";
 import TranscriptTabContent from "../individual-transcript/TranscriptTabContent";
 import NavigationByWords from "../explore/NavigationByWords";
 import { NavigationList } from "@/utils";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
 
 const Tabs = ({
   summary,
@@ -21,6 +23,9 @@ const Tabs = ({
   groupedHeading?: NavigationList[];
   setCurrentHeading?: React.Dispatch<SetStateAction<string>>;
 }) => {
+  const lang = useLang();
+  const t = useTranslations(lang);
+
   const [openTabs, setOpenTabs] = useState<
     "transcript" | "summary" | "extraInfo"
   >("transcript");
@@ -29,13 +34,13 @@ const Tabs = ({
     <div className="flex flex-col relative">
       <div className="sticky bg-white z-10 top-0 lg:top-0  md:pt-6 h-full flex gap-4 md:gap-10 xl:gap-16 justify-start items-center border-b border-b-gray-custom-1200">
         <Tab
-          title="Transcript"
+          title={t("transcript.title")!}
           isOpen={openTabs === "transcript"}
           onClick={() => setOpenTabs("transcript")}
         />
         {summary && (
           <Tab
-            title="Summary"
+            title={t("transcript.summary")!}
             isOpen={openTabs === "summary"}
             onClick={() => setOpenTabs("summary")}
           />
@@ -43,7 +48,7 @@ const Tabs = ({
 
         {extraInfo && (
           <Tab
-            title="Extra Info"
+            title={t("transcript.extra-info")!}
             isOpen={openTabs === "extraInfo"}
             onClick={() => setOpenTabs("extraInfo")}
           />

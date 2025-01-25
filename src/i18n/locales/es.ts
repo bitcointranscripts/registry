@@ -146,6 +146,19 @@ const translations = {
     }
   },
 
+  // Transcript page
+  "transcript": {
+    "title": "Transcripción",
+    "date": "Fecha",
+    "transcript_by": "Transcripción por",
+    "hide-details": "Ocultar Detalles",
+    "show-details": "Mostrar Detalles",
+    "extra-info": "Información Adicional",
+    "summary": "Resumen",
+    "ai-generated": "AI Generado (Revisar para sats)",
+    "not-available": "No Disponible"
+  },
+  
   // About page
   "about": {
     "title": "¿Qué es Bitcoin Transcripts?",

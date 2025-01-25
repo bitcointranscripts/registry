@@ -9,6 +9,9 @@ import { twMerge } from "tailwind-merge";
 import FooterComponent from "../layout/FooterComponent";
 import BaseCrumbLists, { BaseCrumbType } from "../common/BaseCrumbLists";
 import Tabs from "../common/Tabs";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 const IndividualTranscript = ({
   breadCrumbs,
@@ -19,10 +22,13 @@ const IndividualTranscript = ({
 }) => {
   const [currentHeading, setCurrentHeading] = useState("");
 
+  const lang = useLang();
+  const t = useTranslations(lang);
+
   const allHeadings = extractHeadings(transcript.body.raw);
   const staticRoutes = [
-    { name: "Home", link: "/", isActive: false },
-    { name: "Sources", link: "/sources", isActive: false },
+    { name: t("shared.home")!, link: generateNewUrlForLanguage("/", lang), isActive: false },
+    { name: t("shared.sources")!, link: generateNewUrlForLanguage("/sources", lang), isActive: false },
   ];
   const finalRoutes = [...staticRoutes, ...breadCrumbs];
   return (

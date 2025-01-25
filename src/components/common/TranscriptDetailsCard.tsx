@@ -41,7 +41,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent,
         <div className='flex flex-col gap-2 w-full'>
           {breadCrumbsComponent}
           <Link
-            href={`/${languageURL}`}
+            href={`${languageURL}`}
             className='font-bold text-base leading-[21.86px] md:text-xl 2xl:text-[22.5px] md:leading-[30px] text-orange-custom-100 md:text-black'
           >
             {title}

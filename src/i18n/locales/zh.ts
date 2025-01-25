@@ -145,6 +145,19 @@ const translations = {
       "description": "来源帮助您在特定的演讲、聚会、会议等内容中找到文稿。"
     }
   },
+  
+  // Transcript page
+  "transcript": {
+    "title": "文字记录",
+    "date": "日期",
+    "transcript_by": "记录者",
+    "hide-details": "隐藏详情",
+    "show-details": "显示详情",
+    "extra-info": "额外信息",
+    "summary": "摘要",
+    "ai-generated": "AI 生成（审核可赚取比特币）",
+    "not-available": "不可用"
+  },
 
   // About page
   "about": {
