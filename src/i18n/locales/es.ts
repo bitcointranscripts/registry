@@ -65,7 +65,8 @@ const translations = {
       "bitcoin-tldr": "Resumen diario de discusiones y actualizaciones técnicas clave de Bitcoin",
       "saving-satoshi": "Introducción atractiva para desarrolladores sobre Bitcoin con textos técnicos y desafíos de código",
       "bitcoin-transcripts-review": "Revisa transcripciones técnicas de Bitcoin y gana sats"
-    }
+    },
+    "all-products": "Todos los Productos"
   },
 
   // Footer

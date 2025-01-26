@@ -43,7 +43,7 @@ const translations = {
       "contribute": {
         "title": "Contribute to the Project",
         "content": "Help us expand and improve Bitcoin Transcripts by contributing your skills and knowledge. Join the community effort to preserve and share valuable Bitcoin content.",
-        "cta": "Review Transcripts, Earn Sata",
+        "cta": "Review Transcripts, Earn Sats",
         "suggest-transcript": "Suggest Source for Transcription"
       }
     },
@@ -65,7 +65,8 @@ const translations = {
       "bitcoin-tldr": "Daily summary of key bitcoin tech development discussions and updates",
       "saving-satoshi": "Engaging bitcoin dev intro for coders using technical texts and code challenges",
       "bitcoin-transcripts-review": "Review technical bitcoin transcripts and earn sats"
-    }
+    },
+    "all-products": "All Products"
   },
 
   // Footer

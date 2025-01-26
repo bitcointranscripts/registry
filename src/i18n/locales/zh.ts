@@ -65,7 +65,8 @@ const translations = {
       "bitcoin-tldr": "比特币技术开发讨论与更新的每日摘要",
       "saving-satoshi": "为开发者提供技术性文本和代码挑战的有趣比特币开发入门",
       "bitcoin-transcripts-review": "审核技术性比特币文稿并赚取 Sats"
-    }
+    },
+    "all-products": "所有产品"
   },
 
   // Footer
