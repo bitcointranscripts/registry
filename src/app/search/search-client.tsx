@@ -48,6 +48,7 @@ const SearchPage = () => {
       <div className="flex flex-col gap-2 2xl:max-w-[1024px]">
         {searchResults?.map((result) => (
           <SearchResultCard
+            key={result._id}
             result={result._source}
             className={queryResult.isFetching ? "animate-pulse" : ""}
           />

@@ -33,7 +33,7 @@ export const SearchResultCard = ({
     summary,
   } = result;
 
-  const flattenedPath = new URL(url).pathname.split("/").slice(1).join("/");
+  const flattenedPath = new URL(url).pathname
 
   const parsedLanguage = parseLanguageString(language);
 
