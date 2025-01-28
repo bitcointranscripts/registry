@@ -4,7 +4,7 @@ import React, { FC, useState } from "react";
 import GroupedTranscriptContent from "./GroupedTranscriptContent";
 import AlphabetNavigation from "./AlphabetNavigation";
 import {
-    ExploreGroupedData,
+  ExploreGroupedData,
   groupDataByAlphabet,
   sortKeysAlphabetically,
 } from "@/utils";
@@ -12,7 +12,8 @@ import MobileAlphabetNavigation from "./MobileAlphabetNavigation";
 import NavigationByWords from "./NavigationByWords";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { usePathname } from "next/navigation";
-import { LanguageCodes } from "@/config";
+import { LanguageCode, OtherSupportedLanguages } from "@/config";
+import SingleTranscriptContent from "./SingleTranscriptContent";
 
 interface ITranscriptContentPage {
   header: string;
@@ -21,6 +22,7 @@ interface ITranscriptContentPage {
   data: ExploreGroupedData[];
   type: "alphabet" | "words";
   linkName: string;
+  languageCode: LanguageCode;
 }
 
 const TranscriptContentPage: FC<ITranscriptContentPage> = ({
@@ -30,8 +32,8 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
   mobileDescription,
   linkName,
   type,
+  languageCode,
 }) => {
-
   const groupedData =
     type === "alphabet"
       ? groupDataByAlphabet(data)
@@ -56,7 +58,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
 
   // remove language codes from paths passed to breadcrumbs
   const allRoutes = routes.filter(
-    (route) => !LanguageCodes.includes(route.name),
+    (route) => !OtherSupportedLanguages.includes(route.name as any)
   );
 
   return (
@@ -79,9 +81,9 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         </div>
         <div className="flex flex-col border-b border-b-[#9B9B9B] pb-6 lg:pb-10  gap-6 ">
           <BaseCrumbLists crumbsArray={allRoutes} />
-          <div className="flex flex-col gap-1  lg:gap-4">
-            <h3 className="text-xl  2xl:text-2xl font-medium">{header}</h3>
-            <p className="hidden lg:inline-block text-sm  lg:text-base 2xl:text-lg text-custom-black-custom-300">
+          <div className="flex flex-col gap-1 lg:gap-4">
+            <h3 className="text-xl 2xl:text-2xl font-medium">{header}</h3>
+            <p className="hidden lg:inline-block text-sm lg:text-base 2xl:text-lg text-custom-black-custom-300">
               {description}
             </p>
             <p className="inline-block lg:hidden text-sm lg:text-lg text-custom-black-custom-300">
@@ -91,16 +93,24 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         </div>
 
         <div className="flex-col flex gap-10  pb-10">
-          {
-            groupedData.map((alp) => (
-              <GroupedTranscriptContent
-                setCurrentGroup={setCurrentGroup}
-                key={alp.slug}
-                dataByHeading={alp} // The Heading above all GroupedData
-                linkName={linkName}
-                type={type}
-              />
-            ))}
+          {groupedData.map((alp) => (
+            <GroupedTranscriptContent
+              setCurrentGroup={setCurrentGroup}
+              key={alp.slug}
+              dataByHeading={alp} // The Heading above all GroupedData
+            >
+              {(topic) => (
+                <SingleTranscriptContent
+                  key={topic.slug + alp.slug}
+                  name={topic.name}
+                  slug={topic.slug}
+                  count={topic.count}
+                  linkName={linkName}
+                  languageCode={languageCode}
+                />
+              )}
+            </GroupedTranscriptContent>
+          ))}
         </div>
       </div>
 

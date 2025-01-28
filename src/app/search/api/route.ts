@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/config/elasticSearch";
 import { SearchQuery } from "../types";
-import { aggregatorSize, FIELDS_TO_EXCLUDE, FIELDS_TO_SEARCH } from "@/config";
+import { aggregatorSize, FIELDS_TO_EXCLUDE, FIELDS_TO_SEARCH, LanguageCode } from "@/config";
 
+
+type SearchQueryWithLanguage = SearchQuery & { languageCode: LanguageCode };
 export async function POST(request: NextRequest) {
   try {
-    const body: SearchQuery = await request.json();
+    const body: SearchQueryWithLanguage = await request.json();
   
     const query = buildQuery(body);
   
@@ -28,7 +30,8 @@ function buildQuery({
   page,
   size,
   sortFields,
-}: SearchQuery) {
+  languageCode
+}: SearchQueryWithLanguage) {
 
   const baseQuery = {
     query: {
@@ -71,6 +74,9 @@ function buildQuery({
       excludes: FIELDS_TO_EXCLUDE,
     },
   };
+
+  baseQuery.query.bool.must.push({ "match": { language: languageCode } });
+
   if (queryString.trim()) {
     baseQuery.query.bool.must.push({ "multi_match": { query: queryString, fields: FIELDS_TO_SEARCH } });
   }

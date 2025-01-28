@@ -1,55 +1,35 @@
-"use client";
-
 import React from "react";
-import Pagination from "@/components/search/Pagination";
-import SearchResultCard from "@/components/search/SearchResultCard";
-import { useSearch } from "./useSearch";
-import NotFound from "../not-found";
-import { SkeletonResults } from "@/components/search/Loader";
+import { LanguageCode, OtherSupportedLanguages } from "@/config";
+import { deriveAlternateLanguages } from "@/utils";
+import { Metadata } from "next";
+import SearchClient from "./search-client";
+
+const languageKeys = OtherSupportedLanguages
+
+const languageCode = LanguageCode.en;
+
+const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
+  languageCode: LanguageCode.en,
+  languages: languageKeys,
+  suffix: "search",
+});
+
+export const metadata: Metadata = {
+  title: "Search",
+  alternates: {
+    canonical: "/search",
+    languages: metadataLanguages, // Add custom metadata for languages
+  },
+  other: {
+    alternateLanguages,
+    language: languageCode,
+  },
+};
 
 const SearchPage = () => {
-  const { queryResult } = useSearch();
-
-  const isLoading = queryResult.isLoading;
-  const isError = queryResult.isError;
-
-  const searchResults = queryResult.data?.hits?.hits;
-
-  const totalResults = queryResult.data?.hits?.total?.value;
-
-  const noResults = totalResults === 0;
-
-  if (isLoading) {
-    return (
-      <div className="mt-4">
-        <SkeletonResults count={4} />;
-      </div>
-    );
-  }
-
-  if (isError) {
-    return <div>Error: {queryResult.error.message}</div>;
-  }
-
-  if (noResults) {
-    return <NotFound />;
-  }
-
   return (
-    <>
-      <div className="flex flex-col gap-2 2xl:max-w-[1024px]">
-        {searchResults?.map((result) => (
-          <SearchResultCard
-            result={result._source}
-            className={queryResult.isFetching ? "animate-pulse" : ""}
-          />
-        ))}
-        <div className="flex justify-center pt-8">
-          <Pagination />
-        </div>
-      </div>
-    </>
-  );
+    <SearchClient languageCode={languageCode} />
+  )
 };
 
 export default SearchPage;

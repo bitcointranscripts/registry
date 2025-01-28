@@ -2,9 +2,11 @@ import path from "path";
 import * as fs from "fs";
 import {
   createSlug,
+  deriveSourcesList,
   FieldCountItem,
   unsluggify,
 } from "./src/utils";
+import { Topic, ProcessedTopic, ProcessedFieldByLanguage, TopicsCountByLanguage, TagInfo, TopicsCategoryCountByLanguage } from "./src/types";
 import {
   defineDocumentType,
   defineNestedType,
@@ -14,7 +16,7 @@ import {
   Transcript as ContentTranscriptType,
   Source as ContentSourceType,
 } from "./.contentlayer/generated/types";
-import { LanguageCodes } from "./src/config";
+import { LanguageCode, OtherSupportedLanguages } from "./src/config";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -23,32 +25,6 @@ const Resources = defineNestedType(() => ({
     url: { type: "string" },
   },
 }));
-export interface Topic {
-  title: string;
-  slug: string;
-  optech_url: string;
-  categories: string[];
-  aliases?: string[];
-  excerpt: string;
-}
-
-// The full processed topic we use internally
-interface ProcessedTopic {
-  name: string; // Display name (from topic.title or original tag)
-  slug: string; // Slugified identifier
-  count: number; // Number of occurrences
-  categories: string[]; // List of categories it belongs to
-}
-
-interface TagInfo {
-  name: string;
-  slug: string;
-  count: number;
-}
-
-interface ContentTree {
-  [key: string]: ContentTree | ContentTranscriptType[];
-}
 
 const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
   const aliases: Record<string, string> = {};
@@ -76,7 +52,7 @@ const getTopics = () => {
 function buildTopicsMap(
   transcripts: ContentTranscriptType[],
   topics: Topic[]
-): Map<string, ProcessedTopic> {
+): ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}> {
   // Create topics lookup map (includes aliases)
   const topicsLookup = new Map<string, Topic>();
   topics.forEach((topic) => {
@@ -85,74 +61,104 @@ function buildTopicsMap(
   });
 
   // Build the main topics map
-  const processedTopics = new Map<string, ProcessedTopic>();
+  const processedLanguageTopics = {} as ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}>
 
   // Process all transcripts
   transcripts.forEach((transcript) => {
+    const language = transcript.language as LanguageCode;
     transcript.tags?.forEach((tag) => {
       const slug = createSlug(tag);
       const topic = topicsLookup.get(slug);
 
-      if (!processedTopics.has(slug)) {
-        processedTopics.set(slug, {
+      if (!processedLanguageTopics[language]) {
+        processedLanguageTopics[language] = {
+          data: new Map<string, ProcessedTopic>(),
+          metadata: {}
+        }
+      }
+
+      if (!processedLanguageTopics[language].data.has(slug)) {
+        processedLanguageTopics[language].data.set(slug, {
           name: topic?.title || tag,
           slug,
           count: 1,
           categories: topic?.categories || ["Miscellaneous"],
         });
       } else {
-        const processed = processedTopics.get(slug)!;
+        const processed = processedLanguageTopics[language].data.get(slug)!;
         processed.count += 1;
       }
     });
   });
-  return processedTopics;
+  return processedLanguageTopics;
 }
 
 function generateAlphabeticalList(
-  processedTopics: Map<string, ProcessedTopic>
-): FieldCountItem[] {
-  const result: FieldCountItem[] = [];
-  // The categories property is not needed for this list, so we drop it
-  for (const { name, slug, count } of processedTopics.values()) {
-    result.push({ name, slug, count });
-  }
-  return result.sort((a, b) => a.name.localeCompare(b.name));
+  processedTopics: ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}>
+): TopicsCountByLanguage {
+  const result = Object.keys(processedTopics).reduce((acc, language) => {
+    if (!acc[language as LanguageCode]) {
+      acc[language as LanguageCode] = {
+        data: [],
+        metadata: {}
+      };
+    }
+    const topics: FieldCountItem[] = [];
+    // The categories property is not needed for this list, so we drop it
+    for (const { name, slug, count } of processedTopics[language as LanguageCode].data.values()) {
+      topics.push({ name, slug, count });
+    }
+  
+    acc[language as LanguageCode].data = topics.sort((a, b) => a.name.localeCompare(b.name));
+    return acc;
+  }, {} as TopicsCountByLanguage);
+
+  return result;
 }
 
 function generateCategorizedList(
-  processedTopics: Map<string, ProcessedTopic>
-): Record<string, FieldCountItem[]> {
-  const categorizedTopics: Record<string, FieldCountItem[]> = {};
+  processedTopics: ProcessedFieldByLanguage<Map<string, ProcessedTopic>, {}>
+): TopicsCategoryCountByLanguage {
 
-  Array.from(processedTopics.values()).forEach(
-    ({ name, slug, count, categories }) => {
-      categories.forEach((category) => {
-        if (!categorizedTopics[category]) {
-          categorizedTopics[category] = [];
-        }
+  const categorizedTopicsByLanguage = {} as TopicsCategoryCountByLanguage;
+  
+  Object.keys(processedTopics).forEach(language => {
+    categorizedTopicsByLanguage[language as LanguageCode] = {
+      data: {},
+      metadata: {}
+    };
+    const categorizedTopics: Record<string, FieldCountItem[]> = {};
 
-        // Check if topic name contains category name and ends with "(Miscellaneous)"
-        const modifiedName =
-          name.includes(category) && name.endsWith("(Miscellaneous)")
-            ? "Miscellaneous"
-            : name;
-
-        categorizedTopics[category].push({ name: modifiedName, slug, count });
+    Array.from(processedTopics[language as LanguageCode].data.values()).forEach(
+      ({ name, slug, count, categories }) => {
+        categories.forEach((category) => {
+          if (!categorizedTopics[category]) {
+            categorizedTopics[category] = [];
+          }
+  
+          // Check if topic name contains category name and ends with "(Miscellaneous)"
+          const modifiedName =
+            name.includes(category) && name.endsWith("(Miscellaneous)")
+              ? "Miscellaneous"
+              : name;
+  
+          categorizedTopics[category].push({ name: modifiedName, slug, count });
+        });
+      }
+    );
+  
+    // Sort topics within each category
+    Object.values(categorizedTopics).forEach((topics) => {
+      topics.sort((a, b) => {
+        if (a.name == "Miscellaneous") return 1;
+        if (b.name == "Miscellaneous") return -1;
+        return a.name.localeCompare(b.name);
       });
-    }
-  );
-
-  // Sort topics within each category
-  Object.values(categorizedTopics).forEach((topics) => {
-    topics.sort((a, b) => {
-      if (a.name == "Miscellaneous") return 1;
-      if (b.name == "Miscellaneous") return -1;
-      return a.name.localeCompare(b.name);
     });
+    categorizedTopicsByLanguage[language as LanguageCode].data = categorizedTopics;
   });
 
-  return categorizedTopics;
+  return categorizedTopicsByLanguage;
 }
 
 function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
@@ -180,22 +186,30 @@ function generateTopicsCounts(transcripts: ContentTranscriptType[]) {
 
 function createSpeakers(transcripts: ContentTranscriptType[]) {
   const slugSpeakers: any = {};
-  const speakerArray: FieldCountItem[] = [];
+  const speakersByLanguage = {} as ProcessedFieldByLanguage<FieldCountItem[], {}>;
 
   transcripts.forEach((transcript) => {
+    const language = transcript.language as LanguageCode;
+    if (!speakersByLanguage[language]) {
+      speakersByLanguage[language] = {
+        data: [],
+        metadata: {}
+      };
+    }
     const slugSpeakersArray = transcript.speakers?.map((speaker) => ({
       slug: createSlug(speaker),
       name: speaker,
     }));
 
     slugSpeakersArray?.forEach(({ slug, name }) => {
-      if (slugSpeakers[slug] !== undefined) {
-        const index = slugSpeakers[slug];
-        speakerArray[index].count += 1;
+      const key = `${slug}-${language}`;
+      if (slugSpeakers[key] !== undefined) {
+        const index = slugSpeakers[key];
+        speakersByLanguage[language].data[index].count += 1;
       } else {
-        const speakersLength = speakerArray.length;
-        slugSpeakers[slug] = speakersLength;
-        speakerArray[speakersLength] = {
+        const speakersLength = speakersByLanguage[language].data.length;
+        slugSpeakers[key] = speakersLength;
+        speakersByLanguage[language].data[speakersLength] = {
           slug,
           name,
           count: 1,
@@ -204,7 +218,7 @@ function createSpeakers(transcripts: ContentTranscriptType[]) {
     });
   });
 
-  fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakerArray));
+  fs.writeFileSync("./public/speaker-data.json", JSON.stringify(speakersByLanguage));
 }
 
 function generateSourcesCount(
@@ -245,36 +259,66 @@ function generateSourcesCount(
 }
 
 const createTypesCount = (
-  transcripts: ContentTranscriptType[],
-  sources: ContentSourceType[]
+  sources: ContentSourceType[],
+  sourcesTree: any
 ) => {
-  const { sourcesArray, slugSources } = generateSourcesCount(
-    transcripts,
-    sources
-  );
-  const nestedTypes: any = {};
+  const nestedTypesByLanguage = {} as ProcessedFieldByLanguage<Record<string, FieldCountItem[]>, {}>;
+  // Non english sources don't have types
+  // To build the types count for other languages, we need to get the english sources for that type
+  // Find if a language source has that english source
+  const mappedKeys = new Map<string, boolean>();
+  sources.forEach((source) => {
+    if (source.types) {
+      const slug = source.slugAsParams[0];
+      const language = source.language as LanguageCode;
+      const sourceInfoCount = deriveSourcesList({[slug]: sourcesTree[slug][language]})[0];
 
-  sources.forEach((transcript) => {
-    if (transcript.types) {
-      transcript.types.forEach((type) => {
-        const slugType = type.charAt(0).toUpperCase() + type.slice(1);
-        const slug = transcript.slugAsParams[0];
-
-        const sourceIndex = slugSources[slug];
-        const getSource = sourcesArray[sourceIndex] ?? null;
-
-        if (!nestedTypes[slugType]) {
-          nestedTypes[slugType] = [];
-        } else {
-          if (nestedTypes[slugType].includes(getSource) || getSource === null)
-            return;
-          nestedTypes[slugType].push(getSource);
+      if (!nestedTypesByLanguage[language]) {
+        nestedTypesByLanguage[language] = {
+          data: {},
+          metadata: {}
         }
+      }
+      source.types.forEach((type) => {
+        const slugType = type.charAt(0).toUpperCase() + type.slice(1);
+
+        if (!nestedTypesByLanguage[language].data[slugType]) {
+          nestedTypesByLanguage[language].data[slugType] = [];
+        }
+
+        const mappingKey = `${slug}-${type}`;
+        if (mappedKeys.has(mappingKey)) return;
+
+        nestedTypesByLanguage[language].data[slugType].push(sourceInfoCount)
+        mappedKeys.set(mappingKey, true);
+
+        // find other language sources for the english source containing a type
+        OtherSupportedLanguages.forEach((otherLanguage) => {
+          if (otherLanguage === language) return;
+          let hasSourceInLanguage = null;
+          try {
+            hasSourceInLanguage = deriveSourcesList({[slug]: sourcesTree[slug][otherLanguage]})[0];
+          } catch (e) {
+            hasSourceInLanguage = null;
+          }
+          if (!hasSourceInLanguage) return;
+          if (!nestedTypesByLanguage[otherLanguage]) {
+            nestedTypesByLanguage[otherLanguage] = {
+              data: {},
+              metadata: {}
+            }
+          }
+          if (!nestedTypesByLanguage[otherLanguage].data[slugType]) {
+            nestedTypesByLanguage[otherLanguage].data[slugType] = [];
+          }
+          nestedTypesByLanguage[otherLanguage].data[slugType].push(hasSourceInLanguage)
+        });
+        
       });
     }
   });
 
-  fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypes));
+  fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypesByLanguage));
 };
 
 function organizeContent(
@@ -342,6 +386,8 @@ function organizeContent(
   });
 
   fs.writeFileSync("./public/sources-data.json", JSON.stringify(tree, null, 2));
+
+  return tree;
 }
 
 const getLanCode = /[.]\w{2}$/gi; // Removes the last two characters if there's a dot
@@ -411,10 +457,10 @@ export const Transcript = defineDocumentType(() => ({
       resolve: (doc) => {
         const transcript = doc._raw.flattenedPath.split("/").pop();
         const lan = transcript?.match(getLanCode);
-        const languageCode = (lan?.[lan.length - 1] || "").replace(".", "");
-        const finalLanguage = LanguageCodes.includes(languageCode)
+        const languageCode = (lan?.[lan.length - 1] || "").replace(".", "") as LanguageCode;
+        const finalLanguage = OtherSupportedLanguages.includes(languageCode)
           ? languageCode
-          : "en";
+          : LanguageCode.en;
         return finalLanguage;
       },
     },
@@ -428,9 +474,9 @@ export const Transcript = defineDocumentType(() => ({
         );
 
         const lan = transcript?.match(getLanCode);
-        const languageCode = (lan?.[0] || "").replace(".", "");
+        const languageCode = (lan?.[0] || "").replace(".", "") as LanguageCode;
 
-        if (LanguageCodes.includes(languageCode)) {
+        if (OtherSupportedLanguages.includes(languageCode)) {
           return `/${languageCode}/${fullPathWithoutDot}`;
         }
 
@@ -497,11 +543,11 @@ export default makeSource({
   ],
   onSuccess: async (importData) => {
     const { allTranscripts, allSources } = await importData();
+    const sourcesTree = organizeContent(allTranscripts, allSources);
     generateTopicsCounts(allTranscripts);
-    createTypesCount(allTranscripts, allSources);
+    createTypesCount(allSources, sourcesTree);
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
-    organizeContent(allTranscripts, allSources);
   },
 });

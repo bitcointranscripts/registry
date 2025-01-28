@@ -4,6 +4,8 @@ import { ExploreNavigationItems } from "@/utils/data";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
+import { getLangCode } from "@/utils";
+import { LanguageCode } from "@/config";
 
 const ExploreNavigation = () => {
   return (
@@ -32,7 +34,18 @@ const ExploreNavigation = () => {
 
 const ExploreNavigationItem = ({ href, title }: { href: string; title: string }) => {
   const pathname = usePathname();
-  let pagePath = pathname.split("/")[1].toLowerCase();
+
+  // as ["", speakers] or ["", "es", "speakers"]
+  let [_, firstPath, secondPath] = pathname.split("/").map((val)=> val.toLowerCase());
+  let languageCode: LanguageCode = LanguageCode.en
+
+  const derivedLanguageCode = getLangCode(firstPath)
+  if (!(derivedLanguageCode instanceof Error)) {
+    languageCode = derivedLanguageCode
+  }
+  
+  let pagePath = languageCode === LanguageCode.en ? firstPath : secondPath
+  const languageHref = languageCode === LanguageCode.en ? href : `/${languageCode}${href}`
 
   const switchState = () => {
     let isActive = false;
@@ -53,7 +66,7 @@ const ExploreNavigationItem = ({ href, title }: { href: string; title: string })
   return (
     <Link
       data-active={isActive}
-      href={href}
+      href={languageHref}
       className={twMerge(
         "text-sm 2xl:text-lg leading-none px-4 py-4 rounded-lg 2xl:px-6 2xl:py-6 2xl:rounded-xl hover:bg-orange-custom-800 hover:text-orange-custom-100 transition-all",
         isActive ? "bg-orange-custom-800 text-orange-custom-100 font-semibold" : ""

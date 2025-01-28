@@ -1,6 +1,6 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
 import { alphabeticalArrangement, ContentTreeArray } from "./data";
-import { LanguageCodes } from "../config";
+import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "../config";
 
 export interface ContentTree {
   [key: string]: ContentTree | Transcript[];
@@ -59,7 +59,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
 
-  const languageRegex = new RegExp(`\\.(${LanguageCodes.join("|")})(\\.md)?$`);
+  const languageRegex = new RegExp(`\\.(${OtherSupportedLanguages.join("|")})(\\.md)?$`);
 
   // Optimization for landingpage — obscene amount of data passed to the client (reduced from 6.6s to 795ms)
   const lightWeightTranscripts = allTranscripts.map(({ body, summary, ...fieldsToUse }) => {
@@ -255,10 +255,14 @@ export const countItemsAndSort = (args: { [category: string]: FieldCountItem[] }
 };
 
 export const constructSlugPaths = (slug: string[]) => {
+  // receives a slug array e.g [ 'es', 'sources' ], [ 'andreas-autonopolous' ] note: 'en' is not included in the array
+
   const isEnglishSlug =
-    slug[0] !== "en" && slug[0].length > 2 && !LanguageCodes.includes(slug[0]);
+    slug[0].length > 2 && !OtherSupportedLanguages.includes(slug[0] as LanguageCode);
   const englishSlug = ["en", ...slug];
   const newSlug = isEnglishSlug ? [...englishSlug] : [...slug];
+
+  // swap languageCode index in slug, ['es', 'sources'] -> ['sources', 'es']
   [newSlug[0], newSlug[1]] = [newSlug[1], newSlug[0]];
 
   let slugPaths = newSlug;
@@ -290,6 +294,7 @@ export const fetchTranscriptDetails = (
       summary,
       body,
       languageURL,
+      language
     } = curr;
 
     if (paths.includes(url)) {
@@ -303,6 +308,7 @@ export const fetchTranscriptDetails = (
         flattenedPath: _raw.flattenedPath,
         summary,
         body: createText(body),
+        language
       });
     }
     return acc.sort((a, b) => {
@@ -325,7 +331,6 @@ export const deriveSourcesList = (languageTree: any) => {
 
   const getValues = Object.entries(languageTree).map(([key, value]) => {
     const valDetails = (value as unknown as any).data;
-
     const extractCount = (arr: {} | []) => {
       let count: number = 0;
 
@@ -376,4 +381,26 @@ export function extractHeadings(text: string): NavigationList[] {
   });
 
   return headings;
+}
+
+export const getLangCode = (languageFromPath?: string) : Error | LanguageCode => {
+  if (!languageFromPath) {
+    return LanguageCode.en;
+  }
+  const isSupportedLanguage = LanguageCodes.includes(languageFromPath as LanguageCode);
+  if (!isSupportedLanguage) {
+    return new Error(`Language code ${languageFromPath} is not supported`);
+  }
+  return languageFromPath as LanguageCode;
+}
+
+export const deriveAlternateLanguages = ({languageCode, languages, suffix}: {languageCode: LanguageCode, languages: LanguageCode[], suffix: string}) => {
+  const alternateLanguages = languages.filter(lang => lang !== languageCode);
+
+  const metadataLanguages = alternateLanguages.reduce((acc, language) => {
+    const alternateUrl = language === LanguageCode.en ? `/${suffix}` : `/${language}/${suffix}`;
+    acc[language] = alternateUrl;
+    return acc;
+  }, {} as Record<string, string>);
+  return {alternateLanguages, metadataLanguages};
 }
