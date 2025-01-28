@@ -2,6 +2,8 @@ import { FacetKeys } from "@/app/search/types";
 import { appendFilterName, appendSortName } from "./helper";
 import { URLSearchParamsKeyword } from "@/config";
 import { useRouter, useSearchParams } from "next/navigation";
+import useLang from "@/hooks/useLang";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 type FilterProp = {
   filterType: FacetKeys;
@@ -12,6 +14,8 @@ type FilterProp = {
 const useURLManager = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const lang = useLang()
 
   const basePath = "/search";
 
@@ -97,12 +101,14 @@ const useURLManager = () => {
 
   const addSort = (sortField: string, value: string) => {
     const params = addSortParams(sortField, value);
-    router.push(basePath + `${params ? "?" + params : params}`);
+    const newUrl = generateNewUrlForLanguage(basePath + `${params ? "?" + params : params}`, lang);
+    router.push(newUrl);
   };
 
   const removeSort = (sortField: string) => {
     const params = removeSortParams(sortField);
-    router.push(basePath + `${params ? "?" + params : params}`);
+    const newUrl = generateNewUrlForLanguage(basePath + `${params ? "?" + params : params}`, lang);
+    router.push(newUrl);
   };
 
   const addFilter = ({
@@ -116,7 +122,8 @@ const useURLManager = () => {
       multiSelect,
     });
     if (params !== null) {
-      router.push(basePath + `${params ? "?" + params : params}`);
+      const newUrl = generateNewUrlForLanguage(basePath + `${params ? "?" + params : params}`, lang);
+      router.push(newUrl);
     }
   };
 
@@ -131,7 +138,8 @@ const useURLManager = () => {
       multiSelect,
     });
     if (params !== null) {
-      router.push(basePath + `${params ? "?" + params : params}`);
+      const newUrl = generateNewUrlForLanguage(basePath + `${params ? "?" + params : params}`, lang);
+      router.push(newUrl);
     }
   };
 
@@ -176,12 +184,16 @@ const useURLManager = () => {
     removeSortParams(sortField);
     removePageQueryParams(urlParams);
     const params = urlParams.toString();
-    router.push(basePath + `${params ? "?" + params : params}`);
+    const newUrl = generateNewUrlForLanguage(basePath + `${params ? "?" + params : params}`, lang);
+    router.push(newUrl);
   };
 
   const setResultsSize = (size: number) => {
+    const urlParams = new URLSearchParams(searchParams.toString());
     urlParams.set(URLSearchParamsKeyword.SIZE, size.toString());
-    router.push(basePath + "?" + urlParams.toString());
+    const params = urlParams.toString();
+    const newUrl = generateNewUrlForLanguage(basePath + `${params ? "?" + params : params}`, lang);
+    router.push(newUrl);
   };
 
   return {

@@ -6,19 +6,23 @@ import { ContentTreeArray } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
-import { constructSlugPaths, deriveSourcesList, fetchTranscriptDetails, loopArrOrObject } from "@/utils";
+import { constructSlugPaths, deriveAlternateLanguages, deriveSourcesList, fetchTranscriptDetails, getLangCode, loopArrOrObject } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import { allSources as allContentSources, allTranscripts } from "contentlayer/generated";
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
-import { LanguageCodes } from "@/config";
+import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "@/config";
+import { Metadata } from "next";
+import { SourceTree } from "@/types";
+import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
+import { parseLanguageString } from "@/utils/locale";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const languageSlugs = LanguageCodes.map((lang) => ({ slug: [lang, "sources"] }));
+  const languageSlugs = OtherSupportedLanguages.map((lang) => ({ slug: [lang, "sources"] }));
 
   const allSlugs = allContentSources.map(({ language, slugAsParams }) => {
     const isEnglish = language === "en";
@@ -37,6 +41,103 @@ export function generateStaticParams() {
   return combineSlugs;
 }
 
+const checkIfSourcesLanguageRoute = (slug: string[]) => slug.length === 2 && OtherSupportedLanguages.includes(slug[0] as LanguageCode) && slug[1] === "sources";
+
+
+export const generateMetadata = async ({params}: { params: { slug: string[] } }): Promise<Metadata> => {
+
+  const isSourcesLanguageRoute = checkIfSourcesLanguageRoute(params.slug);
+
+  if (isSourcesLanguageRoute) {
+    const languageCode = params.slug[0] as LanguageCode;
+    const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
+        languageCode,
+        languages: LanguageCodes,
+        suffix: "sources",
+      });
+
+    return {
+      title: "Sources",
+      alternates: {
+        canonical: "/sources",
+        languages: metadataLanguages // Add custom metadata for languages
+      },
+      other: {
+        alternateLanguages,
+        language: languageCode
+      }
+    };
+  }
+
+  
+  const slug = params.slug ?? [];
+  const contentTree = allSources as SourceTree;
+  const { slugPaths } = constructSlugPaths(slug);
+  let current: any = contentTree;
+
+  for (const part of slugPaths) {
+    if (typeof current === "object" && !Array.isArray(current) && part in current) {
+      current = current[part];
+    } else {
+      notFound();
+    }
+  }
+
+  const language = slugPaths[1];
+
+  if (slugPaths.length === 2) {
+    // returns all language keys for the current source
+    const languages = Object.keys(contentTree[slugPaths[0]]);
+    const otherLanguages = languages.filter(lang => lang !== slugPaths[1]);
+    const metadataLanguages = otherLanguages.reduce((acc, language) => {
+      const alternateUrl = language === LanguageCode.en ? `/${slugPaths[0]}` : `/${language}/${slugPaths[0]}`;
+      acc[language] = alternateUrl;
+      return acc;
+    }, {} as Record<string, string>);
+
+    return {
+      title: current.metadata.title,
+      alternates: {
+        canonical: "/",
+        languages: metadataLanguages // Add custom metadata for languages
+      },
+      other: {
+        alternateLanguages: otherLanguages,
+        language
+      }
+    };
+  }
+  
+  const alternateLanguages = LanguageCodes.filter(lang => lang !== language).map(language => {
+    const slugPathTocheckForData = slugPaths.filter(path => path !== "data");
+    slugPathTocheckForData[1] = language;
+    const keyHasData = traverseSourceTree(contentTree, slugPathTocheckForData, 0);
+    return keyHasData ? language : undefined;
+  }).filter((lang) => lang !== undefined);
+
+  const metadataLanguages = alternateLanguages.reduce((acc, language) => {
+    // converts [ 'advancing-bitcoin', 'en', 'data', '2019' ] to [ 'advancing-bitcoin', '2019' ]
+    const slugPathNoData = arrayWithoutElementAtIndex(slugPaths.filter(path => path !== "data"), 1);
+
+    // append language to slugPathNoData
+    const alternateUrl = language === LanguageCode.en ? `/${slugPathNoData.join("/")}` : `/${language}/${slugPathNoData.join("/")}`;
+    acc[(language as string)] = alternateUrl;
+    return acc;
+  }, {} as Record<string, string>);
+
+  return {
+    title: current.metadata.title,
+    alternates: {
+      canonical: "/",
+      languages: metadataLanguages // Add custom metadata for languages
+    },
+    other: {
+      alternateLanguages,
+      language
+    }
+  }
+};
+
 const page = ({ params }: { params: { slug: string[] } }) => {
   const slug = params.slug ?? [];
   const contentTree = allSources;
@@ -45,7 +146,10 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   let currentLanguageSource: any = allSources;
   let languageTreeArray: { slug: string; name: string; count: number }[] = [];
 
-  const isRouteForLanguage = slug.length === 2 && LanguageCodes.includes(slug[0]) && slug[1] === "sources";
+  // catch language code followed by sources e.g ["es", "sources"]. English is omitted
+  const isRouteForLanguage = slug.length === 2 && OtherSupportedLanguages.includes(slug[0] as LanguageCode) && slug[1] === "sources";
+
+  // console.log({isRouteForLanguage})
 
   if (isRouteForLanguage) {
     const language = slug[0];
@@ -68,7 +172,8 @@ const page = ({ params }: { params: { slug: string[] } }) => {
           data={languageTreeArray}
           description='Sources help you find transcripts within a specific talk, meetup, conference, and the likes.'
           type='alphabet'
-          linkName={language}
+          linkName='sources'
+          languageCode={language as LanguageCode}
         />
       </div>
     );
@@ -86,6 +191,14 @@ const page = ({ params }: { params: { slug: string[] } }) => {
     const isRoot = Array.isArray(current.data);
     const { transcripts } = fetchTranscriptDetails(allTranscripts, data, isRoot);
 
+    const constructBackLink = () => {
+      const slugPathsCopy = [...slugPaths].filter(item => item !== "data")
+      const language = slugPathsCopy.splice(1,1)[0]
+      const indexPath = language === "en" ? "" : `/${language}`
+      const backRoute = slugPathsCopy.slice(0, -1).length ? slugPathsCopy.slice(0, -1).join("/") : ""
+      return backRoute ? `${indexPath}/${backRoute}` : `${indexPath}/sources`
+    }
+
     return (
       <div className='flex items-start lg:gap-[50px]'>
         <div className='flex flex-col w-full gap-6 md:gap-8 2xl:gap-10 no-scrollbar'>
@@ -98,7 +211,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <SourcesBreadCrumbs slugPaths={slugPaths} current={contentTree} />
             </>
             <div className='flex flex-col'>
-              <Link href={slug.slice(0, -1).join("/") === "" ? `/sources` : `/${slug.slice(0, -1).join("/")}`} className='flex gap-1 items-center'>
+              <Link href={constructBackLink()} className='flex gap-1 items-center'>
                 <ArrowLinkRight className='rotate-180 w-5 md:w-6' />
                 <p>Back</p>
               </Link>
@@ -139,12 +252,15 @@ const page = ({ params }: { params: { slug: string[] } }) => {
 
           {isRoot ? (
             <div className='flex flex-col gap-6 h-full pb-8 overflow-scroll'>
-              {(transcripts as ContentTreeArray[]).map((item, i) => (
+              {(transcripts as ContentTreeArray[]).map((item, i) => {
+                const parsedLanguage = parseLanguageString(item.language)
                 // without suspense, page deopts into CSR due to useSearchParams hook in component
+                return (
                 <Suspense fallback={<></>}>
-                  <TranscriptDetailsCard key={i} slug={slug} data={item} />
+                  <TranscriptDetailsCard key={i} slug={slug} data={item} language={parsedLanguage} />
                 </Suspense>
-              ))}
+                )
+              })}
             </div>
           ) : (
             <div className='flex-col flex gap-10 overflow-scroll pb-8'>

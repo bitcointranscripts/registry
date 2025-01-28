@@ -5,10 +5,12 @@ import { FieldCountItem, formatDate, TagsDetailed } from "@/utils";
 import { MicIcon, BookmarkIcon, CalendarIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Pill from "./Pill";
 import useURLManager from "@/service/URLManager/useURLManager";
+import useLang from "@/hooks/useLang";
+import { LanguageCode } from "@/config";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
-const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, breadCrumbsComponent?: React.ReactNode }) => {
+const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent, language }: { data: ContentTreeArray; slug: string[], pillCountLimit?: number, breadCrumbsComponent?: React.ReactNode, language: LanguageCode }) => {
   const { toggleFilterFromParams, toggleFilter, getFilter } = useURLManager();
-
   const selectedSpeakers = getFilter("authors");
   const selectedTags = getFilter("tags");
 
@@ -29,7 +31,7 @@ const TranscriptDetailsCard = ({ data, pillCountLimit = 3, breadCrumbsComponent 
 
   const getSpeakerLink = (speaker: string) => {
     const baseFilterParam = toggleFilterFromParams({ filterType: "authors", filterValue: speaker });
-    return `${basePath}?${baseFilterParam}`;
+    return generateNewUrlForLanguage(`${basePath}?${baseFilterParam}`, language);
   }
 
   return (

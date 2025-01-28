@@ -3,7 +3,7 @@ import { Manrope } from "next/font/google";
 import "@bitcoin-dev-project/bdp-ui/styles.css";
 import "./globals.css";
 import Script from "next/script";
-import Header from "@/components/layout/Header";
+import Header from "@/components/layout/header/Header";
 import QueryProvider from "./providers";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap" });

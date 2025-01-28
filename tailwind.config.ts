@@ -88,6 +88,9 @@ const config: Config = {
       animation: {
         pulse: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
+      boxShadow: {
+        'all-round': 'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 2px 10px 0px rgb(0 0 0 / 0.1), 0 2px 6px 0px rgb(0 0 0 / 0.1)',
+      }
     },
   },
   plugins: [],
