@@ -8,12 +8,15 @@ import {
 import { useSearchParams, useRouter } from "next/navigation";
 import { URLSearchParamsKeyword } from "@/config";
 import { twMerge } from "tailwind-merge";
+import useLang from "@/hooks/useLang";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 const MobileSearchBox = ({
   onSubmit,
 }: {
   onSubmit?: (searchString: string) => void;
 }) => {
+  const language = useLang();
   const searchParams = useSearchParams();
   const router = useRouter();
   const searchQuery = searchParams.get(URLSearchParamsKeyword.SEARCH) || "";
@@ -41,7 +44,8 @@ const MobileSearchBox = ({
     if (!searchInput?.trim()) {
       return;
     }
-    router.push(`/search?${URLSearchParamsKeyword.SEARCH}=${searchInput}`);
+    const newUrl = generateNewUrlForLanguage(`/search?${URLSearchParamsKeyword.SEARCH}=${searchInput}`, language);
+    router.push(newUrl);
     setOpen(false);
     if (onSubmit) {
       onSubmit(searchInput);

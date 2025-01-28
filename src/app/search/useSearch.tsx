@@ -4,12 +4,14 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { buildQueryCall } from "./searchCall";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { defaultParam, URLSearchParamsKeyword } from "@/config";
-import React, { createContext, useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import {
   generateFilterQuery,
   generateSortFields,
 } from "@/service/URLManager/helper";
 import { EsSearchResponse, Facet } from "./types";
+import useLang from "@/hooks/useLang";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 /**
  * Custom React hook for performing search queries against an Elasticsearch backend via a proxy endpoint.
@@ -60,6 +62,11 @@ export const SearchContextProvider = ({
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+  const languageCode = useLang();
+  
+  const [_, firstPath, secondPath] = pathname.split("/")
+  const isSearchPage = languageCode === "en" ? firstPath === "search" : secondPath === "search";
+
   const page = parseInt(searchParams.get(URLSearchParamsKeyword.PAGE) || "1") - 1;
   const sizeQuery = Number(searchParams.get(URLSearchParamsKeyword.SIZE) || defaultParam[URLSearchParamsKeyword.SIZE]);
   
@@ -84,13 +91,13 @@ export const SearchContextProvider = ({
   );
 
   const queryResult = useQuery({
-    queryKey: ["query", searchQuery, sizeQuery, filterFields, page, sortFields],
+    queryKey: ["query", searchQuery, sizeQuery, filterFields, page, sortFields, languageCode],
     queryFn: () =>
-      buildQueryCall({ queryString: searchQuery, size: sizeQuery, page, filterFields, sortFields }),
+      buildQueryCall({ queryString: searchQuery, size: sizeQuery, page, filterFields, sortFields }, { languageCode }),
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     placeholderData: (prev) => prev,
-    enabled: true,
+    enabled: isSearchPage,
   });
 
   // Function to initiate a new search with the given queryString
@@ -98,10 +105,12 @@ export const SearchContextProvider = ({
 
     urlParams.delete(URLSearchParamsKeyword.PAGE); // new search query resets the user back to the first page of results
     urlParams.set(URLSearchParamsKeyword.SEARCH, queryString.trim()); // new search query
-    if (pathname.includes("search")) {
+    console.log({isSearchPage, pathname, urlParams})
+    if (isSearchPage) {
       router.push(`${pathname}?${urlParams.toString()}`);
     } else {
-      router.push(`/search?${urlParams.toString()}`)
+      const newUrl = generateNewUrlForLanguage(`/search?${urlParams.toString()}`, languageCode);
+      router.push(newUrl);
     }
   };
 

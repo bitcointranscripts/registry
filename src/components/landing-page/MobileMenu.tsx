@@ -2,8 +2,10 @@ import React, { SetStateAction } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ExploreNavigationItems, menuApps } from "@/utils/data";
-import { LanguageSwitcher, ThemeSwitcher } from "../layout/Header";
+import { ThemeSwitcher } from "../layout/header/Header";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
+import LanguageSwitch from "../layout/header/LanguageSwitch";
+
 
 const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}) => {
   const links = ExploreNavigationItems;
@@ -26,8 +28,8 @@ const MobileMenu = ({setOpen}:{setOpen: React.Dispatch<SetStateAction<boolean>>}
       </section>
       <section className='flex flex-col gap-6'>
         <p className='text-lg font-medium text-black hidden'>About</p>
-        <div className='w-fit hidden'>
-          <LanguageSwitcher />
+        <div className='w-fit'>
+          <LanguageSwitch />
         </div>
         <div className='w-fit hidden'>
           <ThemeSwitcher />

@@ -1,8 +1,40 @@
 import { FacetKeys } from "@/app/search/types";
 
-export const LanguageCodes = ["zh", "es", "pt"];
+export const LanguageCode = {
+  en: "en",
+  es: "es",
+  pt: "pt",
+  zh: "zh",
+} as const;
 
-export type LanguageCode = typeof LanguageCodes[number];
+export type LanguageCode = keyof typeof LanguageCode;
+
+export const LanguageCodes = Object.values(LanguageCode);
+
+export const OtherSupportedLanguages: LanguageCode[] = ["es", "pt", "zh"];
+
+export const LanguageConfig: Record<LanguageCode, {name: string, icon: string, url: string}> = {
+  "en": {
+    name: "English",
+    icon: "🇺🇸",
+    url: "/en",
+  },
+  "es": {
+    name: "Español",
+    icon: "🇪🇸",
+    url: "/es",
+  },
+  "pt": {
+    name: "Português",
+    icon: "🇵🇹",
+    url: "/pt",
+  },
+  "zh": {
+    name: "中文",
+    icon: "🇨🇳",
+    url: "/zh",
+  },
+}
 
 export const URLSearchParamsKeyword = {
   SEARCH: "search",

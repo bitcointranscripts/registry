@@ -7,8 +7,12 @@ import {
 } from "@bitcoin-dev-project/bdp-ui/icons";
 import { useSearchParams, useRouter } from "next/navigation";
 import { URLSearchParamsKeyword } from "@/config";
+import useLang from "@/hooks/useLang";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) => {
+  const language = useLang();
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const searchQuery = searchParams.get(URLSearchParamsKeyword.SEARCH) || "";
@@ -35,7 +39,8 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
     if (!searchInput?.trim()) {
       return;
     };
-    router.push(`/search?${URLSearchParamsKeyword.SEARCH}=${searchInput}`);
+    const newUrl = generateNewUrlForLanguage(`/search?${URLSearchParamsKeyword.SEARCH}=${searchInput}`, language);
+    router.push(newUrl);
     inputRef?.current?.blur();
     if (onSubmit) {
       onSubmit(searchInput);

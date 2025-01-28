@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "@/components/layout/Header";
+import Header from "@/components/layout/header/Header";
 import HeroSection from "@/components/landing-page/HeroSection";
 import FeaturedTranscripts from "@/components/landing-page/featured-transcripts/FeaturedTranscripts";
 import WhyTranscripts from "@/components/landing-page/WhyTranscripts";
