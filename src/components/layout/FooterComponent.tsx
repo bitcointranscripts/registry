@@ -87,9 +87,9 @@ const FooterComponent = () => {
               },
             ]}
           />
-          <Footer.About entityLink='https://bitcoindevs.xyz' entityName='Bitcoin Dev Project' />
-          <Footer.Public dashboardLink='https://visits.bitcoindevs.xyz/share/7hL0ysupLrZQsKRw/btc-transcripts'/>
-          <Footer.Feedback feedbackLink='https://cryptpad.fr/form/#/2/form/view/3P2CsohsHOkcH7C+WdtX0-tvqjBHqXnAmz5D9yx0e04/'/>
+          <Footer.About entityText={t("footer.built-by")} entityLink='https://bitcoindevs.xyz' entityName='Bitcoin Dev Project' />
+          <Footer.Public entityText={t("footer.public-dashboard")} dashboardLink='https://visits.bitcoindevs.xyz/share/7hL0ysupLrZQsKRw/btc-transcripts'/>
+          <Footer.Feedback entityText={t("footer.feedback.description")} entityCtaText={t("footer.feedback.cta")} feedbackLink='https://cryptpad.fr/form/#/2/form/view/3P2CsohsHOkcH7C+WdtX0-tvqjBHqXnAmz5D9yx0e04/'/>
         </Footer>
       </Wrapper>
     </div>

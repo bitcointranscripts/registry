@@ -144,7 +144,8 @@ const translations = {
     "sources": {
       "title": "Sources",
       "description": "Sources help you find transcripts within a specific talk, meetup, conference, and the likes.",
-    }
+    },
+    "back": "Back"
   },
 
   // Transcript page

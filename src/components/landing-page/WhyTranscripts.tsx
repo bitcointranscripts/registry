@@ -38,13 +38,13 @@ const WhyTranscripts = ({languageCode = LanguageCode.en }: {languageCode?: Langu
             <p className='pt-6 pb-8 md:text-base lg:text-xl 2xl:text-2xl 2xl:leading-[33.84px] max-md:pb-[18px] max-md:pt-[18px]'>
               Bryan Bishop{" "}
               <span>
-                <Link href='https://github.com/kanzure' target='_blank' className='text-blue-custom-100 underline'>
+                <Link href='https://github.com/kanzure' target='_blank' className='text-orange-custom-100 underline'>
                   (@kanzure)
                 </Link>
               </span>{" "}
               {t("home.why.history.content-1")}{" "}
               <span>
-                <Link href='https://github.com/kanzure/diyhpluswiki' target='_blank' className='text-blue-custom-100 underline'>
+                <Link href='https://github.com/kanzure/diyhpluswiki' target='_blank' className='text-orange-custom-100 underline'>
                   diyhpluswiki.
                 </Link>
                 <br />

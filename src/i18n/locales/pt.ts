@@ -144,7 +144,8 @@ const translations = {
     "sources": {
       "title": "Fontes",
       "description": "As fontes ajudam você a encontrar transcrições de palestras específicas, encontros, conferências, entre outros.",
-    }
+    },
+    "back": "Voltar",
   },
 
   // Transcript page

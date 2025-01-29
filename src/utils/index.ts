@@ -162,6 +162,8 @@ export const sortKeysAlphabetically = (
 
 export const unsluggify = (slug: string) => slug.replace(/-/g, " ");
 
+export const saneCapitalization = (slug: string) => unsluggify(slug).split(" ").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")
+
 export const formatDate = (dateString: string): string | null => {
   if (!dateString) return null;
 

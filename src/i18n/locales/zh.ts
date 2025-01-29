@@ -144,7 +144,8 @@ const translations = {
     "sources": {
       "title": "来源",
       "description": "来源帮助您在特定的演讲、聚会、会议等内容中找到文稿。"
-    }
+    },
+    "back": "返回",
   },
   
   // Transcript page

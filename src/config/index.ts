@@ -11,7 +11,7 @@ export type LanguageCode = keyof typeof LanguageCode;
 
 export const LanguageCodes = Object.values(LanguageCode);
 
-export const OtherSupportedLanguages: LanguageCode[] = ["es", "pt", "zh"];
+export const OtherSupportedLanguages: LanguageCode[] = LanguageCodes.filter((code) => code !== LanguageCode.en);
 
 export const LanguageConfig: Record<LanguageCode, {name: string, icon: string, url: string}> = {
   "en": {

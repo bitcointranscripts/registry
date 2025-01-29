@@ -17,6 +17,7 @@ import {
   Source as ContentSourceType,
 } from "./.contentlayer/generated/types";
 import { LanguageCode, OtherSupportedLanguages } from "./src/config";
+import { getTopicTitle } from "./src/utils/topic";
 
 const Resources = defineNestedType(() => ({
   name: "Resources",
@@ -437,21 +438,11 @@ export const Transcript = defineDocumentType(() => ({
         const topicsStore = doc?.tags as any || [];
         const topics = (topicsStore?._array as string[]) ?? [];
 
-        const topicsWithTitles = topics.map((topic) => {
-          const currentTopic = getTopics().find(
-            (topicData: FieldCountItem) => topicData.slug === topic
-          );
+        const topicIndex = getTopics() as Topic[];
 
-          if(currentTopic?.title && currentTopic?.title.includes("(Miscellaneous)")) {
-            return {
-              name: currentTopic?.title.replace("(Miscellaneous)",""),
-              slug: currentTopic.slug,
-            }
-          }
-          return {
-              name: currentTopic?.title || topic,
-              slug: currentTopic?.slug || topic,
-          };
+        const topicsWithTitles = topics.map((topic) => {
+          const topicTitle = getTopicTitle(topic, topicIndex);
+          return { name: topicTitle, slug: topic };
         });
         return topicsWithTitles;
       },

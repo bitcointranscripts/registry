@@ -45,7 +45,7 @@ const IndividualTranscript = ({
               date={transcript.date || ""}
               topics={transcript.tagsDetailed || []}
               speakers={transcript.speakers || []}
-              transcriptBy={transcript.transcript_by || ""}
+              transcriptBy={transcript?.translation_by || transcript.transcript_by || ""}
             />
           </div>
 

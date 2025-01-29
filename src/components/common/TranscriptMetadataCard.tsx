@@ -45,13 +45,13 @@ const TranscriptMetadataComponent = ({
 
   return (
     <div className="border flex text-black flex-col rounded-2xl p-4 md:p-5 2xl:p-6 gap-4 w-full border-gray-custom-1200">
-      <div className="flex flex-col md:flex-row flex-wrap gap-4 justify-between ">
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
         <h4 className="text-orange-custom-100 text-xl font-bold md:text-2xl 2xl:text-[2rem]">
           {title}
         </h4>
         <button
           onClick={handleShowDetail}
-          className="text-black text-sm lg:text-base gap-1 py-1.5 2xl:py-2 px-5 flex items-center border  w-[149px] md:w-[154px] rounded-lg border-gray-custom-1100 whitespace-nowrap"
+          className="min-w-fit text-black text-sm lg:text-base gap-1 md:gap-2 py-1.5 2xl:py-2 px-3 flex items-center border rounded-lg border-gray-custom-1100 whitespace-nowrap"
         >
           {showDetail ? (
             <>
@@ -62,7 +62,7 @@ const TranscriptMetadataComponent = ({
                 height={24}
                 className="w-5"
               />
-              <span className="font-medium text-sm 2xl:text-base">
+              <span>
                 {t("transcript.hide-details")}{" "}
               </span>
             </>
@@ -75,7 +75,7 @@ const TranscriptMetadataComponent = ({
                 height={24}
                 className="w-5"
               />
-              <span className="font-medium">{t("transcript.show-details")}</span>
+              <span>{t("transcript.show-details")}</span>
             </>
           )}
         </button>
@@ -113,7 +113,7 @@ const TranscriptMetadataComponent = ({
               <div className="flex flex-wrap gap-2">
                 {(topics && topics.length > 0) ?
                   topics.map((topic) => (
-                    <Pill key={topic.slug} kind="link" name={topic.name} slug={getIsolatedFacetLink({filter_field: "tags", filter_value: topic.slug})} />
+                    <Pill key={topic.slug} kind="link" name={topic.name} slug={getIsolatedFacetLink({filter_field: "tags", filter_value: topic.slug, language: lang})} />
                   )):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">{t("transcript.not-available")}</p>
                 }
@@ -132,7 +132,7 @@ const TranscriptMetadataComponent = ({
               <div className="flex flex-wrap gap-2">
                 {speakers && speakers.length > 0 ?
                   speakers.map((speaker) => (
-                    <Pill key={speaker} kind="link" name={speaker} slug={getIsolatedFacetLink({filter_field: "authors", filter_value: speaker})} />
+                    <Pill key={speaker} kind="link" name={speaker} slug={getIsolatedFacetLink({filter_field: "authors", filter_value: speaker, language: lang})} />
                   )):
                   <p className="pl-2.5 pt-1.5 text-xs md:text-sm lg:text-sm 2xl:text-base md:font-medium">{t("transcript.not-available")}</p>
                 }

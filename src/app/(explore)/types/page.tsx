@@ -12,8 +12,6 @@ const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
   suffix: "types",
 });
 
-// console.log({languageKeys})
-
 export const metadata: Metadata = {
   title: "Types",
   alternates: {

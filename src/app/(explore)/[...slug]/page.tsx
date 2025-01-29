@@ -28,6 +28,7 @@ import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "@/config";
 import { SourceTree } from "@/types";
 import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
 import { parseLanguageString } from "@/utils/locale";
+import useTranslations from "@/hooks/useTranslations";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -181,8 +182,6 @@ const page = ({ params }: { params: { slug: string[] } }) => {
   // catch language code followed by sources e.g ["es", "sources"]. English is omitted
   const isRouteForLanguage = slug.length === 2 && OtherSupportedLanguages.includes(slug[0] as LanguageCode) && slug[1] === "sources";
 
-  // console.log({isRouteForLanguage})
-
   if (isRouteForLanguage) {
     const language = slug[0];
     const sourcesAndLanguage = Object.keys(allSources);
@@ -221,18 +220,21 @@ const page = ({ params }: { params: { slug: string[] } }) => {
       }
     }
 
+    const slugPathsCopy = [...slugPaths].filter(item => item !== "data")
+    const language = slugPathsCopy.splice(1,1)[0] as LanguageCode
+
     const metadata = current.metadata;
     const data = loopArrOrObject(current?.data);
     const isRoot = Array.isArray(current.data);
     const { transcripts } = fetchTranscriptDetails(allTranscripts, data, isRoot);
 
     const constructBackLink = () => {
-      const slugPathsCopy = [...slugPaths].filter(item => item !== "data")
-      const language = slugPathsCopy.splice(1,1)[0]
       const indexPath = language === "en" ? "" : `/${language}`
       const backRoute = slugPathsCopy.slice(0, -1).length ? slugPathsCopy.slice(0, -1).join("/") : ""
       return backRoute ? `${indexPath}/${backRoute}` : `${indexPath}/sources`
     }
+
+    const t = useTranslations(language);
 
     return (
       <div className="flex items-start lg:gap-[50px]">
@@ -250,7 +252,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
             <div className='flex flex-col'>
               <Link href={constructBackLink()} className='flex gap-1 items-center'>
                 <ArrowLinkRight className='rotate-180 w-5 md:w-6' />
-                <p>Back</p>
+                <p>{t("explore.back")}</p>
               </Link>
 
               <h3 className="text-xl 2xl:text-2xl font-medium pt-6 md:pt-3">
