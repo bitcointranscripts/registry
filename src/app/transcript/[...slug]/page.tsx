@@ -7,7 +7,8 @@ import IndividualTranscript from "@/components/individual-transcript/IndividualT
 import { BaseCrumbType } from "@/components/common/BaseCrumbLists";
 import { findAlternateLanguageForTranscript } from "@/utils/sources";
 import { LanguageCode } from "@/config";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
+import { previewImageDimensions } from "@/utils/data";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -59,18 +60,22 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
       language: transcript.language
     },
     openGraph:{
+      title: transcript.title,
+      description:transcript?.summary,
       images:[{
         url:`/api/opengraph-image/transcript/${transcript?.url}`,
-        width: 1200,
-        height: 530,
+        width: previewImageDimensions.width,
+        height: previewImageDimensions.height,
         alt: `${transcript?.title} OG Image`
       }]
     },
     twitter:{
+      title: transcript.title,
+      description:transcript?.summary,
       images:[{
         url:`/api/opengraph-image/transcript/${transcript?.url}`,
-        width: 1200,
-        height: 530,
+        width: previewImageDimensions.width,
+        height: previewImageDimensions.height,
         alt: `${transcript?.title} OG Image`
       }]
     }

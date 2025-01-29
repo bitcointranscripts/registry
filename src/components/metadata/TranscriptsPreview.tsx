@@ -10,8 +10,6 @@ type ITranscriptsPreview = {
   speakers: string;
   date: string;
   topics: string;
-  remainingTopics: number;
-  remainingSpeaker: number;
 };
 const TranscriptsPreview = ({
   sourceName,
@@ -19,8 +17,6 @@ const TranscriptsPreview = ({
   speakers,
   date,
   topics,
-  remainingTopics,
-  remainingSpeaker,
 }: ITranscriptsPreview) => {
   return (
     <div
@@ -36,8 +32,16 @@ const TranscriptsPreview = ({
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop:"16px" }}>
-          <p style={{ fontSize: "32px", lineHeight: 0.001, fontWeight: 700 }}>{sourceName}</p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "16px",
+          }}
+        >
+          <p style={{ fontSize: "32px", lineHeight: 0.001, fontWeight: 700 }}>
+            {sourceName}
+          </p>
           {date && (
             <div
               style={{
@@ -48,7 +52,7 @@ const TranscriptsPreview = ({
                 padding: "0px",
               }}
             >
-              <CalendarIcon width={32}  style={{ color: "#FAFAFA"}} />
+              <CalendarIcon width={32} style={{ color: "#FAFAFA" }} />
 
               <p
                 style={{
@@ -63,70 +67,94 @@ const TranscriptsPreview = ({
             </div>
           )}
         </div>
-        <div style={{display:"flex", marginTop:"12px", flexDirection:"column", justifyContent:"center", height:"100%"}}>
-        <div style={{ display: "flex" }}>
-          <p
-            style={{
-              fontSize: "64px",
-              fontWeight: 700,
-              textTransform: "capitalize",
-            }}
-          >
-            {title}
-          </p>
-        </div>
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            fontSize: "38px",
-            lineHeight: 0.001,
-            gap: "16px",
-            marginTop:"24px",
-            textTransform: "capitalize",
+            justifyContent: "center",
+            height:"80%"
           }}
         >
-          {speakers && (
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <MicIcon width={48} style={{ color: "#FAFAFA" }} />
+          <div style={{ display: "flex" }}>
+            <p
+              style={{
+                fontSize: "64px",
+                fontWeight: 700,
+                lineClamp: 2,
+                textTransform: "capitalize",
+                display: "-webkit-box",
+                boxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {title}
+            </p>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: "38px",
+              lineHeight: 0.001,
+              lineClamp: 1,
+              gap: "16px",
+              marginTop: "24px",
+              textTransform: "capitalize",
+            }}
+          >
+            {speakers && (
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0px 4px",
-                  justifyContent: "center",
-                  backgroundColor: "#3D3D3D",
-                  borderRadius: "5px",
-                }}
+                style={{ display: "flex", alignItems: "center", gap: "12px" }}
               >
-                <p style={{ fontWeight: 500, padding: "0px 16px" }}>
-                  {speakers}
-                  {""}
-                  {remainingSpeaker > 0 ? `,+${remainingSpeaker}` : ""}
-                </p>
+                <MicIcon width={48} style={{ color: "#FAFAFA" }} />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0px 4px",
+                    justifyContent: "center",
+                    backgroundColor: "#3D3D3D",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: 500,
+                      padding: "0px 16px",
+                    }}
+                  >
+                    {speakers}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-          {topics && (
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <BookmarkIcon width={48} style={{ color: "#FAFAFA" }} />
+            )}
+            {topics && (
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0px 4px",
-                  justifyContent: "center",
-                  backgroundColor: "#3D3D3D",
-                  borderRadius: "5px",
-                }}
+                style={{ display: "flex", alignItems: "center", gap: "12px" }}
               >
-                <p style={{ fontWeight: 500, padding: "0px 16px" }}>
-                  {topics} {remainingTopics > 0 ? `,+${remainingTopics}` : ""}
-                </p>
+                <BookmarkIcon width={48} style={{ color: "#FAFAFA" }} />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0px 4px",
+                    justifyContent: "center",
+                    backgroundColor: "#3D3D3D",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: 500,
+                      padding: "0px 16px",
+                    }}
+                  >
+                    {topics}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
         </div>
       </div>
 

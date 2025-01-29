@@ -420,3 +420,26 @@ export async function loadManropeFont(base:string) {
 
   return { regularFontData, boldFontData };
 }
+
+//  Needed to truncate text for Image Response Line Clamp doesn't work on Image Response
+export const truncateText = (text: string, maxLines: number, maxCharsPerLine: number) => {
+  const words = text.split(" ");
+  let lines = [""];
+
+  for (const word of words) {
+    let currentLine = lines[lines.length - 1];
+
+    if ((currentLine + " " + word).length <= maxCharsPerLine) {
+      lines[lines.length - 1] = currentLine ? currentLine + " " + word : word;
+    } else {
+      if (lines.length < maxLines) {
+        lines.push(word);
+      } else {
+        lines[lines.length - 1] += "...";
+        break;
+      }
+    }
+  }
+
+  return lines.join("\n");
+};

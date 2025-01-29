@@ -2,13 +2,14 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ContentTreeArray } from "@/utils/data";
+import { ContentTreeArray, previewImageDimensions } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
 import allSourcesCount from "@/public/source-count-data.json";
 import {
   constructSlugPaths,
+  deriveAlternateLanguages,
   deriveSourcesList,
   fetchTranscriptDetails,
   loopArrOrObject,
@@ -22,7 +23,7 @@ import {
 import TranscriptDetailsCard from "@/components/common/TranscriptDetailsCard";
 import { SourcesBreadCrumbs } from "@/components/explore/SourcesBreadCrumbs";
 import TranscriptContentPage from "@/components/explore/TranscriptContentPage";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "@/config";
 import { SourceTree } from "@/types";
 import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
@@ -80,8 +81,16 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
       openGraph:{
         images:[{
           url:`/api/og-image/${foundSource?.slug}`,
-          width: 1280,
-          height: 720,
+          width: previewImageDimensions.width,
+          height: previewImageDimensions.height,
+          alt: `${foundSource?.name} OG Image`
+        }]
+      },
+      twitter:{
+        images:[{
+          url:`/api/og-image/${foundSource?.slug}`,
+          width: previewImageDimensions.width,
+          height: previewImageDimensions.height,
           alt: `${foundSource?.name} OG Image`
         }]
       },
@@ -92,7 +101,7 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
     };
   }
 
-  
+
   const slug = params.slug ?? [];
   const contentTree = allSources as SourceTree;
   const { slugPaths } = constructSlugPaths(slug);
@@ -130,7 +139,7 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
       }
     };
   }
-  
+
   const alternateLanguages = LanguageCodes.filter(lang => lang !== language).map(language => {
     const slugPathTocheckForData = slugPaths.filter(path => path !== "data");
     slugPathTocheckForData[1] = language;

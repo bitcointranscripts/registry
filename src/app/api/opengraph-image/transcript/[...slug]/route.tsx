@@ -1,10 +1,11 @@
-import { loadManropeFont, TagsDetailed } from "@/utils";
+import { loadManropeFont, TagsDetailed, truncateText } from "@/utils";
 import { ImageResponse } from "next/og";
 import sourceCount from "@/public/source-count-data.json";
 import allTranscripts from "@/public/light-transcripts.json";
 import { format, isDate } from "date-fns";
 import TranscriptsPreview from "@/components/metadata/TranscriptsPreview";
 import HomePreview from "@/components/metadata/HomePreview";
+import { previewImageDimensions } from "@/utils/data";
 
 export const runtime = "edge";
 
@@ -23,8 +24,8 @@ export async function GET(
   );
   if (!transcript) {
     return new ImageResponse(<HomePreview />, {
-      width: 1280,
-      height: 720,
+      width: previewImageDimensions.width,
+      height: previewImageDimensions.height,
       fonts: [
         {
           name: "Manrope",
@@ -50,30 +51,28 @@ export async function GET(
     : "";
 
   const allSpeakers = transcript.speakers
-    ? transcript.speakers.slice(0, 3).join(", ")
+    ? transcript.speakers.slice().join(", ")
     : "";
-  const remainingSpeakers = (transcript.speakers?.length || 0) - 3;
   const allTopics =
     transcript.tagsDetailed.map((topic: TagsDetailed) => topic?.name || "") ||
     [];
-  const topicsString = allTopics.slice(0, 3).join(", ");
-  const remainingTopics = allTopics.length - 3;
+  const topicsString = allTopics.slice(0).join(", ");
+
   // Return the OG image
   return new ImageResponse(
     (
       <TranscriptsPreview
         sourceName={transcriptSource?.name || ""}
-        title={transcript.title}
+        title={truncateText(transcript.title,2, 32)}
         date={formattedDate}
-        speakers={allSpeakers}
-        topics={topicsString}
-        remainingTopics={remainingTopics}
-        remainingSpeaker={remainingSpeakers}
+        speakers={truncateText(allSpeakers,1,50)}
+        topics={truncateText(topicsString,1, 50)}
+
       />
     ),
     {
-      width: 1280,
-      height: 720,
+      width: previewImageDimensions.width,
+      height: previewImageDimensions.height,
       fonts: [
         {
           name: "Manrope",

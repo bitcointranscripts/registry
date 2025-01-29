@@ -8,6 +8,7 @@ import { ImageResponse } from "next/og";
 import allSources from "@/public/source-count-data.json";
 import SourcesPreview from "@/components/metadata/SourcesPreview";
 import HomePreview from "@/components/metadata/HomePreview";
+import { previewImageDimensions } from "@/utils/data";
 
 export const runtime = "edge"; // Ensure this API runs in Edge Runtime
 
@@ -30,8 +31,8 @@ export async function GET(
 
   if (!foundSources) {
      return new ImageResponse(<HomePreview />, {
-      width: 1280,
-      height: 720,
+      width: previewImageDimensions.width,
+      height: previewImageDimensions.height,
       fonts: [
         {
           name: "Manrope",
@@ -53,8 +54,8 @@ export async function GET(
   return new ImageResponse(
     <SourcesPreview name={foundSources.name} count={foundSources.count} />,
     {
-      width: 1200,
-      height: 630,
+      width: previewImageDimensions.width,
+      height: previewImageDimensions.height,
       fonts: [
         {
           name: "Manrope",
