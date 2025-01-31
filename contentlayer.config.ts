@@ -108,7 +108,7 @@ function generateAlphabeticalList(
     for (const { name, slug, count } of processedTopics[language as LanguageCode].data.values()) {
       topics.push({ name, slug, count });
     }
-  
+
     acc[language as LanguageCode].data = topics.sort((a, b) => a.name.localeCompare(b.name));
     return acc;
   }, {} as TopicsCountByLanguage);
@@ -121,7 +121,7 @@ function generateCategorizedList(
 ): TopicsCategoryCountByLanguage {
 
   const categorizedTopicsByLanguage = {} as TopicsCategoryCountByLanguage;
-  
+
   Object.keys(processedTopics).forEach(language => {
     categorizedTopicsByLanguage[language as LanguageCode] = {
       data: {},
@@ -135,18 +135,18 @@ function generateCategorizedList(
           if (!categorizedTopics[category]) {
             categorizedTopics[category] = [];
           }
-  
+
           // Check if topic name contains category name and ends with "(Miscellaneous)"
           const modifiedName =
             name.includes(category) && name.endsWith("(Miscellaneous)")
               ? "Miscellaneous"
               : name;
-  
+
           categorizedTopics[category].push({ name: modifiedName, slug, count });
         });
       }
     );
-  
+
     // Sort topics within each category
     Object.values(categorizedTopics).forEach((topics) => {
       topics.sort((a, b) => {
@@ -313,13 +313,21 @@ const createTypesCount = (
           }
           nestedTypesByLanguage[otherLanguage].data[slugType].push(hasSourceInLanguage)
         });
-        
+
       });
     }
   });
 
   fs.writeFileSync("./public/types-data.json", JSON.stringify(nestedTypesByLanguage));
 };
+
+function lightWeightTranscript(transcripts: ContentTranscriptType[]){
+ const cleaned =  transcripts.map(({speakers, tagsDetailed, title, slugAsParams, languageURL, summary, date, ...rest})=>{
+    return {speakers, tagsDetailed, title, slugAsParams, languageURL, summary, date }
+  })
+
+   fs.writeFileSync("./public/light-transcripts.json", JSON.stringify(cleaned));
+}
 
 function organizeContent(
   transcripts: ContentTranscriptType[],
@@ -549,5 +557,6 @@ export default makeSource({
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
+    lightWeightTranscript(allTranscripts)
   },
 });
