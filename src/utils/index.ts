@@ -276,6 +276,13 @@ export const constructSlugPaths = (slug: string[]) => {
   return { slugPaths };
 };
 
+export const convertSlugToLanguageSlug = (slug: string[]) => {
+  // converts  [ 'sources' ] to [ 'en', 'sources' ], or [ 'es', 'sources' ] to [ 'es', 'sources' ] (leaving the language code intact)
+  const isEnglishSlug =
+    slug[0].length > 2 && !OtherSupportedLanguages.includes(slug[0] as LanguageCode);
+  return isEnglishSlug ? [LanguageCode.en, ...slug] : [...slug];
+}
+
 export const fetchTranscriptDetails = (
   allTranscripts: Transcript[],
   paths: string[],

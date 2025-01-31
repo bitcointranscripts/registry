@@ -6,14 +6,13 @@ import { ContentTreeArray, previewImageDimensions } from "@/utils/data";
 import LinkIcon from "/public/svgs/link-icon.svg";
 import WorldIcon from "/public/svgs/world-icon.svg";
 import allSources from "@/public/sources-data.json";
-import allSourcesCount from "@/public/source-count-data.json";
 import {
   constructSlugPaths,
+  convertSlugToLanguageSlug,
   deriveAlternateLanguages,
   deriveSourcesList,
   fetchTranscriptDetails,
   loopArrOrObject,
-  unsluggify,
 } from "@/utils";
 import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import {
@@ -29,6 +28,7 @@ import { SourceTree } from "@/types";
 import { arrayWithoutElementAtIndex, traverseSourceTree } from "@/utils/sources";
 import { parseLanguageString } from "@/utils/locale";
 import useTranslations from "@/hooks/useTranslations";
+import { buildMetadata } from "@/utils/metadata";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -55,18 +55,22 @@ export function generateStaticParams() {
   return combineSlugs;
 }
 
-const checkIfSourcesLanguageRoute = (slug: string[]) => slug.length === 2 && OtherSupportedLanguages.includes(slug[0] as LanguageCode) && slug[1] === "sources";
-
-
 export const generateMetadata = async ({params}: { params: { slug: string[] } }): Promise<Metadata> => {
 
-  const isSourcesLanguageRoute = checkIfSourcesLanguageRoute(params.slug);
+  const slug = params.slug ?? [];
 
-  const id = params.slug[0]
-  const foundSource = allSourcesCount.find((source) => source.slug === id);
+  const slugUrl = slug.join("/");
+
+  // convert the slug to language slug, ensuring that the language code is included as the first element of the array
+  const languagePath = convertSlugToLanguageSlug(slug);
+
+  const language = languagePath[0];
+
+  // is it base source path, e.g [ 'sources' ] (which is converted to [ 'en', 'sources' ]) or [ '{language}', 'sources' ] (which is not converted)
+  const isSourcesLanguageRoute = languagePath.length === 2 && languagePath[1] === "sources";
 
   if (isSourcesLanguageRoute) {
-    const languageCode = params.slug[0] as LanguageCode;
+    const languageCode = languagePath[0] as LanguageCode;
     const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
         languageCode,
         languages: LanguageCodes,
@@ -79,22 +83,6 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
         canonical: "/sources",
         languages: metadataLanguages // Add custom metadata for languages
       },
-      openGraph:{
-        images:[{
-          url:`/api/og-image/${foundSource?.slug}`,
-          width: previewImageDimensions.width,
-          height: previewImageDimensions.height,
-          alt: `${foundSource?.name} OG Image`
-        }]
-      },
-      twitter:{
-        images:[{
-          url:`/api/og-image/${foundSource?.slug}`,
-          width: previewImageDimensions.width,
-          height: previewImageDimensions.height,
-          alt: `${foundSource?.name} OG Image`
-        }]
-      },
       other: {
         alternateLanguages,
         language: languageCode
@@ -102,10 +90,9 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
     };
   }
 
-
-  const slug = params.slug ?? [];
   const contentTree = allSources as SourceTree;
   const { slugPaths } = constructSlugPaths(slug);
+  // console.log({slugPaths, slugUrl, languagePath})
   let current: any = contentTree;
 
   for (const part of slugPaths) {
@@ -116,8 +103,7 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
     }
   }
 
-  const language = slugPaths[1];
-
+  // for e.g [ 'advancing-bitcoin', 'en' ], [ 'advancing-bitcoin', 'es' ] etc
   if (slugPaths.length === 2) {
     // returns all language keys for the current source
     const languages = Object.keys(contentTree[slugPaths[0]]);
@@ -128,18 +114,20 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
       return acc;
     }, {} as Record<string, string>);
 
-    return {
+    return buildMetadata({
       title: current.metadata.title,
-      alternates: {
-        canonical: "/",
-        languages: metadataLanguages // Add custom metadata for languages
+      alternateLanguages: otherLanguages,
+      metadataLanguages,
+      language,
+      canonical: "/",
+      generateOpenGraphImage: {
+        url: `/api/opengraph-image/${slugUrl}`,
+        alt: `${current.metadata.title} OG Image`,
       },
-      other: {
-        alternateLanguages: otherLanguages,
-        language
-      }
-    };
+    });
   }
+
+  // catch every other source (nested sources)
 
   const alternateLanguages = LanguageCodes.filter(lang => lang !== language).map(language => {
     const slugPathTocheckForData = slugPaths.filter(path => path !== "data");
@@ -158,17 +146,17 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
     return acc;
   }, {} as Record<string, string>);
 
-  return {
+  return buildMetadata({
     title: current.metadata.title,
-    alternates: {
-      canonical: "/",
-      languages: metadataLanguages // Add custom metadata for languages
+    alternateLanguages,
+    metadataLanguages,
+    language,
+    canonical: "/",
+    generateOpenGraphImage: {
+      url: `/api/opengraph-image/${slugUrl}`,
+      alt: `${current.metadata.title} OG Image`,
     },
-    other: {
-      alternateLanguages,
-      language
-    }
-  }
+  });
 };
 
 const page = ({ params }: { params: { slug: string[] } }) => {
