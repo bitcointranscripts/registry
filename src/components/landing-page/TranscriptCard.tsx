@@ -7,6 +7,7 @@ import Pill from "@/components/common/Pill";
 import useURLManager from "@/service/URLManager/useURLManager";
 import { LanguageCode } from "@/config";
 import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
 interface TranscriptCardProps {
   data: Transcript;
@@ -86,17 +87,17 @@ export const ExploreTranscriptCard = ({
   let linkUrl = "";
   switch (type) {
     case "CATEGORY":
-      linkUrl = `categories#${parseUrl}`;
+      linkUrl = generateNewUrlForLanguage(`/categories#${parseUrl}`, languageCode);
       break;
     case "TYPE":
-      linkUrl = `types#${parseUrl}`;
+      linkUrl = generateNewUrlForLanguage(`/types#${parseUrl}`, languageCode);
       break;
     default:
       break;
   }
 
   return (
-    <a
+    <Link
       href={linkUrl}
       className={`flex flex-col min-w-[400px] max-md:min-w-[292px] p-6 gap-4 text-black border border-gray-custom-600 rounded-xl shadow-md cursor-pointer max-2xl:p-[18px] max-md:p-4`}
     >
@@ -105,7 +106,7 @@ export const ExploreTranscriptCard = ({
       </section>
 
       <p>{transcripts} {t("shared.transcripts")}</p>
-    </a>
+    </Link>
   );
 };
 
