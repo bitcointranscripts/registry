@@ -8,6 +8,8 @@ import { ArrowLinkRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import reviewers from "@/public/reviewers-data.json";
 import upperLineIcon from "@/public/svgs/upper-line-icon.svg";
 import lowerLineIcon from "@/public/svgs/lower-line-icon.svg";
+import { Metadata } from "next";
+
 
 const page = () => {
   return (
