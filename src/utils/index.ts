@@ -404,3 +404,42 @@ export const deriveAlternateLanguages = ({languageCode, languages, suffix}: {lan
   }, {} as Record<string, string>);
   return {alternateLanguages, metadataLanguages};
 }
+
+
+// To load fonts on the server side
+
+export async function loadManropeFont(base:string) {
+
+  const regularFontData = await fetch(
+    new URL("/fonts/Manrope-Medium.ttf",base)
+  ).then((res) => res.arrayBuffer());
+
+  const boldFontData = await fetch(
+    new URL("/fonts/Manrope-SemiBold.ttf",base)
+  ).then((res) => res.arrayBuffer());
+
+  return { regularFontData, boldFontData };
+}
+
+//  Needed to truncate text for Image Response Line Clamp doesn't work on Image Response
+export const truncateText = (text: string, maxLines: number, maxCharsPerLine: number) => {
+  const words = text.split(" ");
+  let lines = [""];
+
+  for (const word of words) {
+    let currentLine = lines[lines.length - 1];
+
+    if ((currentLine + " " + word).length <= maxCharsPerLine) {
+      lines[lines.length - 1] = currentLine ? currentLine + " " + word : word;
+    } else {
+      if (lines.length < maxLines) {
+        lines.push(word);
+      } else {
+        lines[lines.length - 1] += "...";
+        break;
+      }
+    }
+  }
+
+  return lines.join("\n");
+};

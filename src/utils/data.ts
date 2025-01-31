@@ -1,6 +1,6 @@
 import { StaticImageData } from "next/image";
 import { IsoDateTimeString } from "contentlayer2/core";
-import {  FieldCountItem, TagsDetailed } from ".";
+import { FieldCountItem, TagsDetailed } from ".";
 
 export type MenuApp = {
   href: string;
@@ -20,7 +20,8 @@ export const menuApps = [
     href: "https://chat.bitcoinsearch.xyz",
     image: "/images/chat-btc.jpg",
     alt: "ChatBTC image",
-    title: "Interactive AI chat to learn about bitcoin technology and its history",
+    title:
+      "Interactive AI chat to learn about bitcoin technology and its history",
   },
   {
     href: "https://bitcoinsearch.xyz/",
@@ -32,13 +33,15 @@ export const menuApps = [
     href: "https://tldr.bitcoinsearch.xyz/",
     image: "/images/bitcoin-tldr.jpg",
     alt: "Bitcoin TLDR",
-    title: "Daily summary of key bitcoin tech development discussions and updates",
+    title:
+      "Daily summary of key bitcoin tech development discussions and updates",
   },
   {
     href: "https://savingsatoshi.com",
     image: "/images/saving-satoshi.jpg",
     alt: "Saving Satoshi",
-    title: "Engaging bitcoin dev intro for coders using technical texts and code challenges",
+    title:
+      "Engaging bitcoin dev intro for coders using technical texts and code challenges",
   },
   {
     href: "https://review.btctranscripts.com/",
@@ -71,6 +74,10 @@ export const ExploreNavigationItems = [
   },
 ];
 
+export const previewImageDimensions = {
+  width: 1280,
+  height: 720,
+};
 export const alphabeticalArrangement = [
   "#",
   "A",
@@ -112,7 +119,7 @@ export type ContentTreeArray = {
   flattenedPath: string;
   summary?: string | undefined;
   body: string;
-  language: string
+  language: string;
 };
 
 export const processFlowData = [
@@ -124,19 +131,22 @@ export const processFlowData = [
   },
   {
     title: "AI Transcription",
-    content: "Resources from the backlog are sent to the AI Transcription Service for processing.",
+    content:
+      "Resources from the backlog are sent to the AI Transcription Service for processing.",
     image: "/svgs/ai-icon.svg",
     bgColor: "#F0F1FA",
   },
   {
     title: "Initial Publication",
-    content: "AI-generated transcripts are published on the Registry and also added to the Review Queue.",
+    content:
+      "AI-generated transcripts are published on the Registry and also added to the Review Queue.",
     image: "/svgs/initial-publication-icon.svg",
     bgColor: "#FFF5EB",
   },
   {
     title: "Human Review",
-    content: "Reviewers claim and edit transcripts from the Review Queue and submit them for approval.",
+    content:
+      "Reviewers claim and edit transcripts from the Review Queue and submit them for approval.",
     image: "/svgs/review-icon.svg",
     bgColor: "#ECF9F1",
   },
@@ -148,7 +158,8 @@ export const processFlowData = [
   },
   {
     title: "Final Publication",
-    content: "Approved transcripts are updated on the Registry as final versions, and Reviewers receive a payout for their work",
+    content:
+      "Approved transcripts are updated on the Registry as final versions, and Reviewers receive a payout for their work",
     image: "/svgs/final-publication-icon.svg",
     bgColor: "#FCEDF3",
   },
