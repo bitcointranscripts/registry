@@ -9,6 +9,7 @@ import { findAlternateLanguageForTranscript } from "@/utils/sources";
 import { LanguageCode } from "@/config";
 import { Metadata } from "next";
 import { previewImageDimensions } from "@/utils/data";
+import { buildMetadata } from "@/utils/metadata";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
 export const dynamicParams = false;
@@ -48,38 +49,17 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
     return acc;
   }, {} as Record<string, string>);
 
-  return {
+  return buildMetadata({
     title: transcript.title,
-    description:transcript?.summary,
-    alternates: {
-      canonical: "/",
-      languages: metadataLanguages // Add custom metadata for languages
+    description: transcript?.summary,
+    alternateLanguages,
+    metadataLanguages,
+    language: transcript.language,
+    generateOpenGraphImage: {
+      url: `/api/opengraph-image/transcript/${transcript?.languageURL}`,
+      alt: `${transcript?.title} OG Image`,
     },
-    other: {
-      alternateLanguages,
-      language: transcript.language
-    },
-    openGraph:{
-      title: transcript.title,
-      description:transcript?.summary,
-      images:[{
-        url:`/api/opengraph-image/transcript/${transcript?.url}`,
-        width: previewImageDimensions.width,
-        height: previewImageDimensions.height,
-        alt: `${transcript?.title} OG Image`
-      }]
-    },
-    twitter:{
-      title: transcript.title,
-      description:transcript?.summary,
-      images:[{
-        url:`/api/opengraph-image/transcript/${transcript?.url}`,
-        width: previewImageDimensions.width,
-        height: previewImageDimensions.height,
-        alt: `${transcript?.title} OG Image`
-      }]
-    }
-  };
+  });
 };
 
 const Page = ({ params }: { params: { slug: string[] } }) => {

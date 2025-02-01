@@ -12,8 +12,6 @@ const { alternateLanguages, metadataLanguages } = deriveAlternateLanguages({
   suffix: "types",
 });
 
-// console.log({languageKeys})
-
 export const metadata: Metadata = {
   title: "Types",
   alternates: {
@@ -40,9 +38,8 @@ const TypesPage = () => {
   return (
     <div className="flex flex-col text-black">
       <TranscriptContentPage
-        header="Types"
+        header="types"
         data={reStructuredTypes}
-        description="Sources tend to fall into discrete types, from podcasts to meetups. Find transcripts in your preferred format of communication."
         type="words"
         linkName="sources"
         languageCode={languageCode}

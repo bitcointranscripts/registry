@@ -7,10 +7,18 @@ import { useSearch } from "@/app/search/useSearch";
 import { unsluggify } from "@/utils";
 import useURLManager from "@/service/URLManager/useURLManager";
 import { AuthorIcon, SourceIcon } from "@bitcoin-dev-project/bdp-ui/icons";
-import { getTopicTitle } from "@/utils/search";
+import { getTopicTitle } from "@/utils/topic";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
+import topics from "@/public/topics.json";
+import { Topic } from "@/types";
 
 const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallback }) => {
+  const lang = useLang();
+  const t = useTranslations(lang);
+
   const label = FacelLabelMapping[facet];
+  const labelByLanguage = t(`shared.${label}`) ?? label
 
   const iconMapping = {
     authors: AuthorIcon,
@@ -25,7 +33,7 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
   const selectedOptions = filterFields.filter((item) => item.field === facet);
 
   const options = queryResult.data?.aggregations?.[facet]?.buckets.map((item) => ({
-    label: facet === 'tags' ? getTopicTitle(item.key) : unsluggify(item.key),
+    label: facet === 'tags' ? getTopicTitle(item.key, topics as Topic[]) : unsluggify(item.key),
     count: item.doc_count,
     value: item.key,
     selected: Boolean(selectedOptions.find((option) => option.value === item.key)),
@@ -38,10 +46,10 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
       <SidebarSection>
         <div className="flex items-center gap-2 text-base 2xl:text-lg font-bold pb-4 2xl:pb-6">
           {iconMapping[facet]({className: "w-[20px]"})}
-          <span className="leading-none">{label}</span>
+          <span className="leading-none">{labelByLanguage}</span>
         </div>
         <MultiSelect isCollapsible>
-          <MultiSelect.Input defaultPlaceholder={`Select ${label}`} className="bg-gray-custom-100" />
+          <MultiSelect.Input defaultPlaceholder={t(`search.${label}.select`) ?? ""} className="bg-gray-custom-100" />
           <MultiSelect.List
             options={options ?? []}
             label="Select options"

@@ -5,6 +5,7 @@ import "./globals.css";
 import Script from "next/script";
 import Header from "@/components/layout/header/Header";
 import QueryProvider from "./providers";
+import { LanguageCode } from "@/config";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
@@ -18,11 +19,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  languageCode = LanguageCode.en,
 }: Readonly<{
   children: React.ReactNode;
+  languageCode?: LanguageCode;
 }>) {
   return (
-    <html lang="en">
+    <html lang={languageCode}>
       <body className={manrope.className}>
         <QueryProvider>
           <Header />

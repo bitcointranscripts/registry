@@ -11,7 +11,7 @@ export type LanguageCode = keyof typeof LanguageCode;
 
 export const LanguageCodes = Object.values(LanguageCode);
 
-export const OtherSupportedLanguages: LanguageCode[] = ["es", "pt", "zh"];
+export const OtherSupportedLanguages: LanguageCode[] = LanguageCodes.filter((code) => code !== LanguageCode.en);
 
 export const LanguageConfig: Record<LanguageCode, {name: string, icon: string, url: string}> = {
   "en": {
@@ -59,10 +59,10 @@ export const setup = {
 }
 
 export const FacelLabelMapping: Record<FacetKeys, string> = {
-  "authors": "Speakers",
-  "tags": "Topics",
-  "transcript_source": "Sources",
-  "domain": "Domains"
+  "authors": "speakers",
+  "tags": "topics",
+  "transcript_source": "sources",
+  "domain": "domains"
 };
 
 export const FIELDS_TO_SEARCH = [

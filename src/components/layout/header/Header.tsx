@@ -6,32 +6,40 @@ import Image from "next/image";
 import MenuIcon from "/public/svgs/menu.svg";
 import MobileMenu from "../../landing-page/MobileMenu";
 import { MenuApp, menuApps } from "@/utils/data";
-import { AppsIcon, ArrowRight, CloseIconOutlined, DayIcon, NightIcon } from "@bitcoin-dev-project/bdp-ui/icons";
+import { AppsIcon, CloseIconOutlined, DayIcon, NightIcon } from "@bitcoin-dev-project/bdp-ui/icons";
 import Wrapper from "../Wrapper";
 import Logo from "../Logo";
 import SearchBox from "../../search/SearchBox";
 import MobileSearchBox from "../../search/MobileSearchBox";
 import LanguageSwitch from "./LanguageSwitch";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
+import { generateNewUrlForLanguage } from "@/utils/locale";
 
-export const AppItem = ({ href, image, alt, title }: MenuApp) => (
-  <Link
-    href={href}
-    className='py-2 md:py-3 px-5 md:px-8 gap-3 md:gap-6 flex items-center hover:bg-orange-custom-600 first-of-type:pt-4 first-of-type:md:pt-6 last-of-type:pb-4 last-of-type:md:pb-6'
-    target='_blank'
-    rel='noopener noreferrer'
-  >
-    <Image
-      className={`rounded-xl w-11 h-11 lg:w-16 lg:h-16 ${
-        alt === "Bitcoin search" || alt === "Bitcoin TLDR" ? "border-[1.5px] border-gray-custom-600" : ""
-      }`}
-      src={image}
-      alt={alt}
-      width={88}
-      height={88}
-    />
-    <p className='text-xs md:text-sm xl:text-base 2xl:text-lg text-left '>{title}</p>
-  </Link>
-);
+export const AppItem = ({ id, href, image, alt }: MenuApp) => {
+  const lang = useLang();
+  const t = useTranslations(lang);
+
+  return (
+    <Link
+      href={href}
+      className='py-2 md:py-3 px-5 md:px-8 gap-3 md:gap-6 flex items-center hover:bg-orange-custom-600 first-of-type:pt-4 first-of-type:md:pt-6 last-of-type:pb-4 last-of-type:md:pb-6'
+      target='_blank'
+      rel='noopener noreferrer'
+    >
+      <Image
+        className={`rounded-xl w-11 h-11 lg:w-16 lg:h-16 ${
+          alt === "Bitcoin search" || alt === "Bitcoin TLDR" ? "border-[1.5px] border-gray-custom-600" : ""
+        }`}
+        src={image}
+        alt={alt}
+        width={88}
+        height={88}
+      />
+      <p className='text-xs md:text-sm xl:text-base 2xl:text-lg text-left'>{t(`header.menu.${id}`)}</p>
+    </Link>
+  )
+};
 
 export function AppMenu() {
   return (
@@ -41,7 +49,7 @@ export function AppMenu() {
       <AppItem {...menuApps[0]} />
       <div className='mx-5 md:mx-7 my-3 md:my-3 border border-custom-stroke'></div>
       {menuApps.slice(1).map((item) => (
-        <AppItem key={item.title} {...item} />
+        <AppItem key={item.id} {...item} />
       ))}
     </div>
   );
@@ -87,7 +95,7 @@ const MenuSwitcher = () => {
             <AppItem {...menuApps[0]} />
             <div className='mx-5 md:mx-7 my-3 md:my-3 border border-gray-custom-300'></div>
             {menuApps.slice(1).map((item) => (
-              <AppItem key={item.title} {...item} />
+              <AppItem key={item.id} {...item} />
             ))}
           </div>
         </div>
@@ -116,17 +124,20 @@ export function ThemeSwitcher() {
 const Header = () => {
   const [open, setOpen] = useState(false);
 
+  const lang = useLang();
+  const t = useTranslations(lang);
+
   return (
     <div className='flex items-center justify-center border-b-[0.5px] border-b-gray-custom-200 max-md:border-b-0 w-full sticky top-0 z-20'>
       <Wrapper className='h-[var(--header-height)] flex items-center w-full md:justify-between bg-white sticky top-0 z-20 gap-6 max-lg:gap-4 max-md:h-[86px]'>
         <section className='flex items-center gap-4 md:gap-16 2xl:gap-24'>
-          <Link href="/">
+          <Link href={generateNewUrlForLanguage("/", lang)}>
             <Logo iconStyles='w-[30px] xl:w-9' textStyles='text-black text-base leading-[36.77px] lg:text-[24px]' />
           </Link>
           <nav className='hidden md:flex items-center text-sm md:text-base gap-4 md:gap-8 2xl:gap-16 text-custom-black-custom-200'>
-            <Link href='/categories'>Transcripts</Link>
-            <Link href='/about' className=''>
-              About
+            <Link href={generateNewUrlForLanguage('/categories', lang)}>{t("shared.categories")}</Link>
+            <Link href={generateNewUrlForLanguage('/about', lang)} className=''>
+              {t("shared.about")}
             </Link>
           </nav>
         </section>

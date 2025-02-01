@@ -9,9 +9,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { URLSearchParamsKeyword } from "@/config";
 import useLang from "@/hooks/useLang";
 import { generateNewUrlForLanguage } from "@/utils/locale";
+import useTranslations from "@/hooks/useTranslations";
 
 const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) => {
   const language = useLang();
+  const t = useTranslations(language);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -73,7 +75,7 @@ const SearchBox = ({ onSubmit }: { onSubmit?: (searchString: string) => void }) 
               onChange={handleChange}
               value={searchInput}
               inputMode="search"
-              placeholder="Search here"
+              placeholder={t("search.placeholder")}
               className="text-custom-primary-text font-medium placeholder:text-gray-custom-300 py-1.5 md:py-3 px-3 md:px-6 md:text-base placeholder:text-[14px] md:placeholder:text-base h-full w-full border-none outline-none bg-transparent"
               onFocus={() => setFocus(true)}
             />

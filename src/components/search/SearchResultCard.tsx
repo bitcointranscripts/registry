@@ -8,8 +8,10 @@ import { twMerge } from "tailwind-merge";
 import allSources from "@/public/sources-data.json";
 import BaseCrumbLists from "../common/BaseCrumbLists";
 import { getSourceBreadcrumbsFromSlug } from "@/utils/sources";
-import { getTopicTitle } from "@/utils/search";
 import { parseLanguageString } from "@/utils/locale";
+import { getTopicTitle } from "@/utils/topic";
+import { Topic } from "@/types";
+import topics from "@/public/topics.json";
 
 type Result = EsSearchResult["_source"];
 
@@ -33,7 +35,7 @@ export const SearchResultCard = ({
     summary,
   } = result;
 
-  const flattenedPath = new URL(url).pathname.split("/").slice(1).join("/");
+  const flattenedPath = new URL(url).pathname
 
   const parsedLanguage = parseLanguageString(language);
 
@@ -45,7 +47,7 @@ export const SearchResultCard = ({
     flattenedPath,
     languageURL: flattenedPath,
     date: date as unknown as string,
-    tagsDetailed: tags?.map((tag) => ({ name: getTopicTitle(tag), slug: tag })),
+    tagsDetailed: tags?.map((tag) => ({ name: getTopicTitle(tag, topics as Topic[]), slug: tag })),
     language: parsedLanguage,
   };
 
