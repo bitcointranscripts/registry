@@ -1,4 +1,4 @@
-import { URLSearchParamsKeyword } from "@/config";
+import { LanguageCode, URLSearchParamsKeyword } from "@/config";
 import { setup } from "@/config";
 import { Facet, FacetKeys } from "@/app/search/types";
 
@@ -10,8 +10,9 @@ export const appendSortName = (sortField: string) => {
   return `${URLSearchParamsKeyword.SORT}_${sortField}`;
 };
 
-export const getIsolatedFacetLink = ({filter_field, filter_value}: {filter_field: FacetKeys, filter_value: string}) => {
-  const filterLink = `/search?${appendFilterName(filter_field)}=${filter_value}`;
+export const getIsolatedFacetLink = ({filter_field, filter_value, language = LanguageCode.en}: {filter_field: FacetKeys, filter_value: string, language: LanguageCode}) => {
+  const base = language === LanguageCode.en ? `/search` :`/${language}/search`;
+  const filterLink = `${base}?${appendFilterName(filter_field)}=${filter_value}`;
   return filterLink;
 }
 

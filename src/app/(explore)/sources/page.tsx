@@ -27,9 +27,8 @@ const SourcesPage = () => {
   return (
     <div className="flex flex-col text-black">
       <TranscriptContentPage
-        header="Sources"
+        header="sources"
         data={allSources}
-        description="Sources help you find transcripts within a specific talk, meetup, conference, and the likes."
         type="alphabet"
         linkName="sources"
         languageCode={languageCode}

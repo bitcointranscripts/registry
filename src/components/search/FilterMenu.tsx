@@ -11,8 +11,10 @@ import SidebarSection from "./SidebarSection";
 import { ArbitraryCallback, Facet } from "@/app/search/types";
 import { useUIContext } from "@/context/UIContext";
 import { getFilterDisplayName } from "@/utils/search";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
 
-export const FilterMenuMobile = () => {
+export const FilterMenuMobile = ({ filterHeadingText }: {filterHeadingText: string}) => {
   const { sidebarToggleManager } = useUIContext();
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -24,7 +26,7 @@ export const FilterMenuMobile = () => {
   }
   return (
     <div className="flex md:hidden items-center gap-2 justify-between py-2 sticky top-[0px] bg-white">
-      <p className="text-[14px] font-bold">Filters</p>
+      <p className="text-[14px] font-bold">{filterHeadingText}</p>
       <button
         className="mr-2 active:scale-90 p-1"
         onClick={(e) => handleClick(e)}
@@ -40,21 +42,25 @@ export const FilterMenuMobile = () => {
 const FilterMenu = ({ callback }: { callback: ArbitraryCallback }) => {
   const { filterFields } = useSearch();
 
+  const lang = useLang();
+
+  const t = useTranslations(lang);
+
   return (
     <>
       {/* Mobile filter menu */}
       <div className="md:hidden w-full">
-        <FilterMenuMobile />
+        <FilterMenuMobile filterHeadingText={t("search.filters.title")?? ""} />
       </div>
       <SidebarSection className="hidden md:flex w-full text-custom-primary-text justify-between">
         <div className="flex items-center gap-2">
           <FilterIcon className="w-[20px] hidden md:flex" />
           <p className="text-base 2xl:text-lg font-bold leading-none">
-            Filters
+            {t("search.filters.title")}
           </p>
         </div>
       </SidebarSection>
-      <AppliedFilters filters={filterFields} callback={callback} />
+      <AppliedFilters filters={filterFields} callback={callback} t={t} />
     </>
   );
 };
@@ -62,9 +68,11 @@ const FilterMenu = ({ callback }: { callback: ArbitraryCallback }) => {
 const AppliedFilters = ({
   filters,
   callback,
+  t,
 }: {
   filters: Facet[];
   callback: ArbitraryCallback;
+  t: ReturnType<typeof useTranslations>;
 }) => {
   const { removeFilterTypes, removeFilter } = useURLManager();
   if (!filters?.length) return null;
@@ -78,14 +86,14 @@ const AppliedFilters = ({
   return (
     <SidebarSection className="text-custom-primary-text">
       <div className="flex justify-between mb-4 2xl:mb-6">
-        <p className="text-sm 2xl:text-base font-bold">Applied Filters</p>
+        <p className="text-sm 2xl:text-base font-bold">{t("search.filters.applied")}</p>
         <div
           className="flex gap-2 items-center group/applied-filters"
           role="button"
           onClick={clearAllFilters}
         >
           <span className="text-sm 2xl:text-base group-hover/applied-filters:underline underline-offset-4">
-            Clear all
+            {t("search.clear-all")}
           </span>
           <span className="p-[6px] 2xl:p-2 bg-custom-primary-text rounded-md">
             <CloseIconOutlined className="text-custom-white group-hover/applied-filters:transform group-hover/applied-filters:scale-90 transition-all" />

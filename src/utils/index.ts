@@ -55,11 +55,9 @@ export function shuffle(data: Transcript[]) {
   return data;
 }
 
-export const extractTranscripts = (allTranscripts: Transcript[]) => {
+export const extractTranscripts = (allTranscripts: Transcript[], languageCode: LanguageCode) => {
   const CURRENT_DAY = Date.now();
   const ONE_DAY = 86_400_000; // 1000 * 3600 * 24
-
-  const languageRegex = new RegExp(`\\.(${OtherSupportedLanguages.join("|")})(\\.md)?$`);
 
   // Optimization for landingpage — obscene amount of data passed to the client (reduced from 6.6s to 795ms)
   const lightWeightTranscripts = allTranscripts.map(({ body, summary, ...fieldsToUse }) => {
@@ -67,7 +65,7 @@ export const extractTranscripts = (allTranscripts: Transcript[]) => {
   })
 
   const transcripts = shuffle(lightWeightTranscripts as Transcript[]).filter((transcript) => {
-    return transcript.date && !languageRegex.test(transcript.url);
+    return transcript.date && transcript.language === languageCode;
   });
 
   // Sort and slice in one pass
@@ -163,6 +161,8 @@ export const sortKeysAlphabetically = (
 };
 
 export const unsluggify = (slug: string) => slug.replace(/-/g, " ");
+
+export const saneCapitalization = (slug: string) => unsluggify(slug).split(" ").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")
 
 export const formatDate = (dateString: string): string | null => {
   if (!dateString) return null;
@@ -275,6 +275,13 @@ export const constructSlugPaths = (slug: string[]) => {
 
   return { slugPaths };
 };
+
+export const convertSlugToLanguageSlug = (slug: string[]) => {
+  // converts  [ 'sources' ] to [ 'en', 'sources' ], or [ 'es', 'sources' ] to [ 'es', 'sources' ] (leaving the language code intact)
+  const isEnglishSlug =
+    slug[0].length > 2 && !OtherSupportedLanguages.includes(slug[0] as LanguageCode);
+  return isEnglishSlug ? [LanguageCode.en, ...slug] : [...slug];
+}
 
 export const fetchTranscriptDetails = (
   allTranscripts: Transcript[],

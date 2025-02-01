@@ -1,76 +1,73 @@
 import { StaticImageData } from "next/image";
 import { IsoDateTimeString } from "contentlayer2/core";
-import { FieldCountItem, TagsDetailed } from ".";
+import { TagsDetailed } from ".";
 
 export type MenuApp = {
+  id: string;
   href: string;
   image: string | StaticImageData;
   alt: string;
-  title: string;
 };
 
 export const menuApps = [
   {
+    id: "bitcoin-devs",
     href: "https://bitcoindevs.xyz/",
     image: "/images/bitcoin-devs.jpg",
     alt: "Bitcoin Devs",
-    title: "Study & contribute to bitcoin and lightning open source",
   },
   {
+    id: "chat-btc",
     href: "https://chat.bitcoinsearch.xyz",
     image: "/images/chat-btc.jpg",
     alt: "ChatBTC image",
-    title:
-      "Interactive AI chat to learn about bitcoin technology and its history",
   },
   {
+    id: "bitcoin-search",
     href: "https://bitcoinsearch.xyz/",
     image: "/images/bitcoin-search.jpg",
     alt: "Bitcoin search",
-    title: "Technical bitcoin search engine",
   },
   {
+    id: "bitcoin-tldr",
     href: "https://tldr.bitcoinsearch.xyz/",
     image: "/images/bitcoin-tldr.jpg",
     alt: "Bitcoin TLDR",
-    title:
-      "Daily summary of key bitcoin tech development discussions and updates",
   },
   {
+    id: "saving-satoshi",
     href: "https://savingsatoshi.com",
     image: "/images/saving-satoshi.jpg",
     alt: "Saving Satoshi",
-    title:
-      "Engaging bitcoin dev intro for coders using technical texts and code challenges",
   },
   {
+    id: "bitcoin-transcripts-review",
     href: "https://review.btctranscripts.com/",
     image: "/images/bitcoin-transcripts-review.jpg",
     alt: "Bitcoin Transcripts Review",
-    title: "Review technical bitcoin transcripts and earn sats",
   },
 ] satisfies Array<MenuApp>;
 
 export const ExploreNavigationItems = [
   {
     href: "/categories",
-    title: "Categories",
+    title: "categories",
   },
   {
     href: "/topics",
-    title: "Topics",
+    title: "topics",
   },
   {
     href: "/speakers",
-    title: "Speakers",
+    title: "speakers",
   },
   {
     href: "/types",
-    title: "Types",
+    title: "types",
   },
   {
     href: "/sources",
-    title: "Sources",
+    title: "sources",
   },
 ];
 
@@ -124,42 +121,32 @@ export type ContentTreeArray = {
 
 export const processFlowData = [
   {
-    title: "Curator Adds Sources",
-    content: "Curator adds sources and resources to the Transcription Backlog.",
+    id: "curator",
     image: "/svgs/sources-icon.svg",
     bgColor: "#FCEDF3",
   },
   {
-    title: "AI Transcription",
-    content:
-      "Resources from the backlog are sent to the AI Transcription Service for processing.",
+    id: "ai",
     image: "/svgs/ai-icon.svg",
     bgColor: "#F0F1FA",
   },
   {
-    title: "Initial Publication",
-    content:
-      "AI-generated transcripts are published on the Registry and also added to the Review Queue.",
+    id: "initial-publication",
     image: "/svgs/initial-publication-icon.svg",
     bgColor: "#FFF5EB",
   },
   {
-    title: "Human Review",
-    content:
-      "Reviewers claim and edit transcripts from the Review Queue and submit them for approval.",
+    id: "review",
     image: "/svgs/review-icon.svg",
     bgColor: "#ECF9F1",
   },
   {
-    title: "Evaluation",
-    content: "Editors review and approve finalized transcripts.",
+    id: "evaluation",
     image: "/svgs/evaluation-icon.svg",
     bgColor: "#FCEDED",
   },
   {
-    title: "Final Publication",
-    content:
-      "Approved transcripts are updated on the Registry as final versions, and Reviewers receive a payout for their work",
+    id: "final-publication",
     image: "/svgs/final-publication-icon.svg",
     bgColor: "#FCEDF3",
   },

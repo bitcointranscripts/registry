@@ -56,9 +56,8 @@ const TopicsPage = ({ params }: { params: { languageCode: string } }) => {
   return (
     <div className="flex flex-col  text-black">
       <TranscriptContentPage
-        header="Topics"
+        header="topics"
         data={topics}
-        description="Bitcoin is made up of an endless amount of topics, and there’s no shortage of rabbit holes to go down. "
         type="alphabet"
         linkName="tags"
         languageCode={languageCode}
