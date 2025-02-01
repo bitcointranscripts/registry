@@ -79,15 +79,11 @@ export const findAlternateLanguageForTranscript = (slug: string[], language: Lan
 
   const source = sources[sourceId];
 
-  // console.log({source, sourceId, language, transcriptUrl})
-
   if (!source) return alternateLanguages;
   
   Object.keys(source).filter((key) => key !== language).forEach((key) => {
-    // console.log("finding for ", key)
     const pathContent = traverseSourceTree(source, [key, ...clonedSlug], 1) as SourceData;
     const transcriptLanguageSuffix = key === LanguageCode.en ? transcriptUrl : `${transcriptUrl}.${key}`;
-    // console.log("path Content for", key, {pathContent})
     if ((pathContent?.data as string[])?.includes(transcriptLanguageSuffix)) {
       alternateLanguages.push(key);
     }

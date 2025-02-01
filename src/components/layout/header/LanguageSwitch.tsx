@@ -134,12 +134,10 @@ const LanguageSwitch = ({ callback }: { callback?: () => void }) => {
           <SelectorGroup title="Page available in" data={languageConfig.pageAvailableLanguages} callback={handleSwitch} getLink={(language) => generateNewUrlForLanguage(path, language)} />
         )}
         {/* divider */}
+        {Boolean(languageConfig.pageAvailableLanguages.length && languageConfig.websiteLanguages.length) && (<div className="h-[1px] w-full bg-gray-custom-400 my-3" />)}
 
         {languageConfig.websiteLanguages.length > 0 && (
-          <>
-            <div className="h-[1px] w-full bg-gray-custom-400 my-3" />
             <SelectorGroup title="Website also available in" data={languageConfig.websiteLanguages} callback={handleSwitch} />
-          </>
         )}
       </div>
     </div>
@@ -149,7 +147,7 @@ const LanguageSwitch = ({ callback }: { callback?: () => void }) => {
 const SelectorGroup = ({ title, callback, data, getLink  }: { title: string, callback?: () => void, data: LanguageSwitchConfig["pageAvailableLanguages"], getLink?: (language: string) => string }) => {
   return (
     <div className="flex flex-col gap-1 justify-center">
-      <p className="font-semibold text-gray-custom-400">{title}</p>
+      <p className="font-semibold text-gray-custom-800">{title}</p>
       {data.map(({ language, url }) => (
         <Link
           key={language}

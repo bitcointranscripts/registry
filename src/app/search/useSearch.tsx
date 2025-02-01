@@ -105,7 +105,6 @@ export const SearchContextProvider = ({
 
     urlParams.delete(URLSearchParamsKeyword.PAGE); // new search query resets the user back to the first page of results
     urlParams.set(URLSearchParamsKeyword.SEARCH, queryString.trim()); // new search query
-    console.log({isSearchPage, pathname, urlParams})
     if (isSearchPage) {
       router.push(`${pathname}?${urlParams.toString()}`);
     } else {

@@ -92,7 +92,7 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
 
   const contentTree = allSources as SourceTree;
   const { slugPaths } = constructSlugPaths(slug);
-  // console.log({slugPaths, slugUrl, languagePath})
+
   let current: any = contentTree;
 
   for (const part of slugPaths) {
@@ -238,7 +238,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               <SourcesBreadCrumbs slugPaths={slugPaths} current={contentTree} />
             </>
             <div className='flex flex-col'>
-              <Link href={constructBackLink()} className='flex gap-1 items-center'>
+              <Link href={constructBackLink()} className='flex gap-1 items-center max-w-fit'>
                 <ArrowLinkRight className='rotate-180 w-5 md:w-6' />
                 <p>{t("explore.back")}</p>
               </Link>
