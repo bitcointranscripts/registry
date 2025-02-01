@@ -8,7 +8,6 @@ import { BaseCrumbType } from "@/components/common/BaseCrumbLists";
 import { findAlternateLanguageForTranscript } from "@/utils/sources";
 import { LanguageCode } from "@/config";
 import { Metadata } from "next";
-import { previewImageDimensions } from "@/utils/data";
 import { buildMetadata } from "@/utils/metadata";
 
 // forces 404 for paths not generated from `generateStaticParams` function.
@@ -28,8 +27,17 @@ export function generateStaticParams() {
 
 export const generateMetadata = async ({params}: { params: { slug: string[] } }): Promise<Metadata> => {
 
-  const slugArray = params.slug;
-  let transcriptUrl = `/${slugArray.join("/")}`;
+  const decodedSlug = params.slug.map((segment) => {
+    try {
+      return decodeURIComponent(segment);
+    } catch {
+      // Hanlde malformed URL encoding
+      console.error("Invalid URL encoding:", segment);
+      return "";
+    }
+  });
+
+  let transcriptUrl = `/${decodedSlug.join("/")}`;
 
   const transcript = allTranscripts.find(
     (transcript) => transcript.languageURL === transcriptUrl
@@ -63,8 +71,17 @@ export const generateMetadata = async ({params}: { params: { slug: string[] } })
 };
 
 const Page = ({ params }: { params: { slug: string[] } }) => {
-  const slugArray = params.slug;
-  let transcriptUrl = `/${slugArray.join("/")}`;
+  const decodedSlug = params.slug.map((segment) => {
+    try {
+      return decodeURIComponent(segment);
+    } catch {
+      // Hanlde malformed URL encoding
+      console.error("Invalid URL encoding:", segment);
+      return "";
+    }
+  });
+
+  let transcriptUrl = `/${decodedSlug.join("/")}`;
 
   const transcript = allTranscripts.find(
     (transcript) => transcript.languageURL === transcriptUrl
