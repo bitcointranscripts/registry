@@ -35,7 +35,7 @@ const PillActionContainer = (props: React.PropsWithChildren<PillProps>) => {
   const animationClass = `transition-all duration-300 `
   const prop = {
     "data-selected": Boolean(props.isSelected),
-    className: twMerge(selectedPillClass, animationClass, "max-content py-[4px] px-[6px] md:px-4 rounded-[5px] bg-gray-custom-700 hover:bg-gray-custom-600 hover:text-gray-custom-100 max-md:leading-[100%] cursor-pointer"),
+    className: twMerge(selectedPillClass, animationClass, "max-content py-[4px] px-[6px] md:px-4 rounded-[5px] bg-gray-custom-700 hover:bg-gray-custom-600 hover:text-gray-custom-100 max-md:leading-[100%] cursor-pointer capitalize"),
   };
 
   const defaultOnClick = (e: React.MouseEvent) => {e.stopPropagation()}
