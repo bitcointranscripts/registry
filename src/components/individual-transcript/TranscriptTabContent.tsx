@@ -4,6 +4,7 @@ import "./markdown.css";
 import { InView } from "react-intersection-observer";
 import { createContentSlug } from "@/utils";
 import Link from "next/link";
+import Link from "next/link";
 
 function formatSpeakerText(text: string): string {
   // Regular expression pattern to match "Speaker" or "Speaker:" followed by a timestamp
