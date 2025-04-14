@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Bitcoin Transcripts",
   description: "A collection of technical bitcoin and lightning transcripts",
   icons: {
-    icon: "/btctranscripts.png",
+    icon: "/favicon.png",
   },
 };
 
