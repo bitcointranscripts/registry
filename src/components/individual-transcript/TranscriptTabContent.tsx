@@ -3,6 +3,7 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import "./markdown.css";
 import { InView } from "react-intersection-observer";
 import { createContentSlug } from "@/utils";
+import Link from "next/link";
 
 function formatSpeakerText(text: string): string {
   // Regular expression pattern to match "Speaker" or "Speaker:" followed by a timestamp
@@ -34,6 +35,13 @@ const TranscriptTabContent = ({
       source={formattedMarkdown}
       className={`!bg-transparent`}
       components={{
+        a:({children = [], className, ...props})=>{
+          return(
+            <Link target="blank" className="text-orange-custom-100" href={props.href ||''}> 
+                {children}
+            </Link>
+          )
+        },
         h1: ({ children = [], className, ...props }) => {
           return (
             <InView

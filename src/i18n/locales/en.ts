@@ -10,7 +10,10 @@ const translations = {
     "types": "Types",
     "more": "more",
   },
-
+  // Navigation 
+  "navigation":{
+    "language":"Page available in "
+  },
   // Home
   "home": {
     "hero": {

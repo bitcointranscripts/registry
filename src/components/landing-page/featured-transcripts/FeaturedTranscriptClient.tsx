@@ -41,17 +41,8 @@ const FeaturedTranscriptClient = ({
           </button>
         </section>
         <div className='grid auto-rows-max gap-5 max-sm:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-2 grid-cols-3'>
-          {featured.slice(0, 3).map((transcript, idx) => (
+          {featured.slice(0, 6).map((transcript, idx) => (
             <TranscriptCard data={transcript} key={idx} source={getSourceFromTranscript(transcript)} languageCode={languageCode} />
-          ))}
-        </div>
-      </section>
-
-      <section className='flex flex-col gap-6 w-full'>
-        <h3 className='text-2xl font-semibold max-md:text-xl'>{t("home.dive.latest-transcripts")}</h3>
-        <div className='grid auto-rows-max gap-5 max-sm:grid-cols-1 max-lg:grid-cols-2 max-xl:grid-cols-2 grid-cols-3'>
-          {latestTranscripts.map((transcript, idx) => (
-            <TranscriptCard data={transcript} daysOpened={transcript.days_opened} key={idx} source={getSourceFromTranscript(transcript)} languageCode={languageCode} />
           ))}
         </div>
       </section>

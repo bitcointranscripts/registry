@@ -10,7 +10,9 @@ const translations = {
     "types": "类型",
     "more": "更多"
   },
-
+  navigation: {
+    language: "页面可用语言",
+  },
   // Home
   "home": {
     "hero": {

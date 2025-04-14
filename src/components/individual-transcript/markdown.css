@@ -58,7 +58,9 @@ span.code-line {
     margin: 0px !important;
     font-weight: 400;
 }
-
+.wmde-markdown p a {
+   color: #f7931a;
+}
 .wmde-markdown a.anchor {
     display: none !important;
 }
