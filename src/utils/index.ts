@@ -160,7 +160,7 @@ export const sortKeysAlphabetically = (
   return items.sort((a, b) => a.name.localeCompare(b.name));
 };
 
-export const unsluggify = (slug: string) => slug.replace(/-/g, " ");
+export const unsluggify = (slug: string) => slug.replace(/-/g, " ").replace(/[/]/gi,  " / ");
 
 export const saneCapitalization = (slug: string) => unsluggify(slug).split(" ").map(word => word[0].toUpperCase() + word.slice(1)).join(" ")
 
