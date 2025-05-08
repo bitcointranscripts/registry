@@ -14,6 +14,9 @@ const Pagination = () => {
     return null;
   }
   const totalPages = Math.ceil(totalResults / resultsPerPage);
+  if (totalPages === 1) {
+    return <></>;
+  }
   return (
     <PaginationView
       onChange={handlePageChange}

@@ -32,12 +32,28 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
 
   const selectedOptions = filterFields.filter((item) => item.field === facet);
 
-  const options = queryResult.data?.aggregations?.[facet]?.buckets.map((item) => ({
-    label: facet === 'tags' ? getTopicTitle(item.key, topics as Topic[]) : unsluggify(item.key),
-    count: item.doc_count,
-    value: item.key,
-    selected: Boolean(selectedOptions.find((option) => option.value === item.key)),
-  }));
+ let options = queryResult.data?.aggregations?.[facet]?.buckets.map((item) => {
+
+    return{
+      label: facet === 'tags' ? getTopicTitle(item.key, topics as Topic[]) : unsluggify(item.key),
+      count: item.doc_count,
+      value: item.key,
+      selected: Boolean(selectedOptions.find((option) => option.value === item.key)),
+    }
+  });
+  const optionsOnce = new Set();
+  if(facet === "tags"){
+    options = options?.filter((option)=>{
+
+      if(!optionsOnce.has(option.label)){
+        optionsOnce.add(option.label)
+  
+        return true;
+      }
+  
+      return false;
+    })
+  }
 
   const isLoading = queryResult.isLoading;
 
@@ -53,7 +69,7 @@ const Facet = ({ facet, callback }: { facet: FacetKeys, callback: ArbitraryCallb
           <MultiSelect.List
             options={options ?? []}
             label="Select options"
-            onOptionSelect={({ action, value, event }) => {
+            onOptionSelect={({value }) => {
               toggleFilter({ filterType: facet, filterValue: value });
               callback();
             }}

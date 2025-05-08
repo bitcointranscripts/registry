@@ -40,7 +40,7 @@ const SearchPage = () => {
   }
 
   if (noResults) {
-    return <NotFound />;
+    return <NotFound searchPage/>;
   }
 
   return (
@@ -68,7 +68,6 @@ export default function SearchClient({
 }) {
   const { sidebarToggleManager } = useUIContext();
   const t = useTranslations(languageCode);
-
   return (
     <>
       <SearchContextProvider>
