@@ -21,6 +21,9 @@ export default function NotFound({ searchPage }: { searchPage?: boolean }) {
             <span className="sm:hidden whitespace-nowrap">(we mean you!)</span>
             <br />
             <span className='hidden sm:flex text-center items-center justify-center'>(We mean you!)</span>
+            <span className="hidden sm:flex text-center items-center justify-center">
+              (We mean you!)
+            </span>
           </p>
         </section>
       </section>
