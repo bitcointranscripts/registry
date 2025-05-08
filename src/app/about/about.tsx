@@ -95,7 +95,7 @@ const About = ({
                 className="flex flex-row z-10 items-center gap-4 sm:gap-[31px]"
               >
                 <section
-                  className={`bg-[${bgColor}] flex items-center justify-center min-w-24 h-24 md:min-w-[184px] md:h-[184px] rounded-2xl`}
+                  className={`flex items-center justify-center min-w-24 h-24 md:min-w-[184px] md:h-[184px] rounded-2xl`}
                   style={{ backgroundColor: bgColor }}
                 >
                   <Image

@@ -37,7 +37,7 @@ const TranscriptTabContent = ({
       components={{
         a:({children = [], className, ...props})=>{
           return(
-            <Link target="blank" className="text-orange-custom-100" href={props.href ||''}> 
+            <Link target="_blank" className="text-orange-custom-100" href={props.href ||''}> 
                 {children}
             </Link>
           )

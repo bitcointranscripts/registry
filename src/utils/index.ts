@@ -372,16 +372,34 @@ export function extractHeadings(text: string): NavigationList[] {
   const getHeadingOneTwo = /^#{1,2}\s/;
   const getOnlyHeadingThree = /^#{3}\s/;
   const headings: NavigationList[] = [];
-
+  const headingsListStore =  new Map(); // for titles with duplicates heading and affects linking
   lines.forEach((line) => {
     if (getHeadingOneTwo.test(line)) {
       let title = line.trim().replace(getHeadingOneTwo, "");
-      headings.push({ name: title, slug: createContentSlug(title) });
+      let slug =  createContentSlug(title);
+      if(headingsListStore.has(title)){
+         const currCount = headingsListStore.get(title)
+         headingsListStore.set(title,currCount + 1);
+          slug = slug + `-${currCount}`
+      }
+      else {
+        headingsListStore.set(title,1);
+      }
+      headings.push({ name: title, slug });
     } else if (getOnlyHeadingThree.test(line)) {
       let title = line.trim().replace(getOnlyHeadingThree, "");
+      let slug =  createContentSlug(title);
+      if(headingsListStore.has(title)){
+        const currCount = headingsListStore.get(title)
+        headingsListStore.set(title,currCount + 1);
+         slug = slug + `-${currCount}`
+     }
+     else {
+       headingsListStore.set(title,1);
+     }
       headings.push({
         name: title,
-        slug: createContentSlug(title),
+        slug,
         nested: true,
       });
     }
