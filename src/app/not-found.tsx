@@ -19,7 +19,7 @@ export default function NotFound({ searchPage }: { searchPage?: boolean }) {
           <p className="">
             But maybe we found a new Transcript Reviewer?{" "}
             <span className="sm:hidden whitespace-nowrap">(we mean you!)</span>
-            <br />
+            <br /> 
             <span className='hidden sm:flex text-center items-center justify-center'>(We mean you!)</span>
           </p>
         </section>
