@@ -14,7 +14,6 @@ import SearchResultCard from "@/components/search/SearchResultCard";
 import NotFound from "@/app/not-found";
 import { SkeletonResults } from "@/components/search/Loader";
 import useTranslations from "@/hooks/useTranslations";
-import { unsluggify } from "@/utils";
 
 const SearchPage = () => {
   const { queryResult } = useSearch();
