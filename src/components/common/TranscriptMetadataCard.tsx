@@ -46,7 +46,7 @@ const TranscriptMetadataComponent = ({
   return (
     <div className="border flex text-black flex-col rounded-2xl p-4 md:p-5 2xl:p-6 gap-4 w-full border-gray-custom-1200">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
-        <h4 className="text-orange-custom-100 text-xl font-bold md:text-2xl 2xl:text-[2rem]">
+        <h4 className="text-black text-xl font-bold md:text-2xl 2xl:text-[2rem]">
           {title}
         </h4>
         <button

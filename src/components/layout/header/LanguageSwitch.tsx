@@ -1,4 +1,6 @@
 import { LanguageCode, LanguageCodes, LanguageConfig } from "@/config";
+import useLang from "@/hooks/useLang";
+import useTranslations from "@/hooks/useTranslations";
 import { LanguageSwitchConfig } from "@/types";
 import { generateNewUrlForLanguage } from "@/utils/locale";
 import { ArrowRight } from "@bitcoin-dev-project/bdp-ui/icons";
@@ -19,6 +21,10 @@ const LanguageSwitch = ({ callback }: { callback?: () => void }) => {
   const [languageConfig, setLanguageConfig] = useState<LanguageSwitchConfig>(
     defaultLanguageConfig
   );
+
+  const lang = useLang();
+  const t = useTranslations(lang);
+
   const [isOpen, setOpen] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -51,9 +57,10 @@ const LanguageSwitch = ({ callback }: { callback?: () => void }) => {
       )?.toLowerCase() as LanguageCode;
       if (!currentLanguage) {
         currentLanguage =
-          document.head
+          (document.head
             .querySelector('meta[name="language"]')
-            ?.getAttribute("content") as LanguageCode ?? LanguageCode.en as LanguageCode;
+            ?.getAttribute("content") as LanguageCode) ??
+          (LanguageCode.en as LanguageCode);
       }
 
       document.head
@@ -65,9 +72,12 @@ const LanguageSwitch = ({ callback }: { callback?: () => void }) => {
           });
         });
 
-
       // create a set of all the language field in the pageAvailableLanguages array and the current language
-      const alreadyAdded = new Set(pageAvailableLanguages.map(({ language }) => language).concat(currentLanguage));
+      const alreadyAdded = new Set(
+        pageAvailableLanguages
+          .map(({ language }) => language)
+          .concat(currentLanguage)
+      );
 
       // website languages should not include languages alrady in the pageAvailableLanguages array
       const websiteLanguages = Object.entries(LanguageConfig)
@@ -131,20 +141,42 @@ const LanguageSwitch = ({ callback }: { callback?: () => void }) => {
         )}
       >
         {languageConfig.pageAvailableLanguages.length > 0 && (
-          <SelectorGroup title="Page available in" data={languageConfig.pageAvailableLanguages} callback={handleSwitch} getLink={(language) => generateNewUrlForLanguage(path, language)} />
+          <SelectorGroup
+            title={t("navigation.language") || ""}
+            data={languageConfig.pageAvailableLanguages}
+            callback={handleSwitch}
+            getLink={(language) => generateNewUrlForLanguage(path, language)}
+          />
         )}
         {/* divider */}
-        {Boolean(languageConfig.pageAvailableLanguages.length && languageConfig.websiteLanguages.length) && (<div className="h-[1px] w-full bg-gray-custom-400 my-3" />)}
+        {Boolean(
+          languageConfig.pageAvailableLanguages.length &&
+            languageConfig.websiteLanguages.length
+        ) && <div className="h-[1px] w-full bg-gray-custom-400 my-3" />}
 
         {languageConfig.websiteLanguages.length > 0 && (
-            <SelectorGroup title="Website also available in" data={languageConfig.websiteLanguages} callback={handleSwitch} />
+          <SelectorGroup
+            title="Website also available in"
+            data={languageConfig.websiteLanguages}
+            callback={handleSwitch}
+          />
         )}
       </div>
     </div>
   );
 };
 
-const SelectorGroup = ({ title, callback, data, getLink  }: { title: string, callback?: () => void, data: LanguageSwitchConfig["pageAvailableLanguages"], getLink?: (language: string) => string }) => {
+const SelectorGroup = ({
+  title,
+  callback,
+  data,
+  getLink,
+}: {
+  title: string;
+  callback?: () => void;
+  data: LanguageSwitchConfig["pageAvailableLanguages"];
+  getLink?: (language: string) => string;
+}) => {
   return (
     <div className="flex flex-col gap-1 justify-center">
       <p className="font-semibold text-gray-custom-800">{title}</p>

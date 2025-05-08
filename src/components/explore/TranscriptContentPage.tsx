@@ -85,7 +85,7 @@ const TranscriptContentPage: FC<ITranscriptContentPage> = ({
         <div className="flex flex-col border-b border-b-[#9B9B9B] pb-6 lg:pb-10  gap-6 ">
           <BaseCrumbLists crumbsArray={allRoutes} />
           <div className="flex flex-col gap-1 lg:gap-4">
-            <h3 className="text-xl 2xl:text-2xl font-medium uppercase">{t(`explore.${header}.title`)}</h3>
+            <h3 className="text-xl 2xl:text-2xl font-medium">{t(`explore.${header}.title`)}</h3>
             <p className="hidden lg:inline-block text-sm lg:text-base 2xl:text-lg text-custom-black-custom-300">
               {t(`explore.${header}.description`)}
             </p>
