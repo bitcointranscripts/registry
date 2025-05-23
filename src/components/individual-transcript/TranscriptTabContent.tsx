@@ -22,9 +22,11 @@ function formatSpeakerText(text: string): string {
 }
 
 const TranscriptTabContent = ({
+  currentSlug,
   markdown,
   setCurrentHeading,
 }: {
+  currentSlug: string;
   markdown: string;
   setCurrentHeading?: React.Dispatch<SetStateAction<string>>;
 }) => {
@@ -35,12 +37,16 @@ const TranscriptTabContent = ({
       source={formattedMarkdown}
       className={`!bg-transparent`}
       components={{
-        a:({children = [], className, ...props})=>{
-          return(
-            <Link target="_blank" className="text-orange-custom-100" href={props.href ||''}> 
-                {children}
+        a: ({ children = [], className, ...props }) => {
+          return (
+            <Link
+              target="_blank"
+              className="text-orange-custom-100"
+              href={props.href || ""}
+            >
+              {children}
             </Link>
-          )
+          );
         },
         h1: ({ children = [], className, ...props }) => {
           return (
@@ -89,6 +95,19 @@ const TranscriptTabContent = ({
               <h3 id={createContentSlug(props?.id || "")}>{children}</h3>
             </InView>
           );
+        },
+        img: ({ children = [], className, ...props }) => {
+          // If we have an external link
+          if (
+            props.src?.startsWith("http://") ||
+            props.src?.startsWith("https://")
+          ) {
+            const { src, ...rest } = props;
+            return <img src={src} className={className} {...rest} />;
+          } else if ((props.src?.split("/").length || 0) > 1) {
+            return <img src={`/transcript-images${props.src}`} />;
+          }
+          return <img src={`/transcript-images/${currentSlug}/${props.src}`} />;
         },
       }}
     />

@@ -57,6 +57,11 @@ span.code-line {
 .wmde-markdown ol {
     margin: 0px !important;
     font-weight: 400;
+    color: #000;
+}
+.wmde-markdown ol li {
+    list-style-type: decimal;
+    color: #000;
 }
 .wmde-markdown p a {
    color: #f7931a;

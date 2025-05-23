@@ -7,6 +7,7 @@ import NavigationByWords from "../explore/NavigationByWords";
 import { NavigationList } from "@/utils";
 import useLang from "@/hooks/useLang";
 import useTranslations from "@/hooks/useTranslations";
+import { useParams, useRouter } from "next/navigation";
 
 const Tabs = ({
   summary,
@@ -25,7 +26,8 @@ const Tabs = ({
 }) => {
   const lang = useLang();
   const t = useTranslations(lang);
-
+  const currentRoute = useParams();
+  const slug = Array.isArray(currentRoute?.slug) ?  currentRoute.slug.slice(0,currentRoute.slug.length - 1).join("/") : "";
   const [openTabs, setOpenTabs] = useState<
     "transcript" | "summary" | "extraInfo"
   >("transcript");
@@ -71,6 +73,7 @@ const Tabs = ({
           <div className="relative">
             <div className="pt-4  selection:bg-[#B4D5FF]">
               <TranscriptTabContent
+                currentSlug={slug}
                 markdown={markdown}
                 setCurrentHeading={setCurrentHeading}
               />
