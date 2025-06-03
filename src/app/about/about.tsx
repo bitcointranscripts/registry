@@ -45,7 +45,25 @@ const About = ({
               {t(`about.history.content-2`)}
               <br />
               <br />
-              {t(`about.history.content-3`)}
+              <span>
+                {t(`about.history.content-3.a`)}{" "}
+                <Link
+                  target="_blank"
+                  className="underline text-orange-custom-100"
+                  href={"https://chat.bitcoinsearch.xyz/"}
+                >
+                  ChatBTC{" "}
+                </Link>{" "}
+                {t(`about.history.content-3.separator`)}{" "}
+                <Link
+                  target="_blank"
+                  className="underline text-orange-custom-100"
+                  href={"https://bitcoinsearch.xyz/"}
+                >
+                  Bitcoin Search{" "}
+                </Link>
+                {t(`about.history.content-3.separator`)}
+              </span>
             </p>
           </section>
 

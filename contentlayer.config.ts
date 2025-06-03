@@ -6,6 +6,7 @@ import {
   FieldCountItem,
   unsluggify,
 } from "./src/utils";
+import { transformSourceName } from "./src/utils/data";
 import { Topic, ProcessedTopic, ProcessedFieldByLanguage, TopicsCountByLanguage, TagInfo, TopicsCategoryCountByLanguage } from "./src/types";
 import {
   defineDocumentType,
@@ -376,6 +377,7 @@ function organizeContent(
             : {},
           metadata: {
             ...metaData,
+            title: transformSourceName[createSlug(metaData.title)] || metaData.title
           },
         },
       };
@@ -388,6 +390,7 @@ function organizeContent(
             : {},
           metadata: {
             ...metaData,
+            title: transformSourceName[createSlug(metaData.title)] || metaData.title
           },
         },
       };
@@ -539,6 +542,7 @@ export default makeSource({
     "STYLE.md",
     "twitter_handles.json",
     ".json",
+    "edgedevplusplus/2019/mining-firmware-security.md"
   ],
   onSuccess: async (importData) => {
     const { allTranscripts, allSources } = await importData();

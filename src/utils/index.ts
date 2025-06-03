@@ -1,5 +1,5 @@
 import { Markdown, type Transcript } from "contentlayer/generated";
-import { alphabeticalArrangement, ContentTreeArray } from "./data";
+import { alphabeticalArrangement, ContentTreeArray, transformSourceName } from "./data";
 import { LanguageCode, LanguageCodes, OtherSupportedLanguages } from "../config";
 
 export interface ContentTree {
@@ -356,10 +356,15 @@ export const deriveSourcesList = (languageTree: any) => {
 
       return count;
     };
+    let correctedTitle;
+    if(transformSourceName[key]){
+      correctedTitle = transformSourceName[key]
+      console.log(correctedTitle)
+    }
 
     return {
       slug: key,
-      name: (value as unknown as any)?.metadata.title,
+      name: correctedTitle || (value as unknown as any)?.metadata.title,
       count: extractCount(valDetails),
     };
   });
