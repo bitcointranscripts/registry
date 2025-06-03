@@ -91,7 +91,7 @@ const translations = {
     "built-by": "Hecho con 🧡 por el",
     "public-dashboard": "Consulta nuestro contador público de visitantes",
     feedback: {
-      description: "¿Nos gustaría conocer tu opinión sobre este proyecto?",
+      description: "¿Nos gustaría conocer tu opinión sobre este proyecto",
       cta: "Dar Feedback",
     },
   },
