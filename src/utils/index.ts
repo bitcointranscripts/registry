@@ -359,7 +359,6 @@ export const deriveSourcesList = (languageTree: any) => {
     let correctedTitle;
     if(transformSourceName[key]){
       correctedTitle = transformSourceName[key]
-      console.log(correctedTitle)
     }
 
     return {

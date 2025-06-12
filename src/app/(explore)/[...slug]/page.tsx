@@ -302,7 +302,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               })}
             </div>
           ) : (
-            <div className="flex-col flex gap-10 overflow-scroll pb-8">
+            <div className="flex-col flex gap-10 overflow-auto pb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 ">
                 {(data as any[]).map((value, i) => (
                   <Link

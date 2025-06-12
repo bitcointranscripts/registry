@@ -57,7 +57,6 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
     return range;
   };
 
-    console.log(totalPages,"total amount of pages");
   return (
     <div className="flex items-center gap-2 text-sm md:text-base">
       {/* hide farthest left page controls on mobile */}
@@ -134,7 +133,7 @@ const PaginationView = ({ onChange, totalPages, current }: PaginationProps) => {
 
       <button
         onClick={() => onChange(Math.min(totalPages, current + 1))}
-        disabled={current === totalPages || totalPages <= 2}
+        disabled={current === totalPages || totalPages < 2}
         className="md:p-1 disabled:opacity-50"
         aria-label="Next page"
       >
