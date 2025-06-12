@@ -21,6 +21,7 @@ interface ITranscriptMetadataComponent {
   topics: FieldCountItem[];
   speakers: string[] | null;
   transcriptBy: string | string[];
+  source?: string;
 }
 
 const TranscriptMetadataComponent = ({
@@ -29,6 +30,8 @@ const TranscriptMetadataComponent = ({
   topics,
   date,
   transcriptBy,
+  source
+
 }: ITranscriptMetadataComponent) => {
   const lang = useLang();
   const t = useTranslations(lang);

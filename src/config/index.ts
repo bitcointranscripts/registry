@@ -74,5 +74,5 @@ export const FIELDS_TO_SEARCH = [
 ];
 
 export const FIELDS_TO_EXCLUDE = [
- "summary_vector_embeddings", "body_formatted"
+ "summary_vector_embeddings", "body_formatted",
 ]

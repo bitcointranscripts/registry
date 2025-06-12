@@ -14,6 +14,8 @@ import SearchResultCard from "@/components/search/SearchResultCard";
 import NotFound from "@/app/not-found";
 import { SkeletonResults } from "@/components/search/Loader";
 import useTranslations from "@/hooks/useTranslations";
+import { EsSearchResult } from "./types";
+import { excludedSearchTranscripts } from "@/utils/data";
 
 const SearchPage = () => {
   const { queryResult } = useSearch();
@@ -22,6 +24,8 @@ const SearchPage = () => {
   const isError = queryResult.isError;
 
   const searchResults = queryResult.data?.hits?.hits;
+ 
+  const filteredResults:EsSearchResult[] | undefined = searchResults && searchResults?.filter(result=> !excludedSearchTranscripts.includes(result._source.id)) 
 
   const totalResults = queryResult.data?.hits?.total?.value;
 
@@ -46,7 +50,7 @@ const SearchPage = () => {
   return (
     <>
       <div className="flex flex-col gap-2 2xl:max-w-[1024px]">
-        {searchResults?.map((result) => (
+        {filteredResults?.map((result) => (
           <SearchResultCard
             key={result._id}
             result={result._source}

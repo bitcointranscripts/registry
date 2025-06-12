@@ -16,7 +16,7 @@ const translations = {
   // Home
   "home": {
     "hero": {
-      "title": "Desbloqueie o tesouro de transcrições técnicas sobre bitcoin",
+      "title": "Desbloqueie o tesouro de transcrições técnicas sobre Bitcoin",
       "subtitle-1": "Mais de 1042 transcrições",
       "subtitle-2": "crescendo a cada dia.",
       "subtitle-3": "Graças a pessoas como você.",
@@ -40,7 +40,7 @@ const translations = {
       },
       "accessibility": {
         "title": "Tornando o Bitcoin Acessível",
-        "content": "As transcrições transformam o conhecimento sobre bitcoin em um formato de fácil acesso e pesquisa. Elas ajudam você a encontrar detalhes importantes rapidamente, compreender melhor ideias complexas e compartilhar conteúdo relevante com outros. Ao converter palavras faladas em texto, garantimos que insights valiosos estejam sempre acessíveis e exploráveis."
+        "content": "As transcrições transformam o conhecimento sobre Bitcoin em um formato de fácil acesso e pesquisa. Elas ajudam você a encontrar detalhes importantes rapidamente, compreender melhor ideias complexas e compartilhar conteúdo relevante com outros. Ao converter palavras faladas em texto, garantimos que insights valiosos estejam sempre acessíveis e exploráveis."
       },
       "contribute": {
         "title": "Contribua para o Projeto",
@@ -53,7 +53,7 @@ const translations = {
       "title": "Explorar Transcrições",
       "view-all": "Ver Tudo"
     },
-    "description": "Uma coleção de transcrições técnicas sobre bitcoin e lightning",
+    "description": "Uma coleção de transcrições técnicas sobre Bitcoin e lightning",
     "learn": "Aprender",
     "about": "Sobre",
   },
@@ -61,12 +61,12 @@ const translations = {
   // Header
   "header": {
     "menu": {
-      "bitcoin-devs": "Estude e contribua com o código aberto do bitcoin e lightning",
-      "chat-btc": "Chat interativo com IA para aprender sobre a tecnologia e história do bitcoin",
-      "bitcoin-search": "Motor de busca técnico sobre bitcoin",
-      "bitcoin-tldr": "Resumo diário das principais discussões e atualizações sobre desenvolvimento técnico do bitcoin",
-      "saving-satoshi": "Introdução envolvente ao desenvolvimento bitcoin para programadores, com textos técnicos e desafios de código",
-      "bitcoin-transcripts-review": "Revisar transcrições técnicas sobre bitcoin e ganhar sats"
+      "bitcoin-devs": "Estude e contribua com o código aberto do Bitcoin e lightning",
+      "chat-btc": "Chat interativo com IA para aprender sobre a tecnologia e história do Bitcoin",
+      "bitcoin-search": "Motor de busca técnico sobre Bitcoin",
+      "bitcoin-tldr": "Resumo diário das principais discussões e atualizações sobre desenvolvimento técnico do Bitcoin",
+      "saving-satoshi": "Introdução envolvente ao desenvolvimento Bitcoin para programadores, com textos técnicos e desafios de código",
+      "bitcoin-transcripts-review": "Revisar transcrições técnicas sobre Bitcoin e ganhar sats"
     },
     "all-products": "Todos os Produtos"
   },
@@ -74,7 +74,7 @@ const translations = {
   // Footer
   "footer": {
     "title": "Bitcoin Transcripts",
-    "tagline": "Arquivo comunitário para desbloquear conhecimento de transcrições técnicas sobre bitcoin",
+    "tagline": "Arquivo comunitário para desbloquear conhecimento de transcrições técnicas sobre Bitcoin",
     "products": "Explorar todos os Produtos",
     "built-by": "Desenvolvido com 🧡 pela",
     "public-dashboard": "Veja nosso contador público de visitantes",
@@ -166,16 +166,16 @@ const translations = {
   // About page
   "about": {
     "title": "O Que é Bitcoin Transcripts?",
-    "description": "Bitcoin Transcripts desbloqueia a sabedoria, o conhecimento e a história de podcasts, apresentações e outras mídias audiovisuais sobre bitcoin. Tornamos o conhecimento técnico do bitcoin mais acessível a estudantes, desenvolvedores e educadores.",
+    "description": "Bitcoin Transcripts desbloqueia a sabedoria, o conhecimento e a história de podcasts, apresentações e outras mídias audiovisuais sobre Bitcoin. Tornamos o conhecimento técnico do Bitcoin mais acessível a estudantes, desenvolvedores e educadores.",
     "history": {
       "title": "Como Chegamos Até Aqui",
       "content-1": "No passado, Bryan Bishop (@kanzure) e outros transcreviam palestras manualmente em tempo real. Bryan produziu sozinho mais de 900 transcrições.",
       "content-2": "A partir dessas bases, agora usamos IA para criar transcrições. Em seguida, elas são revisadas por pessoas como você.",
-      "content-3": "Dessa forma, tornamos o conhecimento e a história técnica do bitcoin mais acessíveis como texto. Esses textos alimentam ferramentas como o ChatBTC e o Bitcoin Search, criando um ecossistema mais rico de insights.",
+      "content-3": "Dessa forma, tornamos o conhecimento e a história técnica do Bitcoin mais acessíveis como texto. Esses textos alimentam ferramentas como o ChatBTC e o Bitcoin Search, criando um ecossistema mais rico de insights.",
     },
     "process": {
       "title": "Como Funciona",
-      "description": "No Bitcoin Transcripts, estamos construindo um fluxo de trabalho amplamente autônomo que otimiza a geração por IA, a revisão humana e a publicação de transcrições técnicas sobre bitcoin.",
+      "description": "No Bitcoin Transcripts, estamos construindo um fluxo de trabalho amplamente autônomo que otimiza a geração por IA, a revisão humana e a publicação de transcrições técnicas sobre Bitcoin.",
       "curator": {
         "title": "Curador Adiciona Fontes",
         "content": "O curador adiciona fontes e recursos ao Backlog de Transcrições.",
