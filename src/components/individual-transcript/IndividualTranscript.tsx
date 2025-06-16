@@ -46,7 +46,8 @@ const IndividualTranscript = ({
               topics={transcript.tagsDetailed || []}
               speakers={transcript.speakers || []}
               transcriptBy={transcript?.translation_by || transcript.transcript_by || "Not Available"}
-              source={transcript.source}
+              source={transcript.source_file}
+              media={transcript.media}
             />
           </div>
 
