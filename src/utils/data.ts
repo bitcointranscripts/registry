@@ -151,3 +151,18 @@ export const processFlowData = [
     bgColor: "#FCEDF3",
   },
 ] satisfies Array<{ [key: string]: string }>;
+
+export const excludedTranscripts = [
+  "edgedevplusplus/2019/mining-firmware-security",
+];
+
+export const excludedSearchTranscripts = [
+  "bitcointranscripts-edgedevplusplus-2019-mining-firmware-security",
+];
+
+//  manual way to change sources title name that are not good
+export const transformSourceName: Record<string, string> = {
+  magicalcryptoconference: "Magical Crypto Conference",
+  "magicalcryptoconference-2019": "Magical Crypto Conference 2019",
+  "la-bitdevs": "LA BitDevs",
+};

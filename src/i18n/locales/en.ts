@@ -17,7 +17,7 @@ const translations = {
   // Home
   "home": {
     "hero": {
-      "title": "Unlock the treasure trove of technical bitcoin transcripts",
+      "title": "Unlock the treasure trove of technical Bitcoin transcripts",
       "subtitle-1": "1042+ transcripts",
       "subtitle-2": "growing every day.",
       "subtitle-3": "Thanks to people like you.",
@@ -41,7 +41,7 @@ const translations = {
       },
       "accessibility": {
         "title": "Making Bitcoin Accessible",
-        "content": "Transcripts transform bitcoin knowledge into an easily accessible and searchable format. They help you find key details quickly, understand complex ideas better, and share important content with others. By turning spoken words into text, we make sure that valuable insights are always easy to access and explore."
+        "content": "Transcripts transform Bitcoin knowledge into an easily accessible and searchable format. They help you find key details quickly, understand complex ideas better, and share important content with others. By turning spoken words into text, we make sure that valuable insights are always easy to access and explore."
       },
       "contribute": {
         "title": "Contribute to the Project",
@@ -54,7 +54,7 @@ const translations = {
       "title": "Explore Transcripts",
       "view-all": "View All"
     },
-    "description": "A collection of technical bitcoin and lightning transcripts",
+    "description": "A collection of technical Bitcoin and lightning transcripts",
     "learn": "Learn",
     "about": "About",
   },
@@ -62,12 +62,12 @@ const translations = {
   // Header
   "header": {
     "menu": {
-      "bitcoin-devs": "Study & contribute to bitcoin and lightning open source",
-      "chat-btc": "Interactive AI chat to learn about bitcoin technology and its history",
-      "bitcoin-search": "Technical bitcoin search engine",
-      "bitcoin-tldr": "Daily summary of key bitcoin tech development discussions and updates",
-      "saving-satoshi": "Engaging bitcoin dev intro for coders using technical texts and code challenges",
-      "bitcoin-transcripts-review": "Review technical bitcoin transcripts and earn sats"
+      "bitcoin-devs": "Study & contribute to Bitcoin and lightning open source",
+      "chat-btc": "Interactive AI chat to learn about Bitcoin technology and its history",
+      "bitcoin-search": "Technical Bitcoin search engine",
+      "bitcoin-tldr": "Daily summary of key Bitcoin tech development discussions and updates",
+      "saving-satoshi": "Engaging Bitcoin dev intro for coders using technical texts and code challenges",
+      "bitcoin-transcripts-review": "Review technical Bitcoin transcripts and earn sats"
     },
     "all-products": "All Products"
   },
@@ -75,12 +75,12 @@ const translations = {
   // Footer
   "footer": {
     "title": "Bitcoin Transcripts",
-    "tagline": "Community-maintained archive to unlocking knowledge from technical bitcoin transcripts",
+    "tagline": "Community-maintained archive to unlocking knowledge from technical Bitcoin transcripts",
     "products": "Explore all Products",
     "built-by": "Built with 🧡 by the",
     "public-dashboard": "View our public visitor count",
     "feedback": {
-      "description": "We'd love to hear your feedback on this project?",
+      "description": "We'd love to hear your feedback on this project",
       "cta": "Give Feedback",
     },
   },
@@ -167,16 +167,20 @@ const translations = {
   // About page
   "about": {
     "title": "What Is Bitcoin Transcripts?",
-    "description": "Bitcoin Transcripts unlocks the wisdom, knowledge, and history from bitcoin tech podcasts, presentations, and other audio-visual media. We make technical bitcoin knowledge more accessible to learners, builders, and educators.",
+    "description": "Bitcoin Transcripts unlocks the wisdom, knowledge, and history from Bitcoin tech podcasts, presentations, and other audio-visual media. We make technical Bitcoin knowledge more accessible to learners, builders, and educators.",
     "history": {
       "title": "How We Got Here",
       "content-1": "In the past, Bryan Bishop (@kanzure) and others would manually transcribe talks live. Bryan alone produced over 900 of these.",
       "content-2": "Building on his foundations, we now use AI to create a transcript. We then pass along the transcript to reviewers like you for edits.",
-      "content-3": "Doing so, we make bitcoin tech knowledge and history more accessible as text. This is then fed to tools like ChatBTC and Bitcoin Search to create a richer ecosystem of insights.",
+      "content-3":{
+        "a":"Doing so, we make Bitcoin tech knowledge and history more accessible as text. This is then fed to tools like ",
+        "separator":"and",
+        "b":" ChatBTC and Bitcoin Search to create a richer ecosystem of insights."
+      }
     },
     "process": {
       "title": "How It Works",
-      "description": "At Bitcoin Transcripts we are building a largely autonomous transcription workflow that streamlines the AI-generation, review by humans, and publication of bitcoin tech transcripts.",
+      "description": "At Bitcoin Transcripts we are building a largely autonomous transcription workflow that streamlines the AI-generation, review by humans, and publication of Bitcoin tech transcripts.",
       "curator": {
         "title": "Curator Adds Sources",
         "content": "Curator adds sources and resources to the Transcription Backlog.",

@@ -290,7 +290,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
           </div>
 
           {isRoot ? (
-            <div className='flex flex-col gap-6 h-full pb-8 overflow-scroll'>
+            <div className='flex flex-col gap-6 h-full pb-8 overflow-auto'>
               {(transcripts as ContentTreeArray[]).map((item, i) => {
                 const parsedLanguage = parseLanguageString(item.language)
                 // without suspense, page deopts into CSR due to useSearchParams hook in component
@@ -302,7 +302,7 @@ const page = ({ params }: { params: { slug: string[] } }) => {
               })}
             </div>
           ) : (
-            <div className="flex-col flex gap-10 overflow-scroll pb-8">
+            <div className="flex-col flex gap-10 overflow-auto pb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 ">
                 {(data as any[]).map((value, i) => (
                   <Link
