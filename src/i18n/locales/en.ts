@@ -65,6 +65,8 @@ const translations = {
       "bitcoin-devs": "Study & contribute to Bitcoin and lightning open source",
       "chat-btc": "Interactive AI chat to learn about Bitcoin technology and its history",
       "bitcoin-search": "Technical Bitcoin search engine",
+      "decoding-bitcoin":"Hands on, guided learning to make you confident in bitcoin development.",
+      "good-first-issues":"List of good first issues from curated bitcoin FOSS projects",
       "bitcoin-tldr": "Daily summary of key Bitcoin tech development discussions and updates",
       "saving-satoshi": "Engaging Bitcoin dev intro for coders using technical texts and code challenges",
       "bitcoin-transcripts-review": "Review technical Bitcoin transcripts and earn sats"
