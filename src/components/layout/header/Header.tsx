@@ -72,6 +72,15 @@ const MenuSwitcher = () => {
     };
   }, []);
 
+  useEffect(()=>{
+      if(open){
+        document.body.style.overflow = "hidden"
+      }
+      else {
+        document.body.style.overflow = "auto"
+      }
+  }, [open])
+
   return (
     <div className='relative flex flex-col'>
       <button ref={buttonRef} onClick={() => setIsOpen((v) => !v)}>
@@ -81,7 +90,7 @@ const MenuSwitcher = () => {
               open ? "bg-custom-hover-state shadow-custom-sm" : "bg-custom-background"
             }`}
           >
-            <div data-freeze-body={open}>
+            <div data-freeze-body={false}>
               <AppsIcon className='text-orange-custom-100 w-[28px]' />
             </div>
           </div>
@@ -90,7 +99,7 @@ const MenuSwitcher = () => {
       <div className='relative z-10'>
         <div data-is-open={open} ref={popoverRef} className='hidden data-[is-open=true]:block absolute top-0 right-0 mt-3 md:mt-4'>
           <div
-            className={`bg-white rounded-2xl border border-gray-custom-600 w-[min(90vw,300px)] md:w-[402px] max-h-[calc(100vh-70px)] md:max-h-[calc(100vh-100px)] overflow-auto`}
+            className={`bg-white z-30 rounded-2xl border border-gray-custom-600 w-[min(90vw,300px)] md:w-[402px] max-h-[calc(100vh-70px)] md:max-h-[calc(100vh-100px)] overflow-auto`}
           >
             <AppItem {...menuApps[0]} />
             <div className='mx-5 md:mx-7 my-3 md:my-3 border border-gray-custom-300'></div>

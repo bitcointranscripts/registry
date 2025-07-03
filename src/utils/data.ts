@@ -16,6 +16,18 @@ export const menuApps = [
     image: "/images/bitcoin-devs.jpg",
     alt: "Bitcoin Devs",
   },
+    {
+    id:"decoding-bitcoin",
+    href:"https://bitcoindevs.xyz/decoding",
+    image:"/images/decoding-bitcoin.png",
+    alt:"Decoding Bitcoin",
+  },
+    {
+    id:"good-first-issues",
+    href:"https://bitcoindevs.xyz/good-first-issues",
+    image:"/images/good-first-issues.png",
+    alt:"Decoding Bitcoin",
+  },
   {
     id: "chat-btc",
     href: "https://chat.bitcoinsearch.xyz",
@@ -37,7 +49,7 @@ export const menuApps = [
   {
     id: "saving-satoshi",
     href: "https://savingsatoshi.com",
-    image: "/images/saving-satoshi.jpg",
+    image: "/images/saving-satoshi.webp",
     alt: "Saving Satoshi",
   },
   {
