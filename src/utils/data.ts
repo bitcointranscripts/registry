@@ -16,6 +16,18 @@ export const menuApps = [
     image: "/images/bitcoin-devs.jpg",
     alt: "Bitcoin Devs",
   },
+    {
+    id:"decoding-bitcoin",
+    href:"https://bitcoindevs.xyz/decoding",
+    image:"/images/decoding-bitcoin.png",
+    alt:"Decoding Bitcoin",
+  },
+    {
+    id:"good-first-issues",
+    href:"https://bitcoindevs.xyz/good-first-issues",
+    image:"/images/good-first-issues.png",
+    alt:"Decoding Bitcoin",
+  },
   {
     id: "chat-btc",
     href: "https://chat.bitcoinsearch.xyz",
@@ -37,7 +49,7 @@ export const menuApps = [
   {
     id: "saving-satoshi",
     href: "https://savingsatoshi.com",
-    image: "/images/saving-satoshi.jpg",
+    image: "/images/saving-satoshi.webp",
     alt: "Saving Satoshi",
   },
   {
@@ -151,3 +163,18 @@ export const processFlowData = [
     bgColor: "#FCEDF3",
   },
 ] satisfies Array<{ [key: string]: string }>;
+
+export const excludedTranscripts = [
+  "edgedevplusplus/2019/mining-firmware-security",
+];
+
+export const excludedSearchTranscripts = [
+  "bitcointranscripts-edgedevplusplus-2019-mining-firmware-security",
+];
+
+//  manual way to change sources title name that are not good
+export const transformSourceName: Record<string, string> = {
+  magicalcryptoconference: "Magical Crypto Conference",
+  "magicalcryptoconference-2019": "Magical Crypto Conference 2019",
+  "la-bitdevs": "LA BitDevs",
+};

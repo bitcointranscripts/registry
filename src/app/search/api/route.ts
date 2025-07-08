@@ -37,6 +37,9 @@ function buildQuery({
     query: {
       bool: {
         must: [] as any[],
+        must_not: [
+        
+        ],
         should: [],
         filter: [
           {

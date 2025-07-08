@@ -35,7 +35,7 @@ const FooterComponent = () => {
         <section className='flex flex-col gap-6 max-md:gap-4'>
           <h4 className='text-black text-xl max-md:text-base'>{t("footer.products")}</h4>
           <section className='flex max-w-[400px] gap-6 flex-wrap max-xl:gap-6 max-md:max-w-full max-lg:gap-4'>
-            {menuApps.slice(1).map(({ href, image, alt }) => (
+            {menuApps.slice(3).map(({ href, image, alt }) => (
               <Link href={href} target='_blank' rel='noopener noreferrer' key={alt}>
                 <Image
                   className={`rounded-xl w-[54px] h-[54px] lg:w-16 lg:h-16 border border-gray-custom-200 ${
