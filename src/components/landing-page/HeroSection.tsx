@@ -5,6 +5,7 @@ import Image from "next/image";
 import HeroImageDestop from "/public/images/hero-desktop-image.webp";
 import { ArrowLinkUpRight } from "@bitcoin-dev-project/bdp-ui/icons";
 import circleBackground from "/public/svgs/circle-background.svg";
+import transcriptsLength from "/public/transcripts-length.json";
 import circleBackgroundMobile from "/public/svgs/circle-background-mobile.svg";
 import mobileDesktopImage from "/public/svgs/mobile-desktop-image.svg";
 import Wrapper from "../layout/Wrapper";
@@ -23,7 +24,7 @@ const HeroSection = ({languageCode}: {languageCode: LanguageCode}) => {
               {t("home.hero.title")}
             </h1>
             <p className='text-xl max-lg:text-lg max-md:text-base text-wrap'>
-              <span className='font-bold'>{t("home.hero.subtitle-1")}</span> {t("home.hero.subtitle-2")}{" "}
+              <span className='font-bold'> {transcriptsLength || "1024+"} {t("home.hero.subtitle-1")}</span> {t("home.hero.subtitle-2")}{" "}
               <span className='whitespace-nowrap'>{t("home.hero.subtitle-3")}</span>
             </p>
           </section>

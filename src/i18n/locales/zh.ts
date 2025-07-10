@@ -17,7 +17,7 @@ const translations = {
   "home": {
     "hero": {
       "title": "解锁技术性比特币文稿的宝藏",
-      "subtitle-1": "1042+ 文稿",
+      "subtitle-1": " 文稿",
       "subtitle-2": "每日更新。",
       "subtitle-3": "感谢像您这样的人。",
       "cta": "探索文稿"
