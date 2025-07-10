@@ -18,7 +18,7 @@ const translations = {
   "home": {
     "hero": {
       "title": "Unlock the treasure trove of technical Bitcoin transcripts",
-      "subtitle-1": "1042+ transcripts",
+      "subtitle-1": " transcripts",
       "subtitle-2": "growing every day.",
       "subtitle-3": "Thanks to people like you.",
       "cta": "Explore Transcripts",
