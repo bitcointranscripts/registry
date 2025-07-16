@@ -30,6 +30,7 @@
 /public/sources-data.json
 /public/reviewers-data.json
 /public/light-transcripts.json
+/public/transcripts-length.json
 
 # misc
 .DS_Store

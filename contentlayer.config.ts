@@ -44,6 +44,10 @@ const getTranscriptAliases = (allTranscripts: ContentTranscriptType[]) => {
   fs.writeFileSync("./public/aliases.json", JSON.stringify(aliases));
 };
 
+const getTranscriptsLength = (transcripts: ContentTranscriptType[]) => {
+  fs.writeFileSync("./public/transcripts-length.json", JSON.stringify(transcripts.length));
+}
+
 const getTopics = () => {
   const filePath = path.join(process.cwd(), "public", "topics.json");
   const fileContents = fs.readFileSync(filePath, "utf8");
@@ -552,6 +556,7 @@ export default makeSource({
     getTranscriptAliases(allTranscripts);
     createSpeakers(allTranscripts);
     generateSourcesCount(allTranscripts, allSources);
-    lightWeightTranscript(allTranscripts)
+    lightWeightTranscript(allTranscripts);
+    getTranscriptsLength(allTranscripts);
   },
 });

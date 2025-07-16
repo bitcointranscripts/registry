@@ -17,7 +17,7 @@ const translations = {
   "home": {
     "hero": {
       "title": "Desbloqueie o tesouro de transcrições técnicas sobre Bitcoin",
-      "subtitle-1": "Mais de 1042 transcrições",
+      "subtitle-1": " transcrições",
       "subtitle-2": "crescendo a cada dia.",
       "subtitle-3": "Graças a pessoas como você.",
       "cta": "Explorar Transcrições",
