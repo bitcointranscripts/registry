@@ -12,7 +12,7 @@ const BossBanner = () => {
       <Banner
         headingText="Start your career in bitcoin open source —"
         linkText="APPLY TODAY"
-        linkTo="https://learning.chaincode.com/#BOSS"
+        linkTo="https://bosschallenge.xyz"
         hasBoss
       />
     </div>
