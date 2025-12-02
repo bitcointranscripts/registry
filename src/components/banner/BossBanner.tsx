@@ -11,7 +11,7 @@ const BossBanner = () => {
     <div className={`w-full bg-bdp-background sticky top-[var(--header-height)] z-[15] ${!isHome ? "hidden" : ""}`}>
       <Banner
         headingText="Start your career in bitcoin open source —"
-        linkText="APPLY TODAY"
+        linkText="APPLY TO THE ₿OSS CHALLENGE TODAY"
         linkTo="https://bosschallenge.xyz"
         hasBoss
       />
