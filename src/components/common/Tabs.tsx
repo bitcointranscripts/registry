@@ -1,13 +1,13 @@
 "use client";
 
 import { Resources } from "contentlayer/generated";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction } from "react";
 import TranscriptTabContent from "../individual-transcript/TranscriptTabContent";
 import NavigationByWords from "../explore/NavigationByWords";
 import { NavigationList } from "@/utils";
 import useLang from "@/hooks/useLang";
 import useTranslations from "@/hooks/useTranslations";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const Tabs = ({
   summary,
@@ -16,6 +16,8 @@ const Tabs = ({
   currentHeading,
   groupedHeading,
   setCurrentHeading,
+  openTabs,
+  setOpenTabs,
 }: {
   summary?: string;
   markdown: string;
@@ -23,14 +25,13 @@ const Tabs = ({
   currentHeading?: string;
   groupedHeading?: NavigationList[];
   setCurrentHeading?: React.Dispatch<SetStateAction<string>>;
+  openTabs: "transcript" | "summary" | "extraInfo";
+  setOpenTabs: React.Dispatch<SetStateAction<"transcript" | "summary" | "extraInfo">>;
 }) => {
   const lang = useLang();
   const t = useTranslations(lang);
   const currentRoute = useParams();
   const slug = Array.isArray(currentRoute?.slug) ?  currentRoute.slug.slice(0,currentRoute.slug.length - 1).join("/") : "";
-  const [openTabs, setOpenTabs] = useState<
-    "transcript" | "summary" | "extraInfo"
-  >("transcript");
 
   return (
     <div className="flex flex-col relative">
@@ -63,6 +64,7 @@ const Tabs = ({
           <NavigationByWords
             currentGroup={currentHeading || ""}
             navigationList={groupedHeading}
+            currentTab={openTabs}
             screen="mobile"
           />
         </div>
