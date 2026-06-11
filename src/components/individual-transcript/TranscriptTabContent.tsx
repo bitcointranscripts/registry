@@ -6,18 +6,21 @@ import { createContentSlug } from "@/utils";
 import Link from "next/link";
 
 function formatSpeakerText(text: string): string {
-  // Regular expression pattern to match "Speaker" or "Speaker:" followed by a timestamp
-  const pattern = /(\b\w+(?: \w+)?\s*):? (\d{2}:\d{2}:\d{2})/g;
+  // Match a full line containing a speaker name (which may have more than two
+  // words, e.g. "Aaron van Wirdum") followed by an optional colon and a timestamp
+  const pattern = /^(.+?):?\s+(\d{2}:\d{2}:\d{2})\s*$/gm;
 
   // Replace matched text with formatted HTML
-  return text.replace(pattern, (match, speaker, time) => {
+  return text.replace(pattern, (_match, speaker, time) => {
     // HTML for the speaker's name
     const formattedSpeaker = `<span className="font-bold text-black text-base leading-[1.36rem]">${speaker}:</span>`;
     // HTML for the timestamp
     const formattedTime = `<span className="text-gray-custom-1700 font-bold text-base leading-[1.36rem]">${time}</span>`;
 
-    // Return the combined formatted HTML within a paragraph tag
-    return `<p className="inline-block mt-2">${formattedSpeaker} ${formattedTime}</p>`;
+    // Return the combined formatted HTML within a paragraph tag, followed by a
+    // blank line so this HTML block doesn't swallow the following paragraph
+    // when the source markdown has no blank line after the speaker line
+    return `<p className="inline-block mt-2">${formattedSpeaker} ${formattedTime}</p>\n`;
   });
 }
 
