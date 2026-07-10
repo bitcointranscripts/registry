@@ -15,9 +15,11 @@ export interface IContentNavigation {
   navigationList: NavigationList[] | ExploreGroupedData[]; // Account for Explore Page and Transcript Page
   screen?: "mobile" | "desktop";
   className?: string;
+  currentTab?:  "transcript" | "summary" | "extraInfo";
 }
 const NavigationByWords = ({
   currentGroup,
+  currentTab,
   navigationList,
   screen,
   className,
@@ -25,6 +27,7 @@ const NavigationByWords = ({
 
   const selectRef = useRef<HTMLSelectElement>(null);
   const linkRef = useRef<HTMLAnchorElement>(null);
+  const isSummaryTab =  currentTab === "summary";
   const onOptionsChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const value = e.target.value;
     if (linkRef.current) {
@@ -51,6 +54,7 @@ const NavigationByWords = ({
           )}
         >
           {navigationList.map((nav) => (
+            !isSummaryTab?
               <Link
                 key={nav?.slug}
                 href={`#${nav.slug}`}
@@ -65,7 +69,21 @@ const NavigationByWords = ({
                 )}
               >
                 {nav?.name}
-              </Link>
+              </Link>:
+              <span
+                key={nav?.slug}
+                className={twMerge(
+                  "flex text-sm 2xl:text-lg leading-5 cursor-not-allowed",
+                  createContentSlug(currentGroup) == nav?.slug
+                    ? "text-orange-custom-100  rounded-[4px] font-semibold"
+                    : "hover:text-orange-custom-100",
+                  nav?.nested === true
+                    ? "pl-4 pt-2 2xl:pt-3.5"
+                    : "pt-3 2xl:pt-5",
+                )}
+              >
+                {nav?.name}
+              </span>
             ))}
         </div>
       )}

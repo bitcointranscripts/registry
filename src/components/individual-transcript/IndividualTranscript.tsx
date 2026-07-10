@@ -21,7 +21,7 @@ const IndividualTranscript = ({
   transcript: Transcript;
 }) => {
   const [currentHeading, setCurrentHeading] = useState("");
-
+  const [openTabs, setOpenTabs] = useState<"transcript" | "summary" | "extraInfo">("transcript")
   const lang = useLang();
   const t = useTranslations(lang);
 
@@ -59,6 +59,8 @@ const IndividualTranscript = ({
                 extraInfo={transcript?.additional_resources}
                 currentHeading={currentHeading}
                 groupedHeading={allHeadings}
+                openTabs={openTabs}
+                setOpenTabs={setOpenTabs}
                 setCurrentHeading={setCurrentHeading}
               />
             </div>
@@ -73,6 +75,7 @@ const IndividualTranscript = ({
               `!w-full rounded-xl max-h-[calc(90vh-var(--header-height))]`,
               allHeadings.length < 1 && "!invisible",
             )}
+            currentTab={openTabs}
             screen="desktop"
           />
         </div>
