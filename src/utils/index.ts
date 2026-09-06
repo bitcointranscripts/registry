@@ -81,7 +81,7 @@ export const extractTranscripts = (allTranscripts: Transcript[], languageCode: L
           new Date(a.date as string).getTime(),
       );
 
-      if (acc.length > 3) acc.pop();
+      if (acc.length > 6) acc.pop();
       return acc;
     },
     [] as (Transcript & { days_opened: number })[],
