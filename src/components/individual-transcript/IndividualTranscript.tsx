@@ -38,7 +38,7 @@ const IndividualTranscript = ({
       </div>
 
       <div className="flex gap-4 justify-between px-4 lg:px-10 2xl:px-[60px]">
-        <div className=" w-full relative flex flex-col flex-1 ">
+        <div className="relative flex flex-col flex-1 min-w-0">
           <div className=" w-full">
             <TranscriptMetadataComponent
               title={transcript.title}
@@ -65,7 +65,7 @@ const IndividualTranscript = ({
           </div>
         </div>
 
-        <div className="hidden lg:flex w-full sticky lg:flex-auto top-6 max-w-[300px] 2xl:max-w-[465px] self-start">
+        <div className="hidden lg:flex sticky top-6 flex-shrink-0 w-[300px] 2xl:w-[465px] self-start">
           <NavigationByWords
             currentGroup={currentHeading}
             navigationList={allHeadings}
