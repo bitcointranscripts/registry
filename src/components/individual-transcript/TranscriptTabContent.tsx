@@ -5,6 +5,18 @@ import { InView } from "react-intersection-observer";
 import { createContentSlug } from "@/utils";
 import Link from "next/link";
 
+const isExternalUrl = (src?: string) =>
+  !!src && (src.startsWith("http://") || src.startsWith("https://"));
+
+const resolveRelativeAssetPath = (src: string, currentSlug: string) => {
+  const normalizedSrc = src.replace(/^\.\//, "");
+  if ((normalizedSrc.split("/").length || 0) > 1) return `/transcript-images${normalizedSrc}`;
+  return `/transcript-images/${currentSlug}/${normalizedSrc}`;
+};
+
+const isPdfHref = (href?: string) =>
+  !!href && href.toLowerCase().split(/[?#]/)[0].endsWith(".pdf");
+
 function formatSpeakerText(text: string): string {
   // Match a full line containing a speaker name (which may have more than two
   // words, e.g. "Aaron van Wirdum") followed by an optional colon and a timestamp
@@ -41,11 +53,16 @@ const TranscriptTabContent = ({
       className={`!bg-transparent`}
       components={{
         a: ({ children = [], className, ...props }) => {
+                    const href = props.href || "";
+          const resolvedHref =
+            isPdfHref(href) && !isExternalUrl(href)
+              ? resolveRelativeAssetPath(href, currentSlug)
+              : href;
           return (
             <Link
               target="_blank"
               className="text-orange-custom-100"
-              href={props.href || ""}
+              href={resolvedHref}
             >
               {children}
             </Link>
@@ -101,16 +118,11 @@ const TranscriptTabContent = ({
         },
         img: ({ children = [], className, ...props }) => {
           // If we have an external link
-          if (
-            props.src?.startsWith("http://") ||
-            props.src?.startsWith("https://")
-          ) {
+          if (isExternalUrl(props.src)) {
             const { src, ...rest } = props;
             return <img src={src} className={className} {...rest} />;
-          } else if ((props.src?.split("/").length || 0) > 1) {
-            return <img src={`/transcript-images${props.src}`} />;
           }
-          return <img src={`/transcript-images/${currentSlug}/${props.src}`} />;
+          return <img src={resolveRelativeAssetPath(props.src || "", currentSlug)} />;
         },
       }}
     />
