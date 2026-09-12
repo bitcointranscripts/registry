@@ -6,7 +6,7 @@ const nextConfig = {
   rewrites: async () => ({
     beforeFiles: [
       {
-        source: "/transcript-images/:path*.:ext(png|jpe?g|webp|svg|gif)",
+        source: "/transcript-images/:path*.:ext(png|jpe?g|webp|svg|gif|pdf)",
         destination: "/bitcoin-transcript/:path*.:ext",
       },
     ],
