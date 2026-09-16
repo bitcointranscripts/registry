@@ -129,6 +129,7 @@ export type ContentTreeArray = {
   summary?: string | undefined;
   body: string;
   language: string;
+  weight?: number;
 };
 
 export const processFlowData = [
