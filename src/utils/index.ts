@@ -301,7 +301,8 @@ export const fetchTranscriptDetails = (
       summary,
       body,
       languageURL,
-      language
+      language,
+      weight,
     } = curr;
 
     if (paths.includes(url)) {
@@ -315,14 +316,22 @@ export const fetchTranscriptDetails = (
         flattenedPath: _raw.flattenedPath,
         summary,
         body: createText(body),
-        language
+        language, 
+        weight,
       });
     }
     return acc.sort((a, b) => {
+      // First check if the weight field has been defined
+      if (a.weight != null && b.weight != null && a.weight !== b.weight) {
+        return a.weight - b.weight;
+      }
+
+      // Then sort by time
       const sortByTime =
         new Date(b.date!).getTime() - new Date(a.date!).getTime();
       const sortByTitle = a.title.localeCompare(b.title);
 
+      // Fallback is to sort by title
       return sortByTime || sortByTitle;
     });
   }, [] as Array<ContentTreeArray>);
