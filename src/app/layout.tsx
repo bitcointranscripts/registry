@@ -6,6 +6,7 @@ import Script from "next/script";
 import Header from "@/components/layout/header/Header";
 import QueryProvider from "./providers";
 import { LanguageCode } from "@/config";
+import BossBanner from "@/components/banner/BossBanner";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang={languageCode}>
       <body className={manrope.className}>
         <QueryProvider>
+          <BossBanner />
           <Header />
             {children}
         </QueryProvider>
